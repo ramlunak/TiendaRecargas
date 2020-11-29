@@ -1,0 +1,125 @@
+﻿@model TiendaRecargas.Models.Cuenta
+
+@{
+    ViewData["Title"] = "Edit";
+
+}
+
+<div class="row d-flex justify-content-center">
+    <div class="col-12 col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdCuenta" />
+            <input type="hidden" asp-for="IdCuenta" />
+            <input type="hidden" asp-for="Password" />
+            <input type="hidden" asp-for="ConfirmPassword" value="@Model.Password" />
+            <input type="hidden" asp-for="Credito" />
+            <input type="hidden" asp-for="IdCuentaPadre" />
+            <input type="hidden" asp-for="Rol" />
+
+            @*NOMBRE*@
+            <div class="form-group">
+                @*<label class="control-label">Nombre</label>*@
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </div>
+                    <input asp-for="Nombre" class="form-control" placeholder="Nombre" />
+                </div>
+
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+
+            @*TELEFONO*@
+            <div class="form-group">
+                @*<label asp-for="Telefono" class="control-label"></label>*@
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="fas fa-mobile-alt"></i>
+                        </span>
+                    </div>
+                    <input asp-for="Telefono" type="tel" placeholder="Teléfono" class="form-control" />
+                </div>
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+
+            @*CORREO*@
+            <div class="form-group">
+                @*<label asp-for="Email" class="control-label"></label>*@
+
+                @{
+                    var emailSymbol = "@";
+                }
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">@emailSymbol</span>
+                    </div>
+                    <input asp-for="Email" type="email" placeholder="Correo" class="form-control" />
+                </div>
+
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            @*USUARIO*@
+            <div class="form-group">
+                @*<label asp-for="Usuario" class="control-label"></label>*@
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="fas fa-user-shield"></i>
+                        </span>
+                    </div>
+                    <input asp-for="Usuario" autocomplete="off" placeholder="Usuario" class="form-control" />
+                </div>
+
+                <span asp-validation-for="Usuario" class="text-danger"></span>
+            </div>
+
+            @*PORCIENTO*@
+            <div class="form-group">
+                @*<label asp-for="Porciento" class="control-label"></label>*@
+
+                <div class="input-group mb-3">
+                    <input asp-for="Porciento" id="inputPorciento" placeholder="Porciento" class="form-control" />
+                    <div class="input-group-append">
+                        <span class="input-group-text">%</span>
+                    </div>
+                    <div class="input-group-append">
+                        <a class="btn btn-info" data-toggle="modal" data-target="#CalcularPorcientoModal" style="color:white;cursor:pointer">Calcular</a>
+                    </div>
+                </div>
+                <span asp-validation-for="Porciento" class="text-danger"></span>
+            </div>
+
+            <div class="row col-12 d-flex justify-content-between">
+                @*TIENDA_FISICA*@
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="TiendaFisica" /> @Html.DisplayNameFor(model => model.TiendaFisica)
+                    </label>
+                </div>
+
+                @*ENVIAR_SMS*@
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="EnviarSMS" /> @Html.DisplayNameFor(model => model.EnviarSMS)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary btn-sm form-control form-control-sm mb-2" />
+                <a class="btn btn-danger btn-sm form-control form-control-sm" asp-action="Index">Cancelar</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+

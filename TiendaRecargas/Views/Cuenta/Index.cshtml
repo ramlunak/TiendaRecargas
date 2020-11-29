@@ -1,0 +1,158 @@
+﻿@model IEnumerable<TiendaRecargas.Models.Cuenta>
+
+@{
+    ViewData["Title"] = "Index";
+    var ModelCambiarPass = new Cuenta();
+}
+
+<div class="card">
+    <div class="card-header small">
+        <div class="row d-flex justify-content-between p-2">
+            <div>
+                <b>CUENTAS</b>
+            </div>
+            <div>
+                <a asp-action="Create" class="btn btn-primary btn-sm">Crear</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        @*BODY CARD*@
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-12 col-md-6 col-lg-4 mb-3">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            @item.Nombre
+                        </div>
+                        <div class="card-body">
+                            <div class="row col-12">
+
+                                <table>
+                                    <tr>
+                                        <td style="font-weight:600">Usuario</td>
+                                        <td>: @item.Usuario</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:600">Telefono</td>
+                                        <td>: @item.Telefono</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:600">Email</td>
+                                        <td>: @item.Email</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:600">Credito</td>
+                                        <td>: $@item.Credito.ToString("F") USD</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:600">Balance</td>
+                                        <td>: $@item.Balance.ToString("F") USD</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:600">Porciento</td>
+                                        <td>: @item.Porciento.ToString("F") %</td>
+                                    </tr>
+                                </table>
+
+                                @*<div class="col-12">
+                                        <span style="width:10px">Usuario</span>: @Html.DisplayFor(modelItem => item.Usuario)
+                                    </div>
+                                    <div class="col-12">
+                                        <span style="width:10px">Telefono</span>: @Html.DisplayFor(modelItem => item.Telefono)
+                                    </div>
+                                    <div class="col-12">
+                                        <span style="width:10px">Correo</span>: @Html.DisplayFor(modelItem => item.Email)
+                                    </div>
+                                    <div class="col-12">
+                                        <span style="width:10px">Crédito</span>: $@Html.DisplayFor(modelItem => item.Credito) USD
+                                    </div>
+                                    <div class="col-12">
+                                        <span style="width:10px">Balance</span>: $@Html.DisplayFor(modelItem => item.Balance) USD
+                                    </div>
+                                    <div class="col-12">
+                                        <span style="width:10px">Porciento</span>: @Html.DisplayFor(modelItem => item.Porciento)%
+                                    </div>*@
+
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <div class="row justify-content-between">
+                                <a asp-action="UpdatePassword" asp-route-id="@item.IdCuenta" asp-route-usuario="@item.Usuario">
+                                    <i class="fas fa-user-lock cursor-pointer" data-toggle="tooltip" data-placement="top" title="Cambiar Contraseña" style="color:orange"></i>
+                                </a>
+                                <div>
+                                    <a asp-action="Edit" asp-route-id="@item.IdCuenta" class="mr-3"><i style="color:green" class="fas fa-user-edit"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.IdCuenta"><i style="color:orangered" class="fas fa-trash"></i></a>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                @*<tr>
+                        <td>
+                            @Html.DisplayNameFor(model => model.Nombre): @Html.DisplayFor(modelItem => item.Nombre)
+                            @Html.DisplayNameFor(model => model.Nombre): @Html.DisplayFor(modelItem => item.Usuario)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Telefono)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Credito)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Balance)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Porciento)
+                        </td>
+                        <td>
+
+                            @if (item.TiendaFisica)
+                            {
+                                <i style="color:blue" class="fas fa-store"></i>
+                            }
+
+                            @if (item.EnviarSMS)
+                            {
+                                <i style="color: darkturquoise" class="fas fa-comment"></i>
+                            }
+
+                        </td>
+                        <td>
+                            <a asp-action="UpdatePassword" asp-route-id="@item.IdCuenta" asp-route-usuario="@item.Usuario">
+                                <i class="fas fa-user-lock cursor-pointer" data-toggle="tooltip" data-placement="top" title="Cambiar Contraseña" style="color:orange"></i>
+                            </a>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.IdCuenta"><i style="color:green" class="fas fa-user-edit"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.IdCuenta"><i style="color:orangered" class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>*@
+            }
+        </div>
+        @*FIN BODY CARD*@
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+@*<input name="switchbuttonActivo" type="checkbox" asp-for="@item.Activo" id="@item.IdCuenta" data-onlabel="Ativo" data-offlabel="Inativo" data-toggle="switchbutton" data-offstyle="danger" data-size="xs">
+    <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>*@

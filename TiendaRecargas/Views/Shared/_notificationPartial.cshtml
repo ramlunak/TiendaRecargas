@@ -1,0 +1,35 @@
+﻿<script>
+
+    var msg = @(TempData["Message"]!=null? Html.Raw(TempData["Message"]) : Html.Raw("undefined"));
+
+    if (msg) {
+        if (msg.provider == "sweetAlertNotify") {
+            const Toast = Swal.mixin({
+                   toast: true,
+                   position: 'top-end',
+                   showConfirmButton: false,
+                   showCloseButton: true,
+                   timer: 4000,
+                   timerProgressBar: true,
+                   didOpen: (toast) => {
+                     toast.addEventListener('mouseenter', Swal.stopTimer)
+                     toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+              icon: msg.icon,
+              title: msg.message,
+            })
+
+        } else if (msg.provider == "sweetAlertPromp") {
+           Swal.fire({
+                  icon: msg.icon,
+                  title: 'Oops...',
+                  text: msg.message
+                })
+        }
+    }
+</script>
+
+

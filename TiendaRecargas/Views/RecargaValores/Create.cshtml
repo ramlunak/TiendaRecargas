@@ -1,0 +1,48 @@
+﻿@model TiendaRecargas.Models.RecargaValor
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="row d-flex justify-content-center">
+
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">$</span>
+                    </div>
+                    <input id="inputValor" asp-for="valor" placeholder="Valor" class="form-control" />
+                    <div class="input-group-append">
+                        <span class="input-group-text">USD</span>
+                    </div>
+                </div>
+                <span asp-validation-for="valor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+
+                <select asp-for="tipoRecarga" asp-items="Html.GetEnumSelectList<TipoRecarga>()" class="form-control">
+                    <option value="" selected style="color:lightgray">Tipo de recarga</option>
+                </select>
+                <span asp-validation-for="tipoRecarga" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary form-control mb-2" />
+                <div>
+                    <a class="btn btn-danger form-control" asp-action="Index">Cancelar</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+@section scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/jquery/jquery.mask.js" asp-append-version="true"></script>
+    <script src="~/js/views/recargaValor/create.js" asp-append-version="true"></script>
+}

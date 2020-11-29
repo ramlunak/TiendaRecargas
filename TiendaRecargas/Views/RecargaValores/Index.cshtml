@@ -1,0 +1,63 @@
+﻿@model IEnumerable<TiendaRecargas.Models.RecargaValor>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="card">
+    <div class="card-header small">
+        <div class="row d-flex justify-content-between p-2">
+            <div>
+                <b>VALORES DE LAS RECARGAS</b>
+            </div>
+            <div>
+                <a asp-action="Create" class="btn btn-primary btn-sm">Crear</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        @*BODY CARD*@
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.valor)
+                    </th>
+                    <th>
+                        Tipo de Recarga
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <b>$@Html.DisplayFor(modelItem => item.valor)</b>
+                        </td>
+                        <td>
+                            @if (item.tipoRecarga == TipoRecarga.movil)
+                            {
+                                <img width="20" src="~/img/sim_card.png" />
+                            }
+                            @if (item.tipoRecarga == TipoRecarga.nauta)
+                            {
+                                <img width="20" src="~/img/wifi.png" />
+                            }
+                            @Html.DisplayFor(modelItem => item.tipoRecarga)
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.id">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+        @*FIN BODY CARD*@
+    </div>
+</div>

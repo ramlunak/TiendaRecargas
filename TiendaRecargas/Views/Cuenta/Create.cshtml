@@ -1,0 +1,233 @@
+﻿@model TiendaRecargas.Models.Cuenta
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "_Layout";
+}
+
+
+<div class="row d-flex justify-content-center">
+    <div class="col-12 col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @*NOMBRE*@
+            <div class="form-group">
+                @*<label class="control-label">Nombre</label>*@
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </div>
+                    <input asp-for="Nombre" class="form-control" placeholder="Nombre" />
+                </div>
+
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+
+            @*TELEFONO*@
+            <div class="form-group">
+                @*<label asp-for="Telefono" class="control-label"></label>*@
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="fas fa-mobile-alt"></i>
+                        </span>
+                    </div>
+                    <input asp-for="Telefono" type="tel"  placeholder="Teléfono" class="form-control" />
+                </div>
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+
+            @*CORREO*@
+            <div class="form-group">
+                @*<label asp-for="Email" class="control-label"></label>*@
+
+                @{
+                    var emailSymbol = "@";
+                }
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">@emailSymbol</span>
+                    </div>
+                    <input asp-for="Email" type="email" placeholder="Correo" class="form-control" />
+                </div>
+
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            @*USUARIO*@
+            <div class="form-group">
+                @*<label asp-for="Usuario" class="control-label"></label>*@
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="fas fa-user-shield"></i>
+                        </span>
+                    </div>
+                    <input asp-for="Usuario" autocomplete="off" placeholder="Usuario" class="form-control" />
+                </div>
+
+                <span asp-validation-for="Usuario" class="text-danger"></span>
+            </div>
+
+            @*PASSWORD*@
+            <div class="form-group">
+                @*<label asp-for="Password" class="control-label"></label>*@
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="fas fa-shield-alt"></i>
+                        </span>
+                    </div>
+                    <input asp-for="Password" autocomplete="off" placeholder="Contraseña" type="password" class="form-control" />
+                </div>
+
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+
+            @*CONFIRMAR_PASSWORD*@
+            <div class="form-group">
+                @*<label asp-for="ConfirmPassword" class="control-label"></label>*@
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="fas fa-shield-alt"></i>
+                        </span>
+                    </div>
+                    <input asp-for="ConfirmPassword" autocomplete="off" type="password" placeholder="Confirmar Contraseña" class="form-control" />
+
+                </div>
+
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+
+            @*CREDITO*@
+            <div class="form-group">
+                @*<label asp-for="Credito" class="control-label"></label>*@
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">$</span>
+                    </div>
+                    <input id="inputCredito" asp-for="Credito" placeholder="Crédito" class="form-control" />
+                    <div class="input-group-append">
+                        <span class="input-group-text">USD</span>
+                    </div>
+                </div>
+
+                <span asp-validation-for="Credito" class="text-danger"></span>
+            </div>
+
+
+            @*PORCIENTO*@
+            <div class="form-group">
+                @*<label asp-for="Porciento" class="control-label"></label>*@
+
+                <div class="input-group mb-3">
+                    <input asp-for="Porciento" id="inputPorciento" placeholder="Porciento" class="form-control" />
+                    <div class="input-group-append">
+                        <span class="input-group-text">%</span>
+                    </div>
+                    <div class="input-group-append">
+                        @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Launch demo modal
+                            </button>*@
+                        <a class="btn btn-info" data-toggle="modal" data-target="#CalcularPorcientoModal" style="color:white;cursor:pointer">Calcular</a>
+                    </div>
+                </div>
+                <span asp-validation-for="Porciento" class="text-danger"></span>
+            </div>
+
+            <div class="row col-12 d-flex justify-content-between">
+                @*TIENDA_FISICA*@
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="TiendaFisica" /> @Html.DisplayNameFor(model => model.TiendaFisica)
+                    </label>
+                </div>
+
+                @*ENVIAR_SMS*@
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="EnviarSMS" /> @Html.DisplayNameFor(model => model.EnviarSMS)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary btn-sm form-control form-control-sm mb-2" />
+                <a class="btn btn-danger btn-sm form-control form-control-sm" asp-action="Index">Cancelar</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<!-- Modal Calcular Porciento-->
+<div class="modal fade" id="CalcularPorcientoModal" tabindex="-1" role="dialog" aria-labelledby="CalcularPorcientoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="CalcularPorcientoModalLabel">Cálcular Porciento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="alert alert-info">
+                        <p style="font-size:medium">
+                            Para calcular el % ,ingrese el precio de una recarga de <b>$20.00 USD</b> para esta cuenta que está creando!!.
+                        </p>
+                    </div>
+
+                    @*PRECIO_RECARGA*@
+                    <div class="form-group col-12">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">$</span>
+                            </div>
+                            <input id="inputPrecioRecarga" asp-for="PrecioRecarga" placeholder="Precio de la recarga" class="form-control" />
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">USD</span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="PrecioRecarga" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-12">
+                        <div class="input-group mb-3">
+                            <input id="InputShowPorcientoCalculado" readonly placeholder="Porciento" class="form-control" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/jquery/jquery.mask.js" asp-append-version="true"></script>
+    <script src="~/js/views/cuenta/create.js" asp-append-version="true"></script>
+}

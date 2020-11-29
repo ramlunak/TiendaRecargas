@@ -1,0 +1,65 @@
+﻿@model TiendaRecargas.Models.Cuenta
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Pedidos</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<body>
+
+    <div class="row p-3">
+        <div class="col-sm-2 col-md-2 col-lg-4"></div>
+        <div class="col-sm-8 col-md-8 col-lg-4 text-center">
+            <br />
+
+            <img src="~/img/banner.png" width="300" />
+
+            <form asp-action="Index">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                @if (ViewBag.Erro != null)
+                {
+                    <div class="alert alert-warning" role="alert">
+                        @ViewBag.Erro
+                    </div>
+                }
+
+                <div class="form-group m-0">
+                    <label class="control-label"></label>
+                    <input asp-for="Usuario" class="form-control" placeholder="Usuario" />
+                    <span asp-validation-for="Usuario" class="text-danger"></span>
+                </div>
+
+                <div class="form-group m-0">
+                    <label class="control-label"></label>
+                    <input asp-for="Password" class="form-control" type="Password" placeholder="Contraseña" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group" style="margin-top:20px">
+                    <input type="submit" value="Entrar" class="btn btn-primary form-control" />
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-4"></div>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - TiendaRecargas - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+</body>
+</html>
