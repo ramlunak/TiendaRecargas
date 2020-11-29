@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace TiendaRecargas.Models.Enums
 {
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum TipoRecarga
+    public enum TipoRecarga : short
     {
         [Display(Name = "Movil")]
-        movil,
+        movil = 1,
         [Display(Name = "Nauta")]
-        nauta
+        nauta = 2
     }
 }

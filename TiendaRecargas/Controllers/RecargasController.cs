@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using TiendaRecargas.Data;
 using TiendaRecargas.Models;
+using TiendaRecargas.Models.Enums;
 
 namespace TiendaRecargas.Controllers
 {
@@ -22,7 +24,24 @@ namespace TiendaRecargas.Controllers
         // GET: Recargas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.RT_Recargas.ToListAsync());
+            ViewBag.Valores = await _context.RT_RecargaValores.ToArrayAsync();
+            return View(new Recarga());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetValores(string id)
+        {
+            var tipoRecarga = id.ToLower() == "movil" ? TipoRecarga.movil : TipoRecarga.nauta;
+            try
+            {
+                var valores = await _context.RT_RecargaValores.Where(x => x.tipoRecarga == tipoRecarga).ToListAsync();
+                var json = JsonConvert.SerializeObject(valores);
+                return Ok(new { valores = json });
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
         }
 
         // GET: Recargas/Details/5
