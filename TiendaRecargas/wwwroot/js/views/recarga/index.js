@@ -20,12 +20,16 @@ function CargarValores() {
         dataType: "json",
         success: function (data) {
 
+            var isValorSeleccionado = $('#isValorSeleccionado').val();
             $("#idValorRecarga").empty();
             var arrayValores = JSON.parse(data.valores);
             $.each(arrayValores, function (index, item) {
 
-                $("#idValorRecarga").append('<option value="' + item.id + '">' + item.valor.toFixed(2) + '</option>');
-
+                if (parseInt(isValorSeleccionado) === item.id) {
+                    $("#idValorRecarga").append('<option selected value="' + item.id + '">' + item.valor.toFixed(2) + '</option>');
+                } else {
+                    $("#idValorRecarga").append('<option value="' + item.id + '">' + item.valor.toFixed(2) + '</option>');
+                }
             });
         },
         failure: function (response) {

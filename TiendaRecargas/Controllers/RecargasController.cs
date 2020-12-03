@@ -24,16 +24,17 @@ namespace TiendaRecargas.Controllers
         // GET: Recargas
         public async Task<IActionResult> Index()
         {
-            ViewBag.Valores = await _context.RT_RecargaValores.ToArrayAsync();
-            try
+            ViewBag.RecargasEnLista = await _context.RT_Recargas.ToListAsync();
+
+            var recarga = new Recarga();
+            if (GetSession<Recarga>("Recarga") != null)
             {
-                ViewBag.RecargasEnLista = await _context.RT_Recargas.ToListAsync();
+                recarga = GetSession<Recarga>("Recarga");
+                if (recarga.numero is null)
+                    PrompErro("Complete los datos");
             }
-            catch (Exception ex)
-            {
-                ;
-            }
-            return View(new Recarga());
+
+            return View(recarga);
         }
 
         [HttpGet]
@@ -84,6 +85,7 @@ namespace TiendaRecargas.Controllers
         public async Task<IActionResult> Create(Recarga recarga)
         {
             IsLogged();
+
             if (ModelState.IsValid)
             {
                 recarga.idCuenta = Logged.IdCuenta;
@@ -92,14 +94,19 @@ namespace TiendaRecargas.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
+                                      
+                    SetSession("Recarga", "");
+
+                    return RedirectToAction(nameof(Index));
+                   
                 }
                 catch (Exception ex)
                 {
-                    ;
-                    return RedirectToAction(nameof(Index));
+                    PrompErro(ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
+                
             }
+            SetSession("Recarga", recarga);
             return RedirectToAction(nameof(Index));
         }
 

@@ -14,14 +14,21 @@ namespace TiendaRecargas.Models
     public class Recarga
     {
         public int id { get; set; }
+
+        [Required(ErrorMessage = AppMessages.Required)]
         public TipoRecarga tipoRecarga { get; set; }
+
+        [Required(ErrorMessage = AppMessages.Required)]
         public string numero { get; set; }
+
+        [Required(ErrorMessage = AppMessages.Required)]
         public int idValorRecarga { get; set; }
+
         public decimal valor { get; set; }
         public decimal monto { get; set; }
         public string descripcion { get; set; }
         public int idCuenta { get; set; }
-        public DateTime date { get; set; } = DateTime.Now;     
+        public DateTime date { get; set; } = DateTime.Now;
         public Enums.RecargaStatus status { get; set; }
         public string TransactionId { get; set; }
         public string TransactionMsg { get; set; }

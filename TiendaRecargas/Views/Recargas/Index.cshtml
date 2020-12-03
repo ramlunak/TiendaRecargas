@@ -4,6 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
+@*SELECIONA EL idValorRecarga seleccionado cuando el Model.IsInvalid*@
+@if (Model != null)
+{
+    <input id="isValorSeleccionado" type="hidden" asp-for="@Model.idValorRecarga" />
+}
 
 <div class="row d-flex justify-content-center">
     <div class="col-md-5 col-lg-4">
@@ -26,7 +31,7 @@
                         </div>
                         <input class="form-control form-control-sm" type="number" asp-for="numero" />
                     </div>
-                    <span asp-validation-for="idValorRecarga" class="text-danger"></span>
+                    <span asp-validation-for="numero" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-5 mb-0">

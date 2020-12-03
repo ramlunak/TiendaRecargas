@@ -82,7 +82,15 @@ namespace TiendaRecargas.Controllers
             }
             try
             {
-                TempData["Email"] = Logged.Email;
+                try
+                {
+                    TempData["Email"] = Logged.Email;
+                }
+                catch
+                {
+                    Logof();
+                    Response.Redirect("/Login");
+                }
             }
             catch (Exception ex)
             {
