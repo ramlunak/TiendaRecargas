@@ -14,7 +14,7 @@ namespace TiendaRecargas.Models
     public class Recarga
     {
         public int id { get; set; }
-        public string tipoRecarga { get; set; }
+        public TipoRecarga tipoRecarga { get; set; }
         public string numero { get; set; }
         public int idValorRecarga { get; set; }
         public decimal valor { get; set; }
@@ -22,7 +22,7 @@ namespace TiendaRecargas.Models
         public string descripcion { get; set; }
         public int idCuenta { get; set; }
         public DateTime date { get; set; } = DateTime.Now;     
-        public Enums.TransactionStatus transactionStatus { get; set; }
+        public Enums.RecargaStatus status { get; set; }
         public string TransactionId { get; set; }
         public string TransactionMsg { get; set; }
         public DateTime? TransactionDate { get; set; }

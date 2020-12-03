@@ -32,8 +32,7 @@ namespace TiendaRecargas.Controllers
             {
                 var sms = ex.ToString();
                 return View(new List<RecargaValor>());
-            }
-          
+            }          
         }
 
         // GET: RecargaValores/Details/5

@@ -25,6 +25,8 @@ namespace TiendaRecargas.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RecargaValor>().Property(e => e.tipoRecarga).HasConversion<string>();
+            modelBuilder.Entity<Recarga>().Property(e => e.tipoRecarga).HasConversion<string>();
+            modelBuilder.Entity<Recarga>().Property(e => e.status).HasConversion<string>();
         }
     }
 }

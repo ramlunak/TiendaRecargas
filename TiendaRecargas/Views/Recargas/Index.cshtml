@@ -72,38 +72,38 @@
     <div class="card-body">
         @*BODY CARD*@
         <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.valor)
-                    </th>
-                    <th>
-                        Tipo de Recarga
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
+
             <tbody>
-                @if(ViewBag.RecargasEnLista != null)
-                @foreach (var item in ViewBag.RecargasEnLista)
+                @if (ViewBag.RecargasEnLista != null && ViewBag.RecargasEnLista.Count > 0)
+                {
+                    @foreach (var item in ViewBag.RecargasEnLista)
+                    {
+                        <tr>
+                            <td>
+                                <b>$@item.valor</b>
+                            </td>
+                            <td>
+                                @if (item.tipoRecarga == TipoRecarga.movil)
+                                {
+                                    <img width="20" src="~/img/sim_card.png" />
+                                }
+                                @if (item.tipoRecarga == TipoRecarga.nauta)
+                                {
+                                    <img width="20" src="~/img/wifi.png" />
+                                }
+                                @item.tipoRecarga
+                            </td>
+                            <td>
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.id">Eliminar</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>
-                            <b>$@item.valor</b>
-                        </td>
-                        <td>
-                            @if (item.tipoRecarga == TipoRecarga.movil)
-                            {
-                                <img width="20" src="~/img/sim_card.png" />
-                            }
-                            @if (item.tipoRecarga == TipoRecarga.nauta)
-                            {
-                                <img width="20" src="~/img/wifi.png" />
-                            }
-                            @item.tipoRecarga
-                        </td>
-                        <td>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.id">Eliminar</a>
+                        <td style="text-align:center">
+                            <h5>No hay recargas en la lista</h5>
                         </td>
                     </tr>
                 }

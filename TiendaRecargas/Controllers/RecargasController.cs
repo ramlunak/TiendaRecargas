@@ -12,7 +12,7 @@ using TiendaRecargas.Models.Enums;
 
 namespace TiendaRecargas.Controllers
 {
-    public class RecargasController : Controller
+    public class RecargasController : BaseController
     {
         private readonly AppDbContext _context;
 
@@ -25,6 +25,14 @@ namespace TiendaRecargas.Controllers
         public async Task<IActionResult> Index()
         {
             ViewBag.Valores = await _context.RT_RecargaValores.ToArrayAsync();
+            try
+            {
+                ViewBag.RecargasEnLista = await _context.RT_Recargas.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                ;
+            }
             return View(new Recarga());
         }
 
@@ -73,15 +81,26 @@ namespace TiendaRecargas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,tipoRecarga,numero,idValorRecarga,valor,monto,descripcion,idCuenta,date,transactionStatus,TransactionId,TransactionMsg,TransactionDate")] Recarga recarga)
+        public async Task<IActionResult> Create(Recarga recarga)
         {
+            IsLogged();
             if (ModelState.IsValid)
             {
+                recarga.idCuenta = Logged.IdCuenta;
+                recarga.status = RecargaStatus.en_lista;
                 _context.Add(recarga);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    ;
+                    return RedirectToAction(nameof(Index));
+                }
                 return RedirectToAction(nameof(Index));
             }
-            return View(recarga);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Recargas/Edit/5
