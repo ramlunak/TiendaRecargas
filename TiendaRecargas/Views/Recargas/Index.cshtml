@@ -11,7 +11,7 @@
 }
 
 <div class="row d-flex justify-content-center">
-    <div class="col-md-5 col-lg-4">
+    <div class="col-md-6 col-lg-5">
 
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -24,7 +24,8 @@
 
             <div class="row mb-0">
 
-                <div class="form-group col-7">
+                @*MOVIL*@
+                <div id="numeroMovil" class="form-group col-8">
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">+53</span>
@@ -34,7 +35,18 @@
                     <span asp-validation-for="numero" class="text-danger"></span>
                 </div>
 
-                <div class="form-group col-5 mb-0">
+                @*NAUTA*@
+                <div id="coreoNauta" class="form-group col-8 mr-0">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control form-control-sm" type="text" asp-for="nauta" />
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon1" style="font-size:12px">@("@")nauta.com.cu</span>
+                        </div>
+                    </div>                   
+                    <span asp-validation-for="nauta" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-4 mb-0">
                     <div class="input-group input-group-sm  mb-0">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">$</span>
@@ -84,22 +96,25 @@
                     @foreach (var item in ViewBag.RecargasEnLista)
                     {
                         <tr>
-                            <td>
-                                <b>$@item.valor</b>
+                            <td class="w-100">
+                                <div class="d-flex">
+                                    @if (item.tipoRecarga == TipoRecarga.movil)
+                                    {
+                                        <img width="20" src="~/img/sim_card.png" />
+                                    }
+                                    @if (item.tipoRecarga == TipoRecarga.nauta)
+                                    {
+                                        <img width="20" src="~/img/wifi.png" />
+                                    }
+                                    <b>@item.numero</b>
+                                </div>
                             </td>
                             <td>
-                                @if (item.tipoRecarga == TipoRecarga.movil)
-                                {
-                                    <img width="20" src="~/img/sim_card.png" />
-                                }
-                                @if (item.tipoRecarga == TipoRecarga.nauta)
-                                {
-                                    <img width="20" src="~/img/wifi.png" />
-                                }
-                                @item.tipoRecarga
+                                <b>$@item.monto.ToString("F2")</b>
                             </td>
+
                             <td>
-                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.id">Eliminar</a>
+                                <a class="btn btn-outline-info" onclick="DeleteRecarga(@item.id)"><i style="color:red" class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                     }

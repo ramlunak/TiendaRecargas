@@ -24,14 +24,17 @@ namespace TiendaRecargas.Controllers
         // GET: Recargas
         public async Task<IActionResult> Index()
         {
-            ViewBag.RecargasEnLista = await _context.RT_Recargas.ToListAsync();
+            ViewBag.RecargasEnLista = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta).ToListAsync();
 
             var recarga = new Recarga();
             if (GetSession<Recarga>("Recarga") != null)
             {
                 recarga = GetSession<Recarga>("Recarga");
-                if (recarga.numero is null)
-                    PrompErro("Complete los datos");
+                if (recarga.numero is null && recarga.tipoRecarga == TipoRecarga.movil)
+                    PrompErro("Ingrese el número");
+                if (recarga.nauta is null && recarga.tipoRecarga == TipoRecarga.nauta)
+                    PrompErro("Ingrese el usuario");
+
             }
 
             return View(recarga);
@@ -61,7 +64,7 @@ namespace TiendaRecargas.Controllers
                 return NotFound();
             }
 
-            var recarga = await _context.RT_Recargas
+            var recarga = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (recarga == null)
             {
@@ -86,25 +89,56 @@ namespace TiendaRecargas.Controllers
         {
             IsLogged();
 
+            //Validar fondos
+            var recargaValor = await _context.RT_RecargaValores.FirstOrDefaultAsync(x => x.id == recarga.idValorRecarga);
+            recarga.valor = recargaValor.valor;
+
+            var valorLista = await _context.RT_Recargas.Where(x => x.status == RecargaStatus.en_lista && x.idCuenta == Logged.IdCuenta).SumAsync(x => x.monto);
+            var totalLisat = valorLista + recarga.GetMonto(Logged.Porciento);
+            var fondos = await GetFondos();
+
+            if (fondos < totalLisat)
+            {
+                PrompErro("No tiene saldo suiciente para agregar esta recarga");
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (recarga.nauta is not null && recarga.tipoRecarga == TipoRecarga.nauta)
+            {
+                recarga.numero = recarga.nauta;
+            }
+
             if (ModelState.IsValid)
             {
-                recarga.idCuenta = Logged.IdCuenta;
-                recarga.status = RecargaStatus.en_lista;
-                _context.Add(recarga);
                 try
                 {
+
+                    recarga.idCuenta = Logged.IdCuenta;
+                    recarga.status = RecargaStatus.en_lista;
+
+                    if (recarga.tipoRecarga == TipoRecarga.movil)
+                    {
+                        recarga.numero = "+53" + recarga.numero;
+                    }
+                    else if (recarga.tipoRecarga == TipoRecarga.nauta)
+                    {
+                        recarga.numero = recarga.numero + "@nauta.com.cu";
+                    }
+
+                    _context.Add(recarga);
+
                     await _context.SaveChangesAsync();
-                                      
+
                     SetSession("Recarga", "");
 
                     return RedirectToAction(nameof(Index));
-                   
+
                 }
                 catch (Exception ex)
                 {
                     PrompErro(ex.Message);
                 }
-                
+
             }
             SetSession("Recarga", recarga);
             return RedirectToAction(nameof(Index));
@@ -169,30 +203,31 @@ namespace TiendaRecargas.Controllers
                 return NotFound();
             }
 
-            var recarga = await _context.RT_Recargas
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (recarga == null)
-            {
-                return NotFound();
-            }
-
-            return View(recarga);
-        }
-
-        // POST: Recargas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
             var recarga = await _context.RT_Recargas.FindAsync(id);
             _context.RT_Recargas.Remove(recarga);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Ok(true);
         }
+
 
         private bool RecargaExists(int id)
         {
             return _context.RT_Recargas.Any(e => e.id == id);
         }
+
+        public async Task<decimal> GetFondos()
+        {
+            var cuenta = await _context.RT_Cuentas.FirstOrDefaultAsync(x => x.IdCuenta == Logged.IdCuenta);
+            var fondos = cuenta.Credito - cuenta.Balance;
+            return fondos;
+        }
+
+        public async Task<decimal> ValidarCuentaActiva()
+        {
+            var cuenta = await _context.RT_Cuentas.FirstOrDefaultAsync(x => x.IdCuenta == Logged.IdCuenta);
+            var fondos = cuenta.Credito - cuenta.Balance;
+            return fondos;
+        }
+
     }
 }

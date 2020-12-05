@@ -29,7 +29,7 @@ namespace TiendaRecargas.Models
 
         [NotMapped]
         [Required(ErrorMessage = AppMessages.Required)]
-        [Compare("Password",ErrorMessage ="La contraseña no coincide.")]       
+        [Compare("Password", ErrorMessage = "La contraseña no coincide.")]
         [DisplayName("Confirmar Contraseña")]
         public string ConfirmPassword { get; set; }
 
@@ -44,7 +44,7 @@ namespace TiendaRecargas.Models
         [Column(TypeName = "nvarchar(max)")]
         [DataType(DataType.EmailAddress, ErrorMessage = AppMessages.Email)]
         public string Email { get; set; }
-               
+
         [Column(TypeName = "nvarchar(50)")]
         [StringLength(50)]
         public string Rol { get; set; }
@@ -63,11 +63,7 @@ namespace TiendaRecargas.Models
         [DataType(DataType.Currency, ErrorMessage = AppMessages.Money)]
         public decimal Balance { get; set; }
 
-        [NotMapped]
-        [DataType(DataType.Currency, ErrorMessage = AppMessages.Money)]
-        public decimal Fondo { get; set; }
-
-        [Required(ErrorMessage = AppMessages.Required)]        
+        [Required(ErrorMessage = AppMessages.Required)]
         public decimal Porciento { get; set; }
 
         [Required(ErrorMessage = AppMessages.Required)]
@@ -81,11 +77,11 @@ namespace TiendaRecargas.Models
         public bool EnviarSMS { get; set; } = false;
 
         [Required(ErrorMessage = AppMessages.Required)]
-        [Column(TypeName ="bit")]
+        [Column(TypeName = "bit")]
         public bool Activo { get; set; } = true;
 
         //PARA CALCULAR % 
-                   
+        
         [DisplayName("Precio de la recarga")]
         [NotMapped]
         public decimal PrecioRecarga { get; set; }
@@ -96,7 +92,7 @@ namespace TiendaRecargas.Models
     {
         public int idCuenta { get; set; }
         public string Usuario { get; set; }
-      
+
         [Required(ErrorMessage = AppMessages.Required)]
         [Column(TypeName = "nvarchar(max)")]
         [DisplayName("Contraseña")]
