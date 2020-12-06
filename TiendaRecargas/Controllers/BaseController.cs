@@ -51,8 +51,7 @@ namespace TiendaRecargas.Controllers
                     // redirect response value.
                 };
 
-                await HttpContext.SignInAsync(principal, authProperties);
-               
+                await HttpContext.SignInAsync(principal, authProperties);               
             }
             catch (Exception)
             {
@@ -85,6 +84,7 @@ namespace TiendaRecargas.Controllers
                 try
                 {
                     TempData["Email"] = Logged.Email;
+                    TempData["Fondos"] = (Logged.Credito - Logged.Balance).ToString();
                 }
                 catch
                 {

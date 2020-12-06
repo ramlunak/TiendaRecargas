@@ -24,6 +24,7 @@ namespace TiendaRecargas.Controllers
         // GET: Recargas
         public async Task<IActionResult> Index()
         {
+            IsLogged();
             ViewBag.RecargasEnLista = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta).ToListAsync();
 
             var recarga = new Recarga();
@@ -89,6 +90,7 @@ namespace TiendaRecargas.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Recarga recarga)
         {
+
             IsLogged();
             try
             {
