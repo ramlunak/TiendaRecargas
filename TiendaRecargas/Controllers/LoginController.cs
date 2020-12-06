@@ -32,7 +32,7 @@ namespace TiendaRecargas.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Salir()
         {
-            Logof();
+            Logof();          
             return RedirectToAction(nameof(Index), null);
         }
 

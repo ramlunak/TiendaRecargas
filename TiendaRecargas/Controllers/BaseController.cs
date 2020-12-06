@@ -52,7 +52,7 @@ namespace TiendaRecargas.Controllers
                 };
 
                 await HttpContext.SignInAsync(principal, authProperties);
-                TempData["Email"] = logged.Email;
+               
             }
             catch (Exception)
             {
@@ -121,9 +121,17 @@ namespace TiendaRecargas.Controllers
 
         public T GetSession<T>(string key)
         {
-            var value = string.IsNullOrEmpty(HttpContext.Session.GetString(key)) ? null : HttpContext.Session.GetString(key);
-            if (value is null) return default(T);
-            return JsonConvert.DeserializeObject<T>(value);
+            try
+            {
+                var value = string.IsNullOrEmpty(HttpContext.Session.GetString(key)) ? null : HttpContext.Session.GetString(key);
+                if (value is null) return default(T);
+                return JsonConvert.DeserializeObject<T>(value);
+            }
+            catch (Exception ex)
+            {
+                ;
+                return default;
+            }
         }
 
         public Cuenta Logged
