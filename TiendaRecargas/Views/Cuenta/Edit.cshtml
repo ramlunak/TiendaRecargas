@@ -9,12 +9,12 @@
     <div class="col-12 col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdCuenta" />
-            <input type="hidden" asp-for="IdCuenta" />
+            <input type="hidden" asp-for="IdCuenta" />            
             <input type="hidden" asp-for="Password" />
             <input type="hidden" asp-for="ConfirmPassword" value="@Model.Password" />
             <input type="hidden" asp-for="IdCuentaPadre" />
             <input type="hidden" asp-for="Rol" />
+            <input type="hidden" asp-for="Balance" />
 
             @*NOMBRE*@
             <div class="form-group">
