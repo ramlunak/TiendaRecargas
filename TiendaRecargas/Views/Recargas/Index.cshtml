@@ -42,7 +42,7 @@
                         <div class="input-group-append">
                             <span class="input-group-text" id="basic-addon1" style="font-size:12px">@("@")nauta.com.cu</span>
                         </div>
-                    </div>                   
+                    </div>
                     <span asp-validation-for="nauta" class="text-danger"></span>
                 </div>
 
@@ -81,7 +81,7 @@
                 <b>LISTA DE RECARGAS</b>
             </div>
             <div>
-                <a asp-action="Recargar" class="btn btn-success btn-sm">Enviar</a>
+                <a asp-action="RecargarLista" class="btn btn-success btn-sm">Enviar</a>
             </div>
         </div>
 
@@ -108,6 +108,9 @@
                                     }
                                     <b>@item.numero</b>
                                 </div>
+                            </td>
+                            <td>
+                                <b>@item.status</b>
                             </td>
                             <td>
                                 <b>$@item.monto.ToString("F2")</b>

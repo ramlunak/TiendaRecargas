@@ -17,9 +17,13 @@ namespace TiendaRecargas.Controllers
 {
     public class BaseController : Controller
     {
-        public async Task SignIn(Cuenta logged)
+        public async Task SignIn(Cuenta logged, bool logof = true)
         {
-            Logof();
+            if (logof)
+            {
+                Logof();
+            }
+
             try
             {
                 List<Claim> claims = new List<Claim>();
@@ -51,7 +55,7 @@ namespace TiendaRecargas.Controllers
                     // redirect response value.
                 };
 
-                await HttpContext.SignInAsync(principal, authProperties);               
+                await HttpContext.SignInAsync(principal, authProperties);
             }
             catch (Exception)
             {
@@ -84,7 +88,7 @@ namespace TiendaRecargas.Controllers
                 try
                 {
                     TempData["Email"] = Logged.Email;
-                    TempData["Fondos"] = (Logged.Credito - Logged.Balance).ToString();
+                    TempData["Fondos"] = (Logged.Credito - Logged.Balance).ToString("F2");
                 }
                 catch
                 {
@@ -101,6 +105,11 @@ namespace TiendaRecargas.Controllers
         public void SessionClear()
         {
             HttpContext.Session.Clear();
+        }
+
+        public void CookiesClear()
+        {
+            Response.Cookies.Delete("TiendaRecargas");
         }
 
         public void SetSession(string key, string value)
@@ -153,6 +162,7 @@ namespace TiendaRecargas.Controllers
                 {
                     var cuenta = JsonConvert.DeserializeObject<Cuenta>(json);
                     TempData["Email"] = cuenta.Usuario;
+                    TempData["Fondos"] = (cuenta.Credito - cuenta.Balance).ToString("F2");
                     return cuenta;
                 }
                 else

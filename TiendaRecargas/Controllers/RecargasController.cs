@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using TiendaRecargas.Data;
 using TiendaRecargas.Models;
 using TiendaRecargas.Models.Enums;
+using TiendaRecargas.Provedores;
 
 namespace TiendaRecargas.Controllers
 {
@@ -123,13 +124,12 @@ namespace TiendaRecargas.Controllers
                 {
                     try
                     {
-
                         recarga.idCuenta = Logged.IdCuenta;
                         recarga.status = RecargaStatus.en_lista;
 
                         if (recarga.tipoRecarga == TipoRecarga.movil)
                         {
-                            recarga.numero = "+53" + recarga.numero;
+                            recarga.numero = "53" + recarga.numero;
                         }
                         else if (recarga.tipoRecarga == TipoRecarga.nauta)
                         {
@@ -164,6 +164,7 @@ namespace TiendaRecargas.Controllers
         // GET: Recargas/Edit/5
         public async Task<IActionResult> RecargarLista()
         {
+            
             IsLogged();
             var cuentaActiva = await ValidarCuentaActiva();
             if (!cuentaActiva)
@@ -184,7 +185,23 @@ namespace TiendaRecargas.Controllers
             }
             else
             {
-                PrompInfo("ok");
+                foreach (var item in listaRecargas)
+                {
+                    var result = await Ding.SendTransfer(item, true);
+                    item.TransactionDate = DateTime.Now;
+                    item.TransactionResultCode = result.ResultCode;
+                    item.TransactionMsg = result.ErrorCodes != null ? result.ErrorCodes.FirstOrDefault().Code:null;
+                    if (Convert.ToInt32(result.ResultCode) > 2)
+                    {
+                        item.status = RecargaStatus.error;
+                    }
+                    else
+                    {
+                        item.status = RecargaStatus.success;
+                    }
+                    _context.Update(item);
+                    await _context.SaveChangesAsync();
+                }
             }
 
             return RedirectToAction(nameof(Index));
@@ -263,7 +280,9 @@ namespace TiendaRecargas.Controllers
         public async Task<decimal> GetFondos()
         {
             var cuenta = await _context.RT_Cuentas.FirstOrDefaultAsync(x => x.IdCuenta == Logged.IdCuenta);
-            var fondos = cuenta.Credito - cuenta.Balance;        
+            var fondos = cuenta.Credito - cuenta.Balance;
+            Response.Cookies.Delete("TiendaRecargas");
+            SignIn(cuenta,false);
             return fondos;
         }
 

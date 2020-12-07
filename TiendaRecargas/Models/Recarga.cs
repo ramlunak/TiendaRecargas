@@ -33,9 +33,10 @@ namespace TiendaRecargas.Models
         public string TransactionId { get; set; }
         public string TransactionMsg { get; set; }
         public DateTime? TransactionDate { get; set; }
+        public string TransactionResultCode { get; set; }
         [NotMapped]
         public string nauta { get; set; }
-
+       
         public decimal GetMonto(decimal porciento)
         {
            return monto = valor / 100 * porciento;
