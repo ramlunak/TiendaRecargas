@@ -164,7 +164,7 @@ namespace TiendaRecargas.Controllers
         // GET: Recargas/Edit/5
         public async Task<IActionResult> RecargarLista()
         {
-            
+
             IsLogged();
             var cuentaActiva = await ValidarCuentaActiva();
             if (!cuentaActiva)
@@ -187,10 +187,10 @@ namespace TiendaRecargas.Controllers
             {
                 foreach (var item in listaRecargas)
                 {
-                    var result = await Ding.SendTransfer(item, true);
+                    var result = await Ding.SendTransfer(item, false, Logged.Nombre);
                     item.TransactionDate = DateTime.Now;
                     item.TransactionResultCode = result.ResultCode;
-                    item.TransactionMsg = result.ErrorCodes != null ? result.ErrorCodes.FirstOrDefault().Code:null;
+                    item.TransactionMsg = result.ErrorCodes != null && result.ErrorCodes.Length > 0 ? result.ErrorCodes.FirstOrDefault().Code : null;
                     if (Convert.ToInt32(result.ResultCode) > 2)
                     {
                         item.status = RecargaStatus.error;
@@ -199,9 +199,17 @@ namespace TiendaRecargas.Controllers
                     {
                         item.status = RecargaStatus.success;
                     }
-                    _context.Update(item);
+                    _context.RT_Recargas.Update(item);
                     await _context.SaveChangesAsync();
                 }
+
+                var Sumarbalance = listaRecargas.Where(x => x.status == RecargaStatus.success).Sum(x => x.monto);
+                var cuenta = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
+                cuenta.Balance = cuenta.Balance + Sumarbalance;
+                _context.RT_Cuentas.Update(cuenta);
+                await _context.SaveChangesAsync();
+                await GetFondos();
+
             }
 
             return RedirectToAction(nameof(Index));
@@ -282,7 +290,7 @@ namespace TiendaRecargas.Controllers
             var cuenta = await _context.RT_Cuentas.FirstOrDefaultAsync(x => x.IdCuenta == Logged.IdCuenta);
             var fondos = cuenta.Credito - cuenta.Balance;
             Response.Cookies.Delete("TiendaRecargas");
-            SignIn(cuenta,false);
+            SignIn(cuenta, false);
             return fondos;
         }
 

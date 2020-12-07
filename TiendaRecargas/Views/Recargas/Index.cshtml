@@ -95,31 +95,34 @@
                 {
                     @foreach (var item in ViewBag.RecargasEnLista)
                     {
-                        <tr>
-                            <td class="w-100">
-                                <div class="d-flex">
-                                    @if (item.tipoRecarga == TipoRecarga.movil)
-                                    {
-                                        <img width="20" src="~/img/sim_card.png" />
-                                    }
-                                    @if (item.tipoRecarga == TipoRecarga.nauta)
-                                    {
-                                        <img width="20" src="~/img/wifi.png" />
-                                    }
-                                    <b>@item.numero</b>
-                                </div>
-                            </td>
-                            <td>
-                                <b>@item.status</b>
-                            </td>
-                            <td>
-                                <b>$@item.monto.ToString("F2")</b>
-                            </td>
+                <tr>
+                    <td class="w-100">
+                        <div class="d-flex">
+                            @if (item.tipoRecarga == TipoRecarga.movil)
+                            {
+                                <img width="20" src="~/img/sim_card.png" />
+                            }
+                            @if (item.tipoRecarga == TipoRecarga.nauta)
+                            {
+                                <img width="20" src="~/img/wifi.png" />
+                            }
+                            <b>@item.numero</b>
+                        </div>
+                    </td>
+                    <td>
+                        <b>@item.descripcion</b>
+                    </td>
+                    <td>
+                        <b>@item.status</b>
+                    </td>
+                    <td>
+                        <b>$@item.monto.ToString("F2")</b>
+                    </td>
 
-                            <td>
-                                <a class="btn btn-outline-info" onclick="DeleteRecarga(@item.id)"><i style="color:red" class="fa fa-trash"></i></a>
-                            </td>
-                        </tr>
+                    <td>
+                        <a class="btn btn-outline-info" onclick="DeleteRecarga(@item.id)"><i style="color:red" class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
                     }
                 }
                 else

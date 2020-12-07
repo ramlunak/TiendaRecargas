@@ -23,7 +23,7 @@ namespace TiendaRecargas.Provedores
         public async static Task<string> GetApiKey()
         {           
             return "3qKbCxayh9k5pZOGJk4OYo";//Royber
-            //return "9KnliRcSEqK6l4OtU66xMx"; william
+            //return "9KnliRcSEqK6l4OtU66xMx"; //william
         }
                 
         public static async Task<GetProductsResponse> GetProductsBycountryIso(string iso)
@@ -66,9 +66,9 @@ namespace TiendaRecargas.Provedores
             }
 
             entity.AccountNumber = recarga.numero;
-            entity.SendValue = (float)recarga.monto;
+            entity.SendValue = (float)recarga.valor;
             entity.ValidateOnly = validate;
-            entity.DistributorRef = $"id_{recarga.idCuenta}user_{usuario}";
+            entity.DistributorRef = $"cuenta_{recarga.idCuenta}";
 
             var api_key = await GetApiKey();
 
