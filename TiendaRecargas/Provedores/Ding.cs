@@ -22,8 +22,8 @@ namespace TiendaRecargas.Provedores
 
         public async static Task<string> GetApiKey()
         {           
-            //return "3qKbCxayh9k5pZOGJk4OYo";//Royber
-            return "9KnliRcSEqK6l4OtU66xMx"; //william
+            return "3qKbCxayh9k5pZOGJk4OYo";//Royber
+            //return "9KnliRcSEqK6l4OtU66xMx"; //william
         }
                 
         public static async Task<GetProductsResponse> GetProductsBycountryIso(string iso)
@@ -51,7 +51,7 @@ namespace TiendaRecargas.Provedores
             }
         }
 
-        public static async Task<SendTransferResponse> SendTransfer(Recarga recarga, bool validate,string usuario = null)
+        public static async Task<SendTransferResponse> SendTransfer(Recarga recarga, bool validate)
         {
 
             SendTransferRequest entity = new SendTransferRequest();
