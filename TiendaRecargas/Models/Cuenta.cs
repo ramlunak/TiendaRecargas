@@ -58,6 +58,8 @@ namespace TiendaRecargas.Models
         [DisplayName("Crédito")]
         public decimal Credito { get; set; }
 
+        public decimal CreditoBloqueado { get; set; } = 0;
+
         [Required(ErrorMessage = AppMessages.Required)]
         [Column(TypeName = "money")]
         [DataType(DataType.Currency, ErrorMessage = AppMessages.Money)]
@@ -81,10 +83,18 @@ namespace TiendaRecargas.Models
         public bool Activo { get; set; } = true;
 
         //PARA CALCULAR % 
-        
+
         [DisplayName("Precio de la recarga")]
         [NotMapped]
         public decimal PrecioRecarga { get; set; }
+        [NotMapped]
+        public decimal Fondos
+        {
+            get
+            {
+                return this.Credito - Balance - this.CreditoBloqueado;
+            }
+        }
 
     }
 

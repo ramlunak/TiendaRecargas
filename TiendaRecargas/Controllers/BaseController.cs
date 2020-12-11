@@ -88,7 +88,7 @@ namespace TiendaRecargas.Controllers
                 try
                 {
                     TempData["Email"] = Logged.Email;
-                    TempData["Fondos"] = (Logged.Credito - Logged.Balance).ToString("F2");
+                    TempData["Fondos"] = (Logged.Credito - Logged.Balance - Logged.CreditoBloqueado).ToString("F2");
                 }
                 catch
                 {
@@ -162,7 +162,7 @@ namespace TiendaRecargas.Controllers
                 {
                     var cuenta = JsonConvert.DeserializeObject<Cuenta>(json);
                     TempData["Email"] = cuenta.Usuario;
-                    TempData["Fondos"] = (cuenta.Credito - cuenta.Balance).ToString("F2");
+                    TempData["Fondos"] = (cuenta.Credito - cuenta.Balance - cuenta.CreditoBloqueado).ToString("F2");
                     return cuenta;
                 }
                 else

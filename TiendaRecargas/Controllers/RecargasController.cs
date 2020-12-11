@@ -288,7 +288,7 @@ namespace TiendaRecargas.Controllers
         public async Task<decimal> GetFondos()
         {
             var cuenta = await _context.RT_Cuentas.FirstOrDefaultAsync(x => x.IdCuenta == Logged.IdCuenta);
-            var fondos = cuenta.Credito - cuenta.Balance;
+            var fondos = cuenta.Credito - cuenta.Balance - cuenta.CreditoBloqueado;
             Response.Cookies.Delete("TiendaRecargas");
             SignIn(cuenta, false);
             return fondos;

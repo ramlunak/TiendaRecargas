@@ -26,7 +26,7 @@ namespace TiendaRecargas.Controllers
             IsLogged();
             try
             {
-                var model = await _context.RT_Cuentas.ToListAsync();
+                var model = await _context.RT_Cuentas.Where(x => x.IdCuentaPadre == Logged.IdCuenta).ToListAsync();
                 return View(model.Where(x => x.Rol != "Administrador"));
             }
             catch (Exception ex)
@@ -59,6 +59,12 @@ namespace TiendaRecargas.Controllers
         public IActionResult Create()
         {
             IsLogged();
+            if (Logged.Rol != RolesSistema.Administrador.ToString())
+                if (Logged.Fondos < 100)
+                {
+                    PrompInfo("Para crear una cuenta asociada usted deve tener mas de  $100.00 USD de fondos");
+                    return RedirectToAction(nameof(Index));
+                }
             return View();
         }
 
@@ -70,13 +76,38 @@ namespace TiendaRecargas.Controllers
         public async Task<IActionResult> Create(Cuenta cuenta)
         {
             IsLogged();
+
+
+            //Validaciones para crear sub cuentas
+            if (Logged.Rol != RolesSistema.Administrador.ToString())
+            {
+                if (cuenta.Credito < 100)
+                {
+                    PrompInfo($"El crédito debe ser igual o mayor que $100.00 USD");
+                    return View(cuenta);
+                }
+                
+            }
+
+            //Validaciones para crear sub cuentas
+            if (Logged.Rol != RolesSistema.Administrador.ToString())
+            {
+                if (cuenta.Porciento < Logged.Porciento)
+                {
+                    PrompInfo($"El porciento debe ser igual o mayor que {Logged.Porciento.ToString("F2")}");
+                    return View(cuenta);
+                }
+              
+            }
+
+
             cuenta.IdCuentaPadre = Logged.IdCuenta;
             cuenta.Activo = true;
             cuenta.Rol = RolesSistema.Vendedor.ToString();
 
             if (ModelState.IsValid)
             {
-                if (CuentaExistsByUsuario(cuenta.IdCuenta,cuenta.Usuario))
+                if (CuentaExistsByUsuario(cuenta.IdCuenta, cuenta.Usuario))
                 {
                     PrompInfo("El nombre de usuario no está disponoble, por favor ingrese otro nombre usuario");
                     return View(cuenta);
@@ -86,6 +117,16 @@ namespace TiendaRecargas.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
+
+                    if (Logged.Rol != RolesSistema.Administrador.ToString())
+                    {
+                        var padre = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
+                        padre.CreditoBloqueado += cuenta.Credito;
+                        _context.Update(padre);
+                        await _context.SaveChangesAsync();
+                        await GetFondos();
+                    }
+
                 }
                 catch (Exception ex)
                 {
@@ -138,7 +179,7 @@ namespace TiendaRecargas.Controllers
 
             if (ModelState.IsValid)
             {
-                if (CuentaExistsByUsuario(cuenta.IdCuenta,cuenta.Usuario))
+                if (CuentaExistsByUsuario(cuenta.IdCuenta, cuenta.Usuario))
                 {
                     PrompErro("El nombre de usuario no está disponoble, por favor ingrese otro nombre usuario");
                     return View(cuenta);
@@ -195,6 +236,16 @@ namespace TiendaRecargas.Controllers
             var cuenta = await _context.RT_Cuentas.FindAsync(id);
             _context.RT_Cuentas.Remove(cuenta);
             await _context.SaveChangesAsync();
+            
+            if (Logged.Rol != RolesSistema.Administrador.ToString())
+            {
+                var padre = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
+                padre.CreditoBloqueado -= cuenta.Credito;
+                _context.Update(padre);
+                await _context.SaveChangesAsync();
+                await GetFondos();
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -251,7 +302,7 @@ namespace TiendaRecargas.Controllers
         private bool CuentaExistsByUsuario(int idCuenta, string usuario)
         {
             IsLogged();
-            if(idCuenta == 0)
+            if (idCuenta == 0)
             {
                 return _context.RT_Cuentas.Any(e => e.Usuario == usuario);
             }
@@ -260,5 +311,15 @@ namespace TiendaRecargas.Controllers
                 return _context.RT_Cuentas.Any(e => e.Usuario == usuario && e.IdCuenta != idCuenta);
             }
         }
+
+        public async Task<decimal> GetFondos()
+        {
+            var cuenta = await _context.RT_Cuentas.FirstOrDefaultAsync(x => x.IdCuenta == Logged.IdCuenta);
+            var fondos = cuenta.Credito - cuenta.Balance - cuenta.CreditoBloqueado;
+            Response.Cookies.Delete("TiendaRecargas");
+            SignIn(cuenta, false);
+            return fondos;
+        }
+
     }
 }
