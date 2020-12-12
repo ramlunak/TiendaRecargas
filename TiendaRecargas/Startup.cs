@@ -98,8 +98,8 @@ namespace TiendaRecargas
                     response.StatusCode == (int)HttpStatusCode.Forbidden)
                     response.Redirect("/Login");
 
-                if (response.StatusCode == (int)HttpStatusCode.NotFound)
-                    response.Redirect("/Login/Salir");
+                //if (response.StatusCode == (int)HttpStatusCode.NotFound)
+                //    response.Redirect("/Login/Salir");
             });
 
             //if (env.IsDevelopment())

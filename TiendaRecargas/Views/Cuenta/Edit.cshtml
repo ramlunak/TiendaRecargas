@@ -15,6 +15,7 @@
             <input type="hidden" asp-for="IdCuentaPadre" />
             <input type="hidden" asp-for="Rol" />
             <input type="hidden" asp-for="Balance" />
+            <input type="hidden" asp-for="Credito" />
             <input type="hidden" asp-for="CreditoBloqueado" />
 
             @*NOMBRE*@
@@ -80,23 +81,6 @@
                 </div>
 
                 <span asp-validation-for="Usuario" class="text-danger"></span>
-            </div>
-
-            @*CREDITO*@
-            <div class="form-group">
-                @*<label asp-for="Credito" class="control-label"></label>*@
-
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">$</span>
-                    </div>
-                    <input id="inputCredito" asp-for="Credito" placeholder="Crédito" class="form-control" />
-                    <div class="input-group-append">
-                        <span class="input-group-text">USD</span>
-                    </div>
-                </div>
-
-                <span asp-validation-for="Credito" class="text-danger"></span>
             </div>
 
             @*PORCIENTO*@

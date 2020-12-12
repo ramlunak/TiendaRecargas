@@ -79,6 +79,7 @@ namespace TiendaRecargas.Controllers
 
 
             //Validaciones para crear sub cuentas
+
             if (Logged.Rol != RolesSistema.Administrador.ToString())
             {
                 if (cuenta.Credito < 100)
@@ -86,8 +87,21 @@ namespace TiendaRecargas.Controllers
                     PrompInfo($"El crédito debe ser igual o mayor que $100.00 USD");
                     return View(cuenta);
                 }
-                
+
             }
+
+
+            if (Logged.Rol != RolesSistema.Administrador.ToString())
+            {
+                if (cuenta.Credito > Logged.Fondos)
+                {
+                    PrompInfo($"El crédito no puede exceder los fondos disponibles");
+                    return View(cuenta);
+                }
+
+            }
+
+
 
             //Validaciones para crear sub cuentas
             if (Logged.Rol != RolesSistema.Administrador.ToString())
@@ -97,7 +111,7 @@ namespace TiendaRecargas.Controllers
                     PrompInfo($"El porciento debe ser igual o mayor que {Logged.Porciento.ToString("F2")}");
                     return View(cuenta);
                 }
-              
+
             }
 
 
@@ -236,7 +250,7 @@ namespace TiendaRecargas.Controllers
             var cuenta = await _context.RT_Cuentas.FindAsync(id);
             _context.RT_Cuentas.Remove(cuenta);
             await _context.SaveChangesAsync();
-            
+
             if (Logged.Rol != RolesSistema.Administrador.ToString())
             {
                 var padre = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
@@ -319,6 +333,27 @@ namespace TiendaRecargas.Controllers
             Response.Cookies.Delete("TiendaRecargas");
             SignIn(cuenta, false);
             return fondos;
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddCredito([FromBody] Cuenta cuenta)
+        {
+            //if (id == 0)
+            //{
+            //    return BadRequest();
+            //}
+
+            //if (Logged.Rol != RolesSistema.Administrador.ToString())
+            //{
+            //    if (id > Logged.Fondos)
+            //    {
+            //        return BadRequest();
+            //    }
+            //}
+
+
+
+            return Ok(new { ok = true });
+
         }
 
     }

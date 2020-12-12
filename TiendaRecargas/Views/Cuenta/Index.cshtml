@@ -145,14 +145,8 @@
     </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-</script>
-
-@*<input name="switchbuttonActivo" type="checkbox" asp-for="@item.Activo" id="@item.IdCuenta" data-onlabel="Ativo" data-offlabel="Inativo" data-toggle="switchbutton" data-offstyle="danger" data-size="xs">
-    <div class="spinner-border spinner-border-sm text-primary" role="status">
-        <span class="sr-only">Loading...</span>
-    </div>*@
+@section scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/jquery/jquery.mask.js" asp-append-version="true"></script>
+    <script src="~/js/views/cuenta/index.js" asp-append-version="true"></script>
+}
