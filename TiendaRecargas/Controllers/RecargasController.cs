@@ -187,7 +187,7 @@ namespace TiendaRecargas.Controllers
             {
                 foreach (var item in listaRecargas)
                 {
-                    var result = await Ding.SendTransfer(item, true);
+                    var result = await Ding.SendTransfer(item);
                     item.TransactionDate = DateTime.Now;
                     item.TransactionResultCode = result.ResultCode;
                     item.TransactionMsg = result.ErrorCodes != null && result.ErrorCodes.Length > 0 ? result.ErrorCodes.FirstOrDefault().Code : null;

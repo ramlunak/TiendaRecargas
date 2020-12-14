@@ -48,6 +48,12 @@
 
         </nav>
     </header>
+
+    @if ((bool)TempData["Simulate"])
+    {
+        <div class="alert alert-primary  text-center w-100" style="color:red">Simulación</div>
+    }
+
     <div class="p-4">
         <main role="main" class="pb-3">
             @RenderBody()

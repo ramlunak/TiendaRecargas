@@ -14,6 +14,8 @@ namespace TiendaRecargas.Provedores
 {
     public class Ding
     {
+        public static bool simulate { get; set; } = true;
+
         public class CountryIso
         {
             [DataMember]
@@ -51,7 +53,7 @@ namespace TiendaRecargas.Provedores
             }
         }
 
-        public static async Task<SendTransferResponse> SendTransfer(Recarga recarga, bool validate)
+        public static async Task<SendTransferResponse> SendTransfer(Recarga recarga)
         {
 
             SendTransferRequest entity = new SendTransferRequest();
@@ -67,7 +69,7 @@ namespace TiendaRecargas.Provedores
 
             entity.AccountNumber = recarga.numero;
             entity.SendValue = (float)recarga.valor;
-            entity.ValidateOnly = validate;
+            entity.ValidateOnly = Ding.simulate;
             entity.DistributorRef = $"cuenta_{recarga.idCuenta}";
 
             var api_key = await GetApiKey();

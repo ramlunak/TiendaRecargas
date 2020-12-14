@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using TiendaRecargas.Provedores;
 
 namespace TiendaRecargas.Controllers
 {
@@ -88,6 +89,7 @@ namespace TiendaRecargas.Controllers
                 try
                 {
                     TempData["Email"] = Logged.Email;
+                    TempData["Simulate"] = Ding.simulate;
                     TempData["Fondos"] = (Logged.Credito - Logged.Balance - Logged.CreditoBloqueado).ToString("F2");
                 }
                 catch
@@ -162,6 +164,7 @@ namespace TiendaRecargas.Controllers
                 {
                     var cuenta = JsonConvert.DeserializeObject<Cuenta>(json);
                     TempData["Email"] = cuenta.Usuario;
+                    TempData["Simulate"] = Ding.simulate;
                     TempData["Fondos"] = (cuenta.Credito - cuenta.Balance - cuenta.CreditoBloqueado).ToString("F2");
                     return cuenta;
                 }
