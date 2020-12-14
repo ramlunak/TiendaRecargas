@@ -3,9 +3,15 @@ $(function () {
 
     $('[data-toggle="tooltip"]').tooltip();
 
+});
+
+function EditarCredito(idCuenta) {
+
     var modal = Swal.fire({
-        title: 'Informe el valor que desea aumentar!!',
+        title: 'Informe el valor!!',
         input: 'text',
+        html:
+            '<input id="swal-input1" name="swal-input1"  type="checkbox"> Disminuir',
         inputAttributes: {
             autocapitalize: 'off'
         },
@@ -21,14 +27,16 @@ $(function () {
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    IdCuenta: 1
+                    IdCuenta: idCuenta,
+                    Credito: parseFloat(login),
+                    Activo: $('#swal-input1').is(":checked")
                 })
             }).then(response => {
                 if (login == "") {
-                    throw new Error("informe un valor mayor que $ 0.00 USD")
+                    throw new Error("informe un valor diferente de $ 0.00 USD")
                 } else
                     if (parseFloat(login) == 0) {
-                        throw new Error("informe un valor mayor que $ 0.00 USD")
+                        throw new Error("informe un valor diferente de $ 0.00 USD")
                     }
                     else
                         if (!response.ok) {
@@ -40,26 +48,39 @@ $(function () {
 
                     if (parseFloat(login) == 0) {
                         Swal.showValidationMessage(
-                            `informe un valor mayor que $ 0.00 USD`
+                            `informe un valor diferente de $ 0.00 USD`
                         )
                     } else {
-                        Swal.showValidationMessage(
-                            `Usted no tiene fondos suficientes para completar esta acción`
-                        )
+                        if (!$('#swal-input1').is(":checked")) {
+                            Swal.showValidationMessage(
+                                `Usted no tiene fondos suficientes para completar esta acción`
+                            )
+                        } else {
+                            Swal.showValidationMessage(
+                                `La cuenta no tiene fondos suficientes para completar esta acción`
+                            )
+                        }
                     }
 
                 })
         },
         allowOutsideClick: () => !Swal.isLoading()
     }).then((result) => {
-        Swal.fire(
-            'Acción completada!',
-            'El crédito de la cuenta se ha modificado.',
-            'success'
-        )
+      
+        if (result.isConfirmed) {  
+            
+            Swal.fire(
+                'Acción completada!',
+                'El crédito de la cuenta se ha modificado.',
+                'success'
+            ).then((re) => {
+                location.reload(true);
+            });
+           
+        }
+       
     })
 
     $(".swal2-input").mask("###0.00", { reverse: true });
-    // $(".swal2-input").val(45);
 
-});
+}

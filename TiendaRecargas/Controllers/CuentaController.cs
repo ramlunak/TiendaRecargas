@@ -334,24 +334,83 @@ namespace TiendaRecargas.Controllers
             SignIn(cuenta, false);
             return fondos;
         }
+
         [HttpPost]
         public async Task<IActionResult> AddCredito([FromBody] Cuenta cuenta)
         {
-            //if (id == 0)
-            //{
-            //    return BadRequest();
-            //}
+            if (cuenta == null || cuenta.IdCuenta == 0)
+            {
+                return BadRequest();
+            }
 
-            //if (Logged.Rol != RolesSistema.Administrador.ToString())
-            //{
-            //    if (id > Logged.Fondos)
-            //    {
-            //        return BadRequest();
-            //    }
-            //}
+            if (Logged.Rol != RolesSistema.Administrador.ToString())
+            {
+                if (!cuenta.Activo)
+                {
+                    if (cuenta.Credito > Logged.Fondos)
+                    {
+                        return BadRequest();
+                    }
+                    else
+                    {
+                        var subcuenta = await _context.RT_Cuentas.FindAsync(cuenta.IdCuenta);
+                        subcuenta.Credito += cuenta.Credito;
+                        _context.Update(subcuenta);
+                        await _context.SaveChangesAsync();
 
+                        var padre = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
+                        padre.CreditoBloqueado += cuenta.Credito;
+                        _context.Update(padre);
+                        await _context.SaveChangesAsync();
+                        await GetFondos();
+                    }
+                }
+                else
+                {
+                    var subcuenta = await _context.RT_Cuentas.FindAsync(cuenta.IdCuenta);
+                    if (cuenta.Credito > subcuenta.Fondos)
+                    {
+                        return BadRequest();
+                    }
+                    else
+                    {
+                        subcuenta.Credito -= cuenta.Credito;
+                        _context.Update(subcuenta);
+                        await _context.SaveChangesAsync();
 
-
+                        var padre = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
+                        padre.CreditoBloqueado -= cuenta.Credito;
+                        _context.Update(padre);
+                        await _context.SaveChangesAsync();
+                        await GetFondos();
+                    }
+                }
+            }
+            else
+            {
+                //SI EL USUARIO ES ADIMISTRADOR
+                if (!cuenta.Activo)
+                {
+                    var subcuenta = await _context.RT_Cuentas.FindAsync(cuenta.IdCuenta);
+                    subcuenta.Credito += cuenta.Credito;
+                    _context.Update(subcuenta);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    var subcuenta = await _context.RT_Cuentas.FindAsync(cuenta.IdCuenta);
+                    if (cuenta.Credito > subcuenta.Fondos)
+                    {
+                        return BadRequest();
+                    }
+                    else
+                    {
+                        subcuenta.Credito -= cuenta.Credito;
+                        _context.Update(subcuenta);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
             return Ok(new { ok = true });
 
         }

@@ -30,7 +30,7 @@
                         <div class="card-body">
                             <div class="row col-12">
 
-                                <table>
+                                <table class="w-100">
                                     <tr>
                                         <td style="font-weight:600">Usuario</td>
                                         <td>: @item.Usuario</td>
@@ -44,16 +44,26 @@
                                         <td>: @item.Email</td>
                                     </tr>
                                     <tr>
-                                        <td style="font-weight:600">Credito</td>
+                                        <td style="font-weight:600">Porciento</td>
+                                        <td>: @item.Porciento.ToString("F") %</td>
+                                    </tr>
+                                    <tr><td colspan="2"><hr /></td></tr>
+                                    <tr>
+                                        <td style="font-weight:600">Crédito</td>
                                         <td>: $@item.Credito.ToString("F") USD</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:600">Subcuentas</td>
+                                        <td>: $@item.CreditoBloqueado.ToString("F") USD</td>
                                     </tr>
                                     <tr>
                                         <td style="font-weight:600">Balance</td>
                                         <td>: $@item.Balance.ToString("F") USD</td>
                                     </tr>
+
                                     <tr>
-                                        <td style="font-weight:600">Porciento</td>
-                                        <td>: @item.Porciento.ToString("F") %</td>
+                                        <td style="font-weight:600">Fondos</td>
+                                        <td>: $@item.Fondos.ToString("F") USD</td>
                                     </tr>
                                 </table>
 
@@ -83,6 +93,10 @@
                                 <a asp-action="UpdatePassword" asp-route-id="@item.IdCuenta" asp-route-usuario="@item.Usuario">
                                     <i class="fas fa-user-lock cursor-pointer" data-toggle="tooltip" data-placement="top" title="Cambiar Contraseña" style="color:orange"></i>
                                 </a>
+                                <div>
+                                    <a class="cursor-pointer" data-toggle="tooltip" data-placement="top" title="Editar Crédito" onclick="EditarCredito(@item.IdCuenta)">
+                                    <i class="fas fa-dollar-sign"></i></a>
+                                </div>
                                 <div>
                                     <a asp-action="Edit" asp-route-id="@item.IdCuenta" class="mr-3"><i style="color:green" class="fas fa-user-edit"></i></a>
                                     <a asp-action="Delete" asp-route-id="@item.IdCuenta"><i style="color:orangered" class="fas fa-trash"></i></a>
