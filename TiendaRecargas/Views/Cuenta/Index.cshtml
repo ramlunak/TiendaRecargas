@@ -67,25 +67,6 @@
                                     </tr>
                                 </table>
 
-                                @*<div class="col-12">
-                                        <span style="width:10px">Usuario</span>: @Html.DisplayFor(modelItem => item.Usuario)
-                                    </div>
-                                    <div class="col-12">
-                                        <span style="width:10px">Telefono</span>: @Html.DisplayFor(modelItem => item.Telefono)
-                                    </div>
-                                    <div class="col-12">
-                                        <span style="width:10px">Correo</span>: @Html.DisplayFor(modelItem => item.Email)
-                                    </div>
-                                    <div class="col-12">
-                                        <span style="width:10px">Crédito</span>: $@Html.DisplayFor(modelItem => item.Credito) USD
-                                    </div>
-                                    <div class="col-12">
-                                        <span style="width:10px">Balance</span>: $@Html.DisplayFor(modelItem => item.Balance) USD
-                                    </div>
-                                    <div class="col-12">
-                                        <span style="width:10px">Porciento</span>: @Html.DisplayFor(modelItem => item.Porciento)%
-                                    </div>*@
-
                             </div>
                         </div>
                         <div class="card-footer text-muted">
@@ -107,52 +88,6 @@
                         </div>
                     </div>
                 </div>
-
-                @*<tr>
-                        <td>
-                            @Html.DisplayNameFor(model => model.Nombre): @Html.DisplayFor(modelItem => item.Nombre)
-                            @Html.DisplayNameFor(model => model.Nombre): @Html.DisplayFor(modelItem => item.Usuario)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Telefono)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Credito)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Balance)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Porciento)
-                        </td>
-                        <td>
-
-                            @if (item.TiendaFisica)
-                            {
-                                <i style="color:blue" class="fas fa-store"></i>
-                            }
-
-                            @if (item.EnviarSMS)
-                            {
-                                <i style="color: darkturquoise" class="fas fa-comment"></i>
-                            }
-
-                        </td>
-                        <td>
-                            <a asp-action="UpdatePassword" asp-route-id="@item.IdCuenta" asp-route-usuario="@item.Usuario">
-                                <i class="fas fa-user-lock cursor-pointer" data-toggle="tooltip" data-placement="top" title="Cambiar Contraseña" style="color:orange"></i>
-                            </a>
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.IdCuenta"><i style="color:green" class="fas fa-user-edit"></i></a>
-                            <a asp-action="Delete" asp-route-id="@item.IdCuenta"><i style="color:orangered" class="fas fa-trash"></i></a>
-                        </td>
-                    </tr>*@
             }
         </div>
         @*FIN BODY CARD*@

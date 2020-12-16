@@ -11,6 +11,20 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+
+    <div class="position-absolute d-sm-none" style=" top: 10px;
+        float: right;
+        z-index: 99999;
+        opacity: 0.7;
+        right: 10px;
+        background: green;
+        padding: 5px;
+        border-radius: 5px;
+        color: white;
+    ">
+        <span>$@TempData["Fondos"] USD</span>
+    </div>
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -22,7 +36,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li class="nav-item">
                             <a class="nav-link text-dark">
-                                <span style="color: dodgerblue !important">@TempData["Email"] (@TempData["Fondos"])</span>
+                                <div style="color: dodgerblue !important">@TempData["Email"] <span style="color:green"> ($@TempData["Fondos"] USD)</span></div>
                             </a>
                         </li>
                         <li class="nav-item"><a class="nav-link text-dark" asp-controller="Login" asp-action="Salir">Salir</a></li>
@@ -51,7 +65,7 @@
 
     @if ((bool)TempData["Simulate"])
     {
-        <div class="alert alert-primary  text-center w-100" style="color:red">Simulación</div>
+    <div class="alert alert-primary  text-center w-100" style="color:red">Simulación</div>
     }
 
     <div class="p-4">

@@ -1,4 +1,5 @@
 ﻿@model TiendaRecargas.Models.Recarga
+@using System.Globalization;
 
 @{
     ViewData["Title"] = "Index";
@@ -88,53 +89,136 @@
     </div>
     <div class="card-body">
         @*BODY CARD*@
-        <table class="table table-striped">
 
-            <tbody>
-                @if (ViewBag.RecargasEnLista != null && ViewBag.RecargasEnLista.Count > 0)
+        <div class="row">
+            @if (ViewBag.RecargasEnLista != null && ViewBag.RecargasEnLista.Count > 0)
+            {
+                @foreach (var item in ViewBag.RecargasEnLista)
                 {
-                    @foreach (var item in ViewBag.RecargasEnLista)
-                    {
-                <tr>
-                    <td class="w-100">
-                        <div class="d-flex">
-                            @if (item.tipoRecarga == TipoRecarga.movil)
-                            {
-                                <img width="20" src="~/img/sim_card.png" />
-                            }
-                            @if (item.tipoRecarga == TipoRecarga.nauta)
-                            {
-                                <img width="20" src="~/img/wifi.png" />
-                            }
-                            <b>@item.numero</b>
+                    var data = "";
+                    if (item.TransactionDate != null)
+                        data = item.TransactionDate.ToString("F", CultureInfo.CreateSpecificCulture("es-ES"));
+                    else
+                        data = item.date.ToString("F", CultureInfo.CreateSpecificCulture("es-ES"));
+
+                    var header_style = "bg-primary";
+                    if (item.status == RecargaStatus.success)
+                        header_style = "bg-success ";
+                    if (item.status == RecargaStatus.error)
+                        header_style = "bg-danger";
+
+                    <div class="col-12 col-md-6 col-lg-4 mb-3">
+                        <div class="card">
+                            <div class="card-header @header_style text-white">
+                                <div class="d-flex">
+                                    @if (item.tipoRecarga == TipoRecarga.movil)
+                                    {
+                                        <img width="20" src="~/img/sim_card.png" />
+                                    }
+                                    @if (item.tipoRecarga == TipoRecarga.nauta)
+                                    {
+                                        <img width="20" src="~/img/wifi.png" />
+                                    }
+                                    <b>@item.numero</b>
+                                </div>
+                                @(item.descripcion is null ?" ":item.descripcion)
+                            </div>
+                            <div class="card-body">
+                                <div class="row col-12">
+
+                                    <table>
+                                        <tr>
+                                            <td style="font-weight:600">Valor</td>
+                                            <td>: $@item.valor.ToString("F2") USD</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="font-weight:600">Monto</td>
+                                            <td>: $@item.monto.ToString("F2") USD</td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <div class="d-flex justify-content-end">
+                                    <span>@data</span>
+                                </div>
+                                @*<div class="row justify-content-between">
+
+                                        <div>
+                                            <a class="cursor-pointer" data-toggle="tooltip" data-placement="top" title="Editar Crédito" onclick="EditarCredito(@item.id)">
+                                                <i class="fas fa-dollar-sign"></i>
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a asp-action="Edit" asp-route-id="@item.id" class="mr-3"><i style="color:green" class="fas fa-user-edit"></i></a>
+                                            <a asp-action="Delete" asp-route-id="@item.id"><i style="color:orangered" class="fas fa-trash"></i></a>
+                                        </div>
+                                    </div>*@
+
+                            </div>
                         </div>
-                    </td>
-                    <td>
-                        <b>@item.descripcion</b>
-                    </td>
-                    <td>
-                        <b>@item.status</b>
-                    </td>
-                    <td>
-                        <b>$@item.monto.ToString("F2")</b>
-                    </td>
-
-                    <td>
-                        <a class="btn btn-outline-info" onclick="DeleteRecarga(@item.id)"><i style="color:red" class="fa fa-trash"></i></a>
-                    </td>
-                </tr>
-                    }
+                    </div>
                 }
-                else
-                {
+            }
+            else
+            {
+                <div class="row col-12 d-flex justify-content-center">
+                    <div style="text-align:center">
+                        <h5>No hay recargas en la lista</h5>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @*<table class="table table-striped">
+
+                <tbody>
+                    @if (ViewBag.RecargasEnLista != null && ViewBag.RecargasEnLista.Count > 0)
+                    {
+                        @foreach (var item in ViewBag.RecargasEnLista)
+                        {
                     <tr>
-                        <td style="text-align:center">
-                            <h5>No hay recargas en la lista</h5>
+                        <td class="w-100">
+                            <div class="d-flex">
+                                @if (item.tipoRecarga == TipoRecarga.movil)
+                                {
+                                    <img width="20" src="~/img/sim_card.png" />
+                                }
+                                @if (item.tipoRecarga == TipoRecarga.nauta)
+                                {
+                                    <img width="20" src="~/img/wifi.png" />
+                                }
+                                <b>@item.numero</b>
+                            </div>
+                        </td>
+                        <td>
+                            <b>@item.descripcion</b>
+                        </td>
+                        <td>
+                            <b>@item.status</b>
+                        </td>
+                        <td>
+                            <b>$@item.monto.ToString("F2")</b>
+                        </td>
+
+                        <td>
+                            <a class="btn btn-outline-info" onclick="DeleteRecarga(@item.id)"><i style="color:red" class="fa fa-trash"></i></a>
                         </td>
                     </tr>
-                }
-            </tbody>
-        </table>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td style="text-align:center">
+                                <h5>No hay recargas en la lista</h5>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>*@
 
 
         @*FIN BODY CARD*@

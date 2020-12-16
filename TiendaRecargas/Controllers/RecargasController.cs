@@ -49,6 +49,13 @@ namespace TiendaRecargas.Controllers
             return View(recarga);
         }
 
+        public async Task<IActionResult> Historial()
+        {
+            IsLogged();
+            return View();
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> GetValores(string id)
         {
