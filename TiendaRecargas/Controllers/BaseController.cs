@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using TiendaRecargas.Provedores;
+using System.Globalization;
 
 namespace TiendaRecargas.Controllers
 {
@@ -242,6 +243,7 @@ namespace TiendaRecargas.Controllers
 
             TempData["Message"] = JsonConvert.SerializeObject(msg);
         }
+
         //private string GetProvider()
         //{
         //    var builder = new ConfigurationBuilder()

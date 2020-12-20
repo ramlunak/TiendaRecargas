@@ -125,19 +125,22 @@
                             </div>
                             <div class="card-body">
                                 <div class="row col-12">
+                                    <div class="d-flex justify-content-between">
+                                        <table>
+                                            <tr>
+                                                <td style="font-weight:600">Valor</td>
+                                                <td>: $@item.valor.ToString("F2") USD</td>
+                                            </tr>
 
-                                    <table>
-                                        <tr>
-                                            <td style="font-weight:600">Valor</td>
-                                            <td>: $@item.valor.ToString("F2") USD</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td style="font-weight:600">Monto</td>
-                                            <td>: $@item.monto.ToString("F2") USD</td>
-                                        </tr>
-                                    </table>
-
+                                            <tr>
+                                                <td style="font-weight:600">Monto</td>
+                                                <td>: $@item.monto.ToString("F2") USD</td>
+                                            </tr>
+                                        </table>
+                                        <div>
+                                            <a asp-action="Delete" asp-route-id="@item.id"><i style="color:orangered" class="fas fa-trash"></i></a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-footer text-muted">

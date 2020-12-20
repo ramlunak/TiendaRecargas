@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using TiendaRecargas.Data;
+using TiendaRecargas.Extensions;
 using TiendaRecargas.Models;
 using TiendaRecargas.Models.Enums;
 using TiendaRecargas.Provedores;
@@ -26,11 +27,12 @@ namespace TiendaRecargas.Controllers
         public async Task<IActionResult> Index()
         {
             IsLogged();
-            ViewBag.RecargasEnLista = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta).ToListAsync();
 
             var recarga = new Recarga();
             try
             {
+                ViewBag.RecargasEnLista = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.en_lista).ToListAsync();
+
                 if (GetSession<Recarga>("Recarga") != null)
                 {
                     recarga = GetSession<Recarga>("Recarga");
@@ -195,7 +197,7 @@ namespace TiendaRecargas.Controllers
                 foreach (var item in listaRecargas)
                 {
                     var result = await Ding.SendTransfer(item);
-                    item.TransactionDate = DateTime.Now;
+                    item.TransactionDate = DateTime.Now.ToEasternStandardTime();
                     item.TransactionResultCode = result.ResultCode;
                     item.TransactionMsg = result.ErrorCodes != null && result.ErrorCodes.Length > 0 ? result.ErrorCodes.FirstOrDefault().Code : null;
                     if (Convert.ToInt32(result.ResultCode) > 2)

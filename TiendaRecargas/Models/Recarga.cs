@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using TiendaRecargas.Extensions;
 using TiendaRecargas.Models.Enums;
 using TiendaRecargas.Utiles;
 
@@ -28,7 +30,9 @@ namespace TiendaRecargas.Models
         public decimal monto { get; set; }
         public string descripcion { get; set; }
         public int idCuenta { get; set; }
-        public DateTime date { get; set; } = DateTime.Now;
+        public DateTime date { get; set; } = DateTime.Now.ToEasternStandardTime();
+        public int? semana { get; set; } = CultureInfo.GetCultureInfo("es-ES").Calendar.GetWeekOfYear(DateTime.Now.ToUniversalTime(), CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+        public int? year { get; set; } = DateTime.Now.ToEasternStandardTime().Year;
         public Enums.RecargaStatus status { get; set; }
         public string TransactionId { get; set; }
         public string TransactionMsg { get; set; }
@@ -36,10 +40,10 @@ namespace TiendaRecargas.Models
         public string TransactionResultCode { get; set; }
         [NotMapped]
         public string nauta { get; set; }
-       
+
         public decimal GetMonto(decimal porciento)
         {
-           return monto = valor / 100 * porciento;
+            return monto = valor / 100 * porciento;
         }
     }
 }
