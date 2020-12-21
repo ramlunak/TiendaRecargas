@@ -1,0 +1,30 @@
+﻿@model TiendaRecargas.Models.Facturacion
+
+@{
+    ViewData["Title"] = "Facturacion";
+    var filtro = new RecargaSearch();
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="row d-flex justify-content-between p-2">
+            <div>
+                <b>FACTURACIÓN</b>
+            </div>
+            <form asp-action="Facturacion">
+                <div>
+                    <div class="form-group d-flex">
+                        <input asp-for="@filtro.input" type="week" value="@ViewBag.Semana" class="form-control form-control-sm" />
+                        <button type="submit" class="btn btn-sm btn-outline-primary"><i class="fa fa-search"></i></button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="card-body">
+        @*BODY CARD*@
+
+    </div>
+</div>
