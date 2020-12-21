@@ -47,6 +47,9 @@
                             <a class="nav-link text-dark textalign-center" asp-area="" asp-controller="Home" asp-action="Index"> <i class="fas fa-home"></i> Inicio</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark textalign-center" asp-area="" asp-controller="Recargas" asp-action="Historial"> <i class="fas fa-home"></i> Historial</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark textalign-center" asp-controller="Cuenta" asp-action="Index"><i class="fas fa-user-shield"></i> Cuentas</a>
                         </li>
                         <li class="nav-item">
@@ -65,10 +68,12 @@
 
     @if ((bool)TempData["Simulate"])
     {
-    <div class="alert alert-primary  text-center w-100" style="color:red">Simulación</div>
+        <div class="alert alert-primary  text-center w-100" style="color:red">Simulación</div>
     }
 
+
     <div class="p-4">
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

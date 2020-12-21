@@ -46,4 +46,26 @@ namespace TiendaRecargas.Models
             return monto = valor / 100 * porciento;
         }
     }
+
+    public class RecargaSearch
+    {
+        public string input { get; set; } = DateTime.Now.GetYearSemana();
+        public int year
+        {
+            get
+            {
+                if (input is null) return DateTime.Now.ToEasternStandardTime().Year;
+                return Convert.ToInt32(input.Split("-")[0]);
+            }
+        }
+        public int semana
+        {
+            get
+            {
+                if (input is null) return 0;
+                var numeroSemana = input.Split("-")[1].ToString().Replace("W","");
+                return Convert.ToInt32(numeroSemana);
+            }
+        }
+    }
 }

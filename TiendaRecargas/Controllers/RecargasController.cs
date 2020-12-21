@@ -54,9 +54,22 @@ namespace TiendaRecargas.Controllers
         public async Task<IActionResult> Historial()
         {
             IsLogged();
-            return View();
+            var semana = DateTime.Now.GetSemana();
+            var year = DateTime.Now.ToEasternStandardTime().Year;
+            ViewBag.Semana = $"{year}-W{semana}";
+            var model = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.success && x.year == year && x.semana == semana).ToListAsync();
+            return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Historial(RecargaSearch filtro)
+        {
+            IsLogged();
+            var model = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.success && x.year == filtro.year && x.semana == filtro.semana).ToListAsync();
+            ViewBag.Semana = filtro.input;
+            return View(model);
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetValores(string id)
