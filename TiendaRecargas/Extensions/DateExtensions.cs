@@ -23,12 +23,12 @@ namespace TiendaRecargas.Extensions
         }
         public static int GetSemana(this DateTime date)
         {
-            return CultureInfo.GetCultureInfo("es-ES").Calendar.GetWeekOfYear(date.ToUniversalTime(), CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+            return CultureInfo.GetCultureInfo("es-ES").Calendar.GetWeekOfYear(date.ToEasternStandardTime(), CalendarWeekRule.FirstDay, DayOfWeek.Monday);
         }
 
         public static string GetYearSemana(this DateTime date)
         {
-            return $"{date.ToEasternStandardTime().Year}-W{CultureInfo.GetCultureInfo("es-ES").Calendar.GetWeekOfYear(date.ToUniversalTime(), CalendarWeekRule.FirstDay, DayOfWeek.Monday)}";
+            return $"{date.ToEasternStandardTime().Year}-W{CultureInfo.GetCultureInfo("es-ES").Calendar.GetWeekOfYear(date.ToEasternStandardTime(), CalendarWeekRule.FirstDay, DayOfWeek.Monday)}";
         }
     }
 }
