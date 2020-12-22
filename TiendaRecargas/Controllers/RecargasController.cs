@@ -92,7 +92,7 @@ namespace TiendaRecargas.Controllers
                 item.Recargas = await _context.RT_Recargas.Where(x => x.idCuenta == item.IdCuenta && x.status == RecargaStatus.success && x.year == year && x.semana == semana).ToListAsync();
             }
 
-            
+
             return View(model);
         }
 
@@ -101,9 +101,25 @@ namespace TiendaRecargas.Controllers
         public async Task<IActionResult> Facturacion(RecargaSearch filtro)
         {
             IsLogged();
-            var model = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.success && x.year == filtro.year && x.semana == filtro.semana).ToListAsync();
+            var semana = filtro.semana;
+            var year = filtro.year;
             ViewBag.Semana = filtro.input;
-            return View();
+
+            var model = new Facturacion();
+
+            var recargas = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.success && x.year == year && x.semana == semana).ToListAsync();
+
+            model.Recargas = recargas;
+
+            var cuentas = await _context.RT_Cuentas.Where(x => x.IdCuentaPadre == Logged.IdCuenta).ToListAsync();
+            model.cuentas = cuentas;
+
+            foreach (var item in model.cuentas)
+            {
+                item.Recargas = await _context.RT_Recargas.Where(x => x.idCuenta == item.IdCuenta && x.status == RecargaStatus.success && x.year == year && x.semana == semana).ToListAsync();
+            }
+
+            return View(model);
         }
 
 

@@ -26,5 +26,38 @@
     <div class="card-body">
         @*BODY CARD*@
 
+        <div class="row" style="font-weight:600">
+
+            <div class="col-12 col-md-4">
+                <div class="alert bg-danger text-white">
+                    <div class="d-flex justify-content-between">
+                        <div>Total a Pagar</div>
+                        <div>$@Model.montoTotalRecargas.ToString("F2")</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="alert bg-success text-white">
+                    <div class="d-flex justify-content-between">
+                        <div>Su Comisión</div>
+                        <div>$0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="alert bg-info text-white">
+                    <div class="d-flex justify-content-between">
+                        <div>Recargas</div>
+                        <div>@Model.totalRecargas</div>
+                        <div>$@Model.montoTotalRecargas.ToString("F2")</div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
     </div>
 </div>
