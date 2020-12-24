@@ -262,6 +262,10 @@ namespace TiendaRecargas.Controllers
                 foreach (var item in listaRecargas)
                 {
                     var result = await Ding.SendTransfer(item);
+
+                    //BORRAR >>>>
+                    result.ResultCode = "1";//SOLO PARA PODER INSERTER EN SIMULACIO
+
                     item.TransactionDate = DateTime.Now.ToEasternStandardTime();
                     item.TransactionResultCode = result.ResultCode;
                     item.TransactionMsg = result.ErrorCodes != null && result.ErrorCodes.Length > 0 ? result.ErrorCodes.FirstOrDefault().Code : null;
