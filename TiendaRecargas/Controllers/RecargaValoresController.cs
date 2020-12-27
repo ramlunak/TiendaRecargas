@@ -11,7 +11,7 @@ using TiendaRecargas.Models;
 
 namespace TiendaRecargas.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrador")]
     public class RecargaValoresController : BaseController
     {
         private readonly AppDbContext _context;

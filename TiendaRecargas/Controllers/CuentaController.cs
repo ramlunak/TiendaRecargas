@@ -12,7 +12,7 @@ using TiendaRecargas.Models.Enums;
 
 namespace TiendaRecargas.Controllers
 {
-    [Authorize(Roles = "Administrator,Vendedor")]
+    [Authorize(Roles = "Administrador,Vendedor")]
     public class CuentaController : BaseController
     {
         private readonly AppDbContext _context;
@@ -23,12 +23,12 @@ namespace TiendaRecargas.Controllers
         }
 
         // GET: Cuenta
-        public async Task<IActionResult> Index(int? id,int? backId)
+        public async Task<IActionResult> Index(int? id, int? backId)
         {
             IsLogged();
 
             ViewBag.BackId = backId;
-          //  ViewBag.BackId = backId;
+            //  ViewBag.BackId = backId;
             var idPadre = id;
 
             try
@@ -37,7 +37,7 @@ namespace TiendaRecargas.Controllers
                 {
                     idPadre = Logged.IdCuenta;
                 }
-               
+
                 var model = await _context.RT_Cuentas.Where(x => x.IdCuentaPadre == idPadre).ToListAsync();
                 return View(model.Where(x => x.Rol != "Administrador"));
             }
@@ -135,11 +135,11 @@ namespace TiendaRecargas.Controllers
                 cuenta.Rol = RolesSistema.Vendedor.ToString();
             }
 
-            
+
 
             cuenta.IdCuentaPadre = Logged.IdCuenta;
             cuenta.Activo = true;
-         
+
 
             if (ModelState.IsValid)
             {

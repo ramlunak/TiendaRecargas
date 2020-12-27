@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -62,12 +63,12 @@ namespace TiendaRecargas
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(RolesSistema.Administrador.ToString(), pol => pol.RequireClaim(ClaimTypes.Role, RolesSistema.Administrador.ToString()));
-                options.AddPolicy(RolesSistema.Vendedor.ToString(), pol => pol.RequireClaim(ClaimTypes.Role, RolesSistema.Vendedor.ToString()));
-                options.AddPolicy(RolesSistema.Subvendedor.ToString(), pol => pol.RequireClaim(ClaimTypes.Role, RolesSistema.Subvendedor.ToString()));
-            });
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("Administrador", pol => pol.RequireClaim(ClaimTypes.Role, "Administrador"));
+            //    options.AddPolicy(RolesSistema.Vendedor.ToString(), pol => pol.RequireClaim(ClaimTypes.Role, RolesSistema.Vendedor.ToString()));
+            //    options.AddPolicy(RolesSistema.Subvendedor.ToString(), pol => pol.RequireClaim(ClaimTypes.Role, RolesSistema.Subvendedor.ToString()));
+            //});
 
             var cultureInfo = new CultureInfo("en-US");
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
@@ -108,7 +109,7 @@ namespace TiendaRecargas
             //}
             //else
             //{
-            //    app.UseExceptionHandler("/Shared/Error");
+            app.UseExceptionHandler("/Shared/Error");
             //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             //    app.UseHsts();
             //}
@@ -117,6 +118,7 @@ namespace TiendaRecargas
             app.UseStaticFiles();
 
             app.UseRouting();
+
 
             app.UseAuthentication();
             app.UseAuthorization();
