@@ -13,6 +13,7 @@ namespace TiendaRecargas.Models.Enums
     public enum RolesSistema
     {
         Administrador,
-        Vendedor
+        Vendedor,
+        Subvendedor
     }
 }

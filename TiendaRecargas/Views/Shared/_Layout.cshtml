@@ -42,23 +42,22 @@
                         <li class="nav-item"><a class="nav-link text-dark" asp-controller="Login" asp-action="Salir">Salir</a></li>
                     </ul>
                     <ul class="navbar-nav flex-grow-1">
-
                         <li class="nav-item">
                             <a class="nav-link text-dark textalign-center" asp-area="" asp-controller="Home" asp-action="Index"> <i class="fas fa-home"></i> Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark textalign-center" asp-area="" asp-controller="Recargas" asp-action="Historial"> <i class="fas fa-home"></i> Historial</a>
+                            <a class="nav-link text-dark textalign-center" asp-authorize asp-roles="@RolesSistema.Vendedor,@RolesSistema.Subvendedor" asp-area="" asp-controller="Recargas" asp-action="Historial"> <i class="fas fa-home"></i> Historial</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador,@RolesSistema.Vendedor">
                             <a class="nav-link text-dark textalign-center" asp-controller="Cuenta" asp-action="Index"><i class="fas fa-user-shield"></i> Cuentas</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador">
                             <a class="nav-link text-dark textalign-center" asp-controller="RecargaValores" asp-action="Index"><i class="fas fa-dollar-sign"></i> Valores</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Vendedor,@RolesSistema.Subvendedor">
                             <a class="nav-link text-dark textalign-center" asp-controller="Recargas" asp-action="Index"> <i class="fas fa-cart-plus"></i> Recargar</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Vendedor,@RolesSistema.Subvendedor">
                             <a class="nav-link text-dark textalign-center" asp-controller="Recargas" asp-action="Facturacion"> <i class="fas fa-cart-plus"></i> Facturacion</a>
                         </li>
                     </ul>
@@ -68,33 +67,33 @@
 
         </nav>
     </header>
+    @if (TempData["Simulate"] != null)
+        @if ((bool)TempData["Simulate"])
+        {
+            <div class="alert alert-primary  text-center w-100" style="color:red">Simulación</div>
+        }
 
-    @if ((bool)TempData["Simulate"])
-    {
-        <div class="alert alert-primary  text-center w-100" style="color:red">Simulación</div>
-    }
 
+        <div class="p-4">
 
-    <div class="p-4">
-
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - TiendaRecargas - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
-    <script src="~/lib/limonte-sweetalert2/sweetalert2.js" asp-append-version="true"></script>
-    <script src="~/lib/bootstrap-switch-button/bootstrap-switch-button.js"></script>
-    <script src="~/lib/font-awesome/js/all.js" asp-append-version="true"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
-    @await Html.PartialAsync("_notificationPartial")
-    @RenderSection("Scripts", required: false)
-</body>
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2020 - TiendaRecargas - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
+        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+        <script src="~/lib/limonte-sweetalert2/sweetalert2.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap-switch-button/bootstrap-switch-button.js"></script>
+        <script src="~/lib/font-awesome/js/all.js" asp-append-version="true"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+
+        @await Html.PartialAsync("_notificationPartial")
+        @RenderSection("Scripts", required: false)
+    </body>
 </html>

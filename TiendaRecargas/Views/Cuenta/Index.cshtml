@@ -9,6 +9,10 @@
     <div class="card-header small">
         <div class="row d-flex justify-content-between p-2">
             <div>
+                @if (ViewBag.BackId != null)
+                {
+                    <a asp-action="Index" asp-route-id="@ViewBag.BackId"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+                }
                 <b>CUENTAS</b>
             </div>
             <div>
@@ -25,7 +29,14 @@
                 <div class="col-12 col-md-6 col-lg-4 mb-3">
                     <div class="card">
                         <div class="card-header bg-primary text-white">
-                            @item.Nombre
+                            <div class="d-flex justify-content-between">
+                                <div>@item.Nombre</div>
+                                @if (item.Rol != RolesSistema.Subvendedor.ToString())
+                                {
+                                    <div><a asp-action="Index" asp-route-id="@item.IdCuenta" asp-route-backId="@item.IdCuentaPadre" data-toggle="tooltip" data-placement="top" title="Subcuentas"><i class="fa fa-users" style="color:white" aria-hidden="true"></i></a></div>
+
+                                }
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="row col-12">
@@ -76,7 +87,8 @@
                                 </a>
                                 <div>
                                     <a class="cursor-pointer" data-toggle="tooltip" data-placement="top" title="Editar Crédito" onclick="EditarCredito(@item.IdCuenta)">
-                                    <i class="fas fa-dollar-sign"></i></a>
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </a>
                                 </div>
                                 <div>
                                     <a asp-action="Edit" asp-route-id="@item.IdCuenta" class="mr-3"><i style="color:green" class="fas fa-user-edit"></i></a>

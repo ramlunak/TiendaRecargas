@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using TiendaRecargas.Models.Enums;
 
 namespace TiendaRecargas.Controllers
 {
+    [Authorize(Roles = "Administrator,Vendedor")]
     public class CuentaController : BaseController
     {
         private readonly AppDbContext _context;
@@ -21,12 +23,22 @@ namespace TiendaRecargas.Controllers
         }
 
         // GET: Cuenta
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id,int? backId)
         {
             IsLogged();
+
+            ViewBag.BackId = backId;
+          //  ViewBag.BackId = backId;
+            var idPadre = id;
+
             try
             {
-                var model = await _context.RT_Cuentas.Where(x => x.IdCuentaPadre == Logged.IdCuenta).ToListAsync();
+                if (!id.HasValue)
+                {
+                    idPadre = Logged.IdCuenta;
+                }
+               
+                var model = await _context.RT_Cuentas.Where(x => x.IdCuentaPadre == idPadre).ToListAsync();
                 return View(model.Where(x => x.Rol != "Administrador"));
             }
             catch (Exception ex)
@@ -114,10 +126,20 @@ namespace TiendaRecargas.Controllers
 
             }
 
+            if (Logged.Rol != RolesSistema.Administrador.ToString())
+            {
+                cuenta.Rol = RolesSistema.Subvendedor.ToString();
+            }
+            else
+            {
+                cuenta.Rol = RolesSistema.Vendedor.ToString();
+            }
+
+            
 
             cuenta.IdCuentaPadre = Logged.IdCuenta;
             cuenta.Activo = true;
-            cuenta.Rol = RolesSistema.Vendedor.ToString();
+         
 
             if (ModelState.IsValid)
             {

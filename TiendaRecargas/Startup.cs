@@ -62,12 +62,12 @@ namespace TiendaRecargas
                 options.Cookie.IsEssential = true;
             });
 
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy(RolesSistema.Administrador.ToString(), pol => pol.RequireClaim(ClaimTypes.Role, RolesSistema.Administrador.ToString()));
-            //    options.AddPolicy(RolesSistema.Vendedor.ToString(), pol => pol.RequireClaim(ClaimTypes.Role, RolesSistema.Vendedor.ToString()));
-            //    options.AddPolicy(RolesSistema.SubVendedor.ToString(), pol => pol.RequireClaim(ClaimTypes.Role, RolesSistema.SubVendedor.ToString()));
-            //});
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(RolesSistema.Administrador.ToString(), pol => pol.RequireClaim(ClaimTypes.Role, RolesSistema.Administrador.ToString()));
+                options.AddPolicy(RolesSistema.Vendedor.ToString(), pol => pol.RequireClaim(ClaimTypes.Role, RolesSistema.Vendedor.ToString()));
+                options.AddPolicy(RolesSistema.Subvendedor.ToString(), pol => pol.RequireClaim(ClaimTypes.Role, RolesSistema.Subvendedor.ToString()));
+            });
 
             var cultureInfo = new CultureInfo("en-US");
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
