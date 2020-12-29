@@ -97,6 +97,6 @@ function showLoading() {
         showConfirmButton: false,
         allowOutsideClick: false,
         imageAlt: 'A tall image',
-        html: "<div class='d-block justify-content-center'> <div class='spinner-border text-primary mr-3' role='status'></div > <div>Espere un momento por favor. </div> </div >"
+        html: "<div class='d-block justify-content-center'> <div class='spinner-border text-primary mr-3' role='status'></div > <div>El sistema esta procesando las recargas. Por favor espere...</div> </div >"
     })
 }

@@ -65,6 +65,12 @@
                 <input class="form-control form-control-sm" asp-for="descripcion" placeholder="Descripción (Opcional)" />
             </div>
 
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="simularErro" /> @Html.DisplayNameFor(model => model.simularErro)
+                </label>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Adicionar a la lista" class="btn btn-primary form-control form-control-sm mb-2" />
             </div>
@@ -100,50 +106,110 @@
                     else
                         data = item.date.ToString("F", CultureInfo.CreateSpecificCulture("es-ES"));
 
-                    var header_style = "bg-primary";
-                    if (item.status == RecargaStatus.success)
-                        header_style = "bg-success ";
+                    var header_style = "";
+                    //if (item.status == RecargaStatus.success)
+                    //    header_style = "border: 1px solid green; ";
                     if (item.status == RecargaStatus.error)
-                        header_style = "bg-danger";
+                        header_style = "border: 1px solid red;";
 
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
                         <div class="card">
-                            <div class="card-header @header_style text-white">
-                                <div class="d-flex">
-                                    @if (item.tipoRecarga == TipoRecarga.movil)
-                                    {
-                                        <img width="20" src="~/img/sim_card.png" />
-                                    }
-                                    @if (item.tipoRecarga == TipoRecarga.nauta)
-                                    {
-                                        <img width="20" src="~/img/wifi.png" />
-                                    }
-                                    <b>@item.numero</b>
-                                </div>
-                                @(item.descripcion is null ?" ":item.descripcion)
-                            </div>
-                            <div class="card-body">
-                                <div class="row col-12">
-                                    <div class="d-flex justify-content-between">
-                                        <table>
-                                            <tr>
-                                                <td style="font-weight:600">Valor</td>
-                                                <td>: $@item.valor.ToString("F2") USD</td>
-                                            </tr>
+                            <div class="card-header" style="@header_style">
 
-                                            <tr>
-                                                <td style="font-weight:600">Monto</td>
-                                                <td>: $@item.monto.ToString("F2") USD</td>
-                                            </tr>
-                                        </table>
-                                        <div>
-                                            <a asp-action="Delete" asp-route-id="@item.id"><i style="color:orangered" class="fas fa-trash"></i></a>
-                                        </div>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        @if (item.status == RecargaStatus.error)
+                                        {
+                                            <i class="fa fa-ban" style="color:red"></i>
+                                        }
+
+                                        @(item.descripcion is null ?" ":item.descripcion)
+                                    </div>
+                                    <div>
+                                        <a class="cursor-pointer" onclick="DeleteRecarga(@item.id)"><i style="color:orangered" class="fas fa-trash"></i></a>
                                     </div>
                                 </div>
+
+                                @*<div class="d-flex">
+                                        @if (item.tipoRecarga == TipoRecarga.movil)
+                                        {
+                                            <img width="20" src="~/img/sim_card.png" />
+                                        }
+                                        @if (item.tipoRecarga == TipoRecarga.nauta)
+                                        {
+                                            <img width="20" src="~/img/wifi.png" />
+                                        }
+                                        <b>@item.numero</b>
+                                    </div>
+                                    @(item.descripcion is null ?" ":item.descripcion)*@
+                            </div>
+                            <div class="card-body">
+
+                                <table class="w-100">
+                                    <tr>
+                                        <td>
+                                            <div class="d-block" style="font-weight:700">
+                                                <div>
+                                                    @if (item.tipoRecarga == TipoRecarga.movil)
+                                                    {
+                                                        <span>Número</span>
+                                                    }
+                                                    @if (item.tipoRecarga == TipoRecarga.nauta)
+                                                    {
+                                                        <span>Usuario</span>
+                                                    }
+                                                </div>
+                                                <div>País</div>
+                                                <div>Operadora</div>
+                                                <div>Tipo Producto</div>
+                                                <div>Valor</div>
+                                                <div>Recibe en Cuba</div>
+                                                <div>Total a Pagar</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div>
+                                                   @item.numero
+                                                </div>
+                                            </div>
+                                            <div>Cuba</div>
+                                            <div>
+                                                @if (item.tipoRecarga == TipoRecarga.movil)
+                                                {
+                                                    <span>Cubacel Cuba</span>
+                                                }
+                                                @if (item.tipoRecarga == TipoRecarga.nauta)
+                                                {
+                                                    <span>NAUTA Cuba</span>
+                                                }
+                                            </div>
+                                            <div>Top-up</div>
+                                            <div>$@item.valor.ToString("F2") USD</div>
+                                            <div>$@item.valor.ToString("F2") USD</div>
+                                            <div>$@item.monto.ToString("F2") USD</div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                @*<div class="row col-12">
+                                        <div class="d-flex justify-content-between">
+                                            <table>
+                                                <tr>
+                                                    <td style="font-weight:600">Valor</td>
+                                                    <td>: $@item.valor.ToString("F2") USD</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td style="font-weight:600">Monto</td>
+                                                    <td>: $@item.monto.ToString("F2") USD</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>*@
                             </div>
                             <div class="card-footer text-muted">
-                                <div class="d-flex justify-content-end">
+                                <div class="d-flex justify-content-between">
                                     <span>@data</span>
                                 </div>
                                 @*<div class="row justify-content-between">

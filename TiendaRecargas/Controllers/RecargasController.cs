@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -33,7 +34,7 @@ namespace TiendaRecargas.Controllers
             var recarga = new Recarga();
             try
             {
-                ViewBag.RecargasEnLista = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.en_lista).ToListAsync();
+                ViewBag.RecargasEnLista = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && (x.status == RecargaStatus.en_lista || x.status == RecargaStatus.error) && x.activo).ToListAsync();
 
                 if (GetSession<Recarga>("Recarga") != null)
                 {
@@ -177,11 +178,19 @@ namespace TiendaRecargas.Controllers
                     return RedirectToAction("Salir", "Login");
                 }
 
+                var RecargasEnLista = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && (x.status == RecargaStatus.en_lista || x.status == RecargaStatus.error) && x.activo).ToListAsync();
+
+                if (RecargasEnLista.Count() >= 3)
+                {
+                    PrompErro("Solo puede enviar 3 recargas por vez.");
+                    return RedirectToAction(nameof(Index));
+                }
+
                 //Validar fondos
                 var recargaValor = await _context.RT_RecargaValores.FirstOrDefaultAsync(x => x.id == recarga.idValorRecarga);
                 recarga.valor = recargaValor.valor;
 
-                var valorLista = await _context.RT_Recargas.Where(x => x.status == RecargaStatus.en_lista && x.idCuenta == Logged.IdCuenta).SumAsync(x => x.monto);
+                var valorLista = RecargasEnLista.Where(x => x.status == RecargaStatus.en_lista && x.idCuenta == Logged.IdCuenta).Sum(x => x.monto);
                 var totalLisat = valorLista + recarga.GetMonto(Logged.Porciento);
                 var fondos = await GetFondos();
 
@@ -194,6 +203,7 @@ namespace TiendaRecargas.Controllers
                 if (recarga.nauta is not null && recarga.tipoRecarga == TipoRecarga.nauta)
                 {
                     recarga.numero = recarga.nauta;
+                    ModelState["Numero"].ValidationState = ModelValidationState.Valid;
                 }
 
                 if (ModelState.IsValid)
@@ -202,6 +212,7 @@ namespace TiendaRecargas.Controllers
                     {
                         recarga.idCuenta = Logged.IdCuenta;
                         recarga.status = RecargaStatus.en_lista;
+                        recarga.activo = true;
 
                         if (recarga.tipoRecarga == TipoRecarga.movil)
                         {
@@ -250,7 +261,7 @@ namespace TiendaRecargas.Controllers
 
             //Validar fondos
 
-            var listaRecargas = await _context.RT_Recargas.Where(x => x.status == RecargaStatus.en_lista && x.idCuenta == Logged.IdCuenta).ToListAsync();
+            var listaRecargas = await _context.RT_Recargas.Where(x => (x.status == RecargaStatus.en_lista || x.status == RecargaStatus.error) && x.activo && x.idCuenta == Logged.IdCuenta).ToListAsync();
             var totalLisat = listaRecargas.Sum(x => x.monto);
             var fondos = await GetFondos();
 
@@ -266,7 +277,16 @@ namespace TiendaRecargas.Controllers
                     var result = await Ding.SendTransfer(item);
 
                     //BORRAR >>>>
-                    result.ResultCode = "1";//SOLO PARA PODER INSERTER EN SIMULACIO
+                    if (item.simularErro)
+                    {
+                        //BORRAR >>>>
+                        result.ResultCode = "3";//SOLO PARA PODER INSERTER EN SIMULACIO
+                    }
+                    else
+                    {
+                        //BORRAR >>>>
+                        result.ResultCode = "1";//SOLO PARA PODER INSERTER EN SIMULACIO
+                    }
 
                     item.TransactionDate = DateTime.Now.ToEasternStandardTime();
                     item.TransactionResultCode = result.ResultCode;
@@ -316,7 +336,7 @@ namespace TiendaRecargas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,tipoRecarga,numero,idValorRecarga,valor,monto,descripcion,idCuenta,date,transactionStatus,TransactionId,TransactionMsg,TransactionDate")] Recarga recarga)
+        public async Task<IActionResult> Edit(int id, Recarga recarga)
         {
             if (id != recarga.id)
             {
@@ -355,7 +375,15 @@ namespace TiendaRecargas.Controllers
             }
 
             var recarga = await _context.RT_Recargas.FindAsync(id);
-            _context.RT_Recargas.Remove(recarga);
+            if (recarga.status == RecargaStatus.error)
+            {
+                recarga.activo = false;
+                _context.RT_Recargas.Update(recarga);
+            }
+            else
+            {
+                _context.RT_Recargas.Remove(recarga);
+            }
             await _context.SaveChangesAsync();
             return Ok(true);
         }
