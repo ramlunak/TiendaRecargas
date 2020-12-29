@@ -20,11 +20,11 @@ namespace TiendaRecargas.Models
         public bool activo { get; set; } = true;
 
         [NotMapped]
-        public string primerDiaSemana
+        public string primerDiaPromocion
         {
             get
             {
-                return semana.FirstDateOfWeek().ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
+                return semana.FirstDateOfWeek().AddDays(1).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
             }
         }
     }
