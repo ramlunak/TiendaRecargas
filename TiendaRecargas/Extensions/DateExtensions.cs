@@ -30,5 +30,26 @@ namespace TiendaRecargas.Extensions
         {
             return $"{date.ToEasternStandardTime().Year}-W{CultureInfo.GetCultureInfo("es-ES").Calendar.GetWeekOfYear(date.ToEasternStandardTime(), CalendarWeekRule.FirstDay, DayOfWeek.Monday)}";
         }
+         
+        public static DateTime FirstDateOfWeek(this string s)
+        {
+            var array = s.Split('-');
+            var year = Convert.ToInt32(array[0]);
+            var weekOfYear = 52;
+            DateTime jan1 = new DateTime(year, 1, 1);
+
+            int daysOffset = (int)CultureInfo.GetCultureInfo("es-ES").DateTimeFormat.FirstDayOfWeek - (int)jan1.DayOfWeek;
+
+            DateTime firstMonday = jan1.AddDays(daysOffset);
+
+            int firstWeek = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(jan1, CultureInfo.GetCultureInfo("es-ES").DateTimeFormat.CalendarWeekRule, CultureInfo.GetCultureInfo("es-ES").DateTimeFormat.FirstDayOfWeek);
+
+            if (firstWeek <= 1)
+            {
+                weekOfYear -= 1;
+            }
+
+            return firstMonday.AddDays(weekOfYear * 7);
+        }
     }
 }

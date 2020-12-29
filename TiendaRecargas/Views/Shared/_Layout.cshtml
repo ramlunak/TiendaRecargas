@@ -54,6 +54,9 @@
                         <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador">
                             <a class="nav-link text-dark textalign-center" asp-controller="RecargaValores" asp-action="Index"><i class="fas fa-dollar-sign"></i> Valores</a>
                         </li>
+                        <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador">
+                            <a class="nav-link text-dark textalign-center" asp-controller="Promociones" asp-action="Index"><i class="fas fa-dollar-sign"></i> Promociones</a>
+                        </li>
                         <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Vendedor,@RolesSistema.Subvendedor">
                             <a class="nav-link text-dark textalign-center" asp-controller="Recargas" asp-action="Index"> <i class="fas fa-cart-plus"></i> Recargar</a>
                         </li>

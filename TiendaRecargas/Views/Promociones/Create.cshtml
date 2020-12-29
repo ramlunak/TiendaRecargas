@@ -1,0 +1,29 @@
+﻿@model TiendaRecargas.Models.Promociones
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="row d-flex justify-content-center">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">               
+                <input asp-for="semana" type="week" class="form-control" />
+                <span asp-validation-for="semana" class="text-danger"></span>
+            </div>
+            <div class="form-group">                
+                <textarea asp-for="texto" rows="6" class="form-control" placeholder="Promoción"> </textarea>
+                <span asp-validation-for="texto" class="text-danger"></span>
+            </div>          
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary form-control mb-2" />
+                <div>
+                    <a class="btn btn-danger form-control" asp-action="Index">Cancelar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

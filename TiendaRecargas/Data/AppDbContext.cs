@@ -21,6 +21,7 @@ namespace TiendaRecargas.Data
         public DbSet<Cuenta> RT_Cuentas { get; set; }
         public DbSet<RecargaValor> RT_RecargaValores { get; set; }
         public DbSet<Recarga> RT_Recargas { get; set; }
+        public DbSet<Promociones> RT_Promociones { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
