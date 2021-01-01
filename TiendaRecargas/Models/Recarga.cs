@@ -40,6 +40,7 @@ namespace TiendaRecargas.Models
         public string TransactionResultCode { get; set; }
         public bool activo { get; set; } = true;
         public bool simularErro { get; set; }
+        public string bono { get; set; }
         [NotMapped]
         public string nauta { get; set; }
 

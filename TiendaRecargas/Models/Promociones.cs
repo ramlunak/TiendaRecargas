@@ -17,6 +17,8 @@ namespace TiendaRecargas.Models
         public int year { get; set; }
         [Required]
         public string texto { get; set; }
+        [Required]
+        public string bono { get; set; }
         public bool activo { get; set; } = true;
 
         [NotMapped]

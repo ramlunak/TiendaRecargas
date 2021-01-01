@@ -36,6 +36,21 @@ namespace TiendaRecargas.Controllers
             {
                 ViewBag.RecargasEnLista = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && (x.status == RecargaStatus.en_lista || x.status == RecargaStatus.error) && x.activo).ToListAsync();
 
+                var numeroSemana = DateTime.Now.GetSemana();
+                var year = DateTime.Now.ToEasternStandardTime().Year;
+                var semana = $"{year}-W{numeroSemana}";
+                if (numeroSemana < 10)
+                {
+                    semana = $"{year}-W0{numeroSemana}";
+                }
+                var promo = await _context.RT_Promociones.Where(x => x.semana == semana && x.activo).FirstOrDefaultAsync();
+
+                if (promo != null)
+                {
+                    ViewBag.Promocion = promo.texto;
+                    ViewBag.Bono = promo.bono;
+                }
+
                 if (GetSession<Recarga>("Recarga") != null)
                 {
                     recarga = GetSession<Recarga>("Recarga");

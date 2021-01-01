@@ -22,6 +22,7 @@ namespace TiendaRecargas.Controllers
         // GET: PromocionesController
         public async Task<ActionResult> Index()
         {
+            IsLogged();
             var model = await _context.RT_Promociones.ToListAsync();
             return View(model);
         }
@@ -29,6 +30,7 @@ namespace TiendaRecargas.Controllers
         // GET: PromocionesController/Details/5
         public ActionResult Details(int id)
         {
+            IsLogged();
             return View();
         }
 
@@ -57,29 +59,54 @@ namespace TiendaRecargas.Controllers
         }
 
         // GET: PromocionesController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            IsLogged();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var promocion = await _context.RT_Promociones.FindAsync(id);
+            if (promocion == null)
+            {
+                return NotFound();
+            }
+            return View(promocion);
         }
 
         // POST: PromocionesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, Promociones promocion)
         {
-            try
+            IsLogged();
+            if (id != promocion.id)
             {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(promocion);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(promocion);
         }
 
         // GET: PromocionesController/Delete/5
         public ActionResult Delete(int id)
         {
+            IsLogged();
             return View();
         }
 

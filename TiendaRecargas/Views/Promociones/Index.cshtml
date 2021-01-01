@@ -15,29 +15,36 @@
             </th>
 
             <th>
-              Promoción
+                Promoción
             </th>
 
-            @*<th></th>*@
+
+            <th>
+                Bono
+            </th>
+
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.primerDiaPromocion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.texto)
-                </td>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.primerDiaPromocion)
+            </td>
+            <td>
+                <textarea asp-for="@item.texto" class="form-control" readonly rows="5"></textarea>
+            </td>
 
-                @*<td>
-                        <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-                    </td>*@
-            </tr>
+            <td>
+                <textarea asp-for="@item.bono" class="form-control" readonly rows="3"></textarea>
+            </td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id" class="mr-3"><i style="color:green" class="fas fa-edit"></i></a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

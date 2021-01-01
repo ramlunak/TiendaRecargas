@@ -17,6 +17,15 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            @if (ViewBag.Promocion != null)
+            {
+                <div class="alert alert-info">
+                    @ViewBag.Promocion
+                </div>
+            }
+
+            <input type="hidden" asp-for="bono" value="@ViewBag.bono" />
+
             <div class="form-group">
                 <select id="tipoRecarga" asp-for="tipoRecarga" asp-items="Html.GetEnumSelectList<TipoRecarga>()" class="form-control form-control-sm">
                 </select>
@@ -170,7 +179,7 @@
                                         <td>
                                             <div>
                                                 <div>
-                                                   @item.numero
+                                                    @item.numero
                                                 </div>
                                             </div>
                                             <div>Cuba</div>
@@ -190,6 +199,20 @@
                                             <div>$@item.monto.ToString("F2") USD</div>
                                         </td>
                                     </tr>
+
+                                    @if (item.bono != null)
+                                    {
+                                        <tr>
+                                            <td colspan="2">
+                                                <div class="alert alert-info">
+                                                    <p>
+                                                        <b>Bono: </b> @item.bono
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+
                                 </table>
 
                                 @*<div class="row col-12">
