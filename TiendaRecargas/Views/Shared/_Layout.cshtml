@@ -22,7 +22,7 @@
         border-radius: 5px;
         color: white;
     ">
-        <span>$@TempData["Fondos"] USD</span>
+        <a class="nav-link text-white p-1" asp-controller="Config" asp-action="Index"><i class="fas fa-user-circle"></i> $@TempData["Fondos"] USD</a>
     </div>
 
     <header>
@@ -34,12 +34,16 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark">
-                                <div style="color: dodgerblue !important">@TempData["Email"] <span style="color:green"> ($@TempData["Fondos"] USD)</span></div>
+                        <li class="nav-item d-none d-sm-block">
+                            <a class="nav-link text-dark" asp-controller="Config" asp-action="Index">
+                                <div class="text-nowrap btn btn-success  text-white cursor-pointer"><i class="fas fa-user-circle"></i> <span> ($@TempData["Fondos"] USD)</span></div>
                             </a>
                         </li>
-                        <li class="nav-item"><a class="nav-link text-dark" asp-controller="Login" asp-action="Salir">Salir</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Login" asp-action="Salir">
+                                <div class="btn btn-outline-secondary"><i class="fas fa-sign-out-alt"></i> Salir</div>
+                            </a>
+                        </li>
                     </ul>
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
@@ -99,6 +103,7 @@
 
         </nav>
     </header>
+
     @if (TempData["Simulate"] != null)
         @if ((bool)TempData["Simulate"])
         {
