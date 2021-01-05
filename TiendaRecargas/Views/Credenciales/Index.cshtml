@@ -1,0 +1,55 @@
+﻿@model IEnumerable<TiendaRecargas.Models.Credenciales>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="card">
+    <div class="card-header small">
+        <div class="row d-flex justify-content-between p-2">
+            <div>
+                <b>CREDENCIALES</b>
+            </div>
+            <div>
+                <a asp-action="Create" class="btn btn-primary btn-sm">Crear</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Proveedor
+                    </th>
+                    <th>
+                        Código
+                    </th>
+                    <th>
+                        Token
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.proveedor
+                        </td>
+                        <td>
+                            @item.codigo
+                        </td>
+                        <td>
+                            **********
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.id"><i style="color:forestgreen" class="fas fa-edit"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

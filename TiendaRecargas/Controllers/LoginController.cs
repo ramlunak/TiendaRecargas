@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TiendaRecargas.Data;
 using TiendaRecargas.Models;
+using TiendaRecargas.Models.Enums;
 
 namespace TiendaRecargas.Controllers
 {
@@ -24,7 +25,14 @@ namespace TiendaRecargas.Controllers
         {
             if (Logged != null)
             {
-                return RedirectToAction(nameof(Index), "Home", null);
+                if (Logged.Rol == RolesSistema.Administrador.ToString())
+                {
+                    return RedirectToAction(nameof(Index), "Home", null);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index), "Recargas", null);
+                }
             }
             return View();
         }
@@ -32,7 +40,7 @@ namespace TiendaRecargas.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Salir()
         {
-            Logof();          
+            Logof();
             return RedirectToAction(nameof(Index), null);
         }
 
@@ -55,7 +63,14 @@ namespace TiendaRecargas.Controllers
                 else
                 {
                     await SignIn(cuenta);
-                    return RedirectToAction(nameof(Index), "Home", null);
+                    if (cuenta.Rol == RolesSistema.Administrador.ToString())
+                    {
+                        return RedirectToAction(nameof(Index), "Home", null);
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(Index), "Recargas", null);
+                    }
                 }
             }
             catch (Exception ex)
@@ -66,7 +81,7 @@ namespace TiendaRecargas.Controllers
 
             return View(login);
         }
-              
+
         private bool CuentaExists(int id)
         {
             return _context.RT_Cuentas.Any(e => e.IdCuenta == id);

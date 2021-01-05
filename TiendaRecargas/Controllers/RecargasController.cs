@@ -287,9 +287,23 @@ namespace TiendaRecargas.Controllers
             }
             else
             {
+                string ding_token = "";
+                try
+                {
+                    var credenciales = await _context.RT_Credenciales.ToListAsync();
+                    var dingPeovvedor = credenciales.First(x => x.codigo == "ding");
+                    ding_token = dingPeovvedor.token == null ? string.Empty : dingPeovvedor.token;
+
+                }
+                catch (Exception ex)
+                {
+                    PrompErro("Error de credenciales del proveedor, contacte con soporte técnico");
+                    return RedirectToAction(nameof(Index));
+                }
+
                 foreach (var item in listaRecargas)
                 {
-                    var result = await Ding.SendTransfer(item);
+                    var result = await Ding.SendTransfer(item, ding_token);
 
                     //BORRAR >>>>
                     if (item.simularErro)

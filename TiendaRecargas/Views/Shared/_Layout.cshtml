@@ -48,14 +48,20 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark textalign-center" asp-authorize asp-roles="@RolesSistema.Vendedor,@RolesSistema.Subvendedor" asp-area="" asp-controller="Recargas" asp-action="Historial"> <i class="fas fa-home"></i> Historial</a>
                         </li>
-                        <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador,@RolesSistema.Vendedor">
-                            <a class="nav-link text-dark textalign-center" asp-controller="Cuenta" asp-action="Index"><i class="fas fa-user-shield"></i> Cuentas</a>
+                        <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador">
+                            <a class="nav-link text-dark textalign-center" asp-controller="Cuenta" asp-action="Index"><i class="fas fa-user-shield"></i> Vendedores</a>
+                        </li>
+                        <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Vendedor">
+                            <a class="nav-link text-dark textalign-center" asp-controller="Cuenta" asp-action="Index"><i class="fas fa-user-shield"></i> Mis asociados</a>
                         </li>
                         <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador">
                             <a class="nav-link text-dark textalign-center" asp-controller="RecargaValores" asp-action="Index"><i class="fas fa-dollar-sign"></i> Valores</a>
                         </li>
                         <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador">
                             <a class="nav-link text-dark textalign-center" asp-controller="Promociones" asp-action="Index"><i class="fas fa-dollar-sign"></i> Promociones</a>
+                        </li>
+                        <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador">
+                            <a class="nav-link text-dark textalign-center" asp-controller="Credenciales" asp-action="Index"><i class="fas fa-key"></i> Credenciales</a>
                         </li>
                         <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Vendedor,@RolesSistema.Subvendedor">
                             <a class="nav-link text-dark textalign-center" asp-controller="Recargas" asp-action="Index"> <i class="fas fa-cart-plus"></i> Recargar</a>

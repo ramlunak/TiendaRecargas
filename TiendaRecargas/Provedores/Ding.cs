@@ -21,21 +21,13 @@ namespace TiendaRecargas.Provedores
             [DataMember]
             public string countryIso { get; set; }
         }
-
-        public async static Task<string> GetApiKey()
+    
+        public static async Task<GetProductsResponse> GetProductsBycountryIso(string iso,string token)
         {           
-            return "3qKbCxayh9k5pZOGJk4OYo";//Royber
-            //return "9KnliRcSEqK6l4OtU66xMx"; //william
-        }
-                
-        public static async Task<GetProductsResponse> GetProductsBycountryIso(string iso)
-        {
-            var api_key = await GetApiKey();
-
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Add("api_key", api_key);
+                client.DefaultRequestHeaders.Add("api_key", token);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -53,7 +45,7 @@ namespace TiendaRecargas.Provedores
             }
         }
 
-        public static async Task<SendTransferResponse> SendTransfer(Recarga recarga)
+        public static async Task<SendTransferResponse> SendTransfer(Recarga recarga, string token)
         {
 
             SendTransferRequest entity = new SendTransferRequest();
@@ -72,12 +64,10 @@ namespace TiendaRecargas.Provedores
             entity.ValidateOnly = Ding.simulate;
             entity.DistributorRef = $"cuenta_{recarga.idCuenta}";
 
-            var api_key = await GetApiKey();
-
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Add("api_key", api_key);
+                client.DefaultRequestHeaders.Add("api_key", token);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

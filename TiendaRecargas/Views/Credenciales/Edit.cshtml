@@ -1,0 +1,37 @@
+﻿@model TiendaRecargas.Models.Credenciales
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="row d-flex justify-content-center">
+    <div class="col-12 col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="id" />
+            <input type="hidden" asp-for="idCuenta" />
+
+            <div class="form-group">
+                <label>Proveedor</label>
+                <input asp-for="proveedor" class="form-control" />
+                <span asp-validation-for="proveedor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Código</label>
+                <input asp-for="codigo" readonly class="form-control" />
+                <span asp-validation-for="codigo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Token</label>
+                <textarea asp-for="token" class="form-control" placeholder="Token" rows="5"></textarea>
+                <span asp-validation-for="token" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary btn-sm form-control form-control-sm mb-2" />
+                <a class="btn btn-danger btn-sm form-control form-control-sm" asp-action="Index">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
