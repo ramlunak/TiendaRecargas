@@ -8,16 +8,19 @@ $(function () {
 
         var value = parseFloat($("#inputPrecioRecarga").val());
 
-        //Calcular el % para una recarga con valor de 20 USD
+        //Calcular el % para una recarga 
+
+        var baseCalculoPorciento = parseFloat($('#inputBaseCalculoPorciento').val());
+
         if (!isNaN(value)) {
-            var porciento = value * 100 / 20;
-            $("#InputShowPorcientoCalculado").val(porciento.toFixed(2).replace(',','.'));
+            var porciento = value * 100 / baseCalculoPorciento;
+            $("#InputShowPorcientoCalculado").val(porciento.toFixed(2).replace(',', '.'));
             $("#inputPorciento").val(porciento.toFixed(2).replace(',', '.'));
         } else {
             $("#InputShowPorcientoCalculado").val(null);
             $("#inputPrecioRecarga").val(null);
         }
-      
+
 
     });
 

@@ -31,6 +31,11 @@ namespace TiendaRecargas.Controllers
         {
             IsLogged();
 
+            var configuracion = await _context.RT_Configuracion.ToListAsync();
+            var tasaCambioCUP = configuracion.FirstOrDefault().tasaCambioCUP;
+
+            ViewBag.TasaCambioCUP = tasaCambioCUP;
+
             var recarga = new Recarga();
             try
             {

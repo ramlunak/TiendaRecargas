@@ -147,8 +147,9 @@
             <div class="modal-body">
                 <div>
                     <div class="alert alert-info">
+                        <input id="inputBaseCalculoPorciento" type="hidden" value="@ViewBag.BaseCalculoPorciento" />
                         <p style="font-size:medium">
-                            Para calcular el % ,ingrese el precio de una recarga de <b>$20.00 USD</b> para esta cuenta que está creando!!.
+                            Para calcular el % ,ingrese el precio de una recarga de <b>$@ViewBag.BaseCalculoPorciento.ToString("F2") USD</b> para esta cuenta que está creando!!.
                         </p>
                     </div>
 

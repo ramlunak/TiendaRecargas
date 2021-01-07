@@ -95,14 +95,7 @@ namespace TiendaRecargas.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RecargaValorExists(credenciales.id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
                 return RedirectToAction(nameof(Index));
             }

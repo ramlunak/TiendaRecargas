@@ -23,6 +23,7 @@ namespace TiendaRecargas.Data
         public DbSet<Recarga> RT_Recargas { get; set; }
         public DbSet<Promociones> RT_Promociones { get; set; }
         public DbSet<Credenciales> RT_Credenciales { get; set; }
+        public DbSet<Configuracion> RT_Configuracion { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

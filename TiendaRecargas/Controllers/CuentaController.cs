@@ -68,9 +68,15 @@ namespace TiendaRecargas.Controllers
         }
 
         // GET: Cuenta/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             IsLogged();
+
+            var configuracion = await _context.RT_Configuracion.ToListAsync();
+            var baseCalculoPorciento = configuracion.FirstOrDefault().baseCalculoPorciento;
+
+            ViewBag.BaseCalculoPorciento = baseCalculoPorciento;
+
             if (Logged.Rol != RolesSistema.Administrador.ToString())
                 if (Logged.Fondos < 100)
                 {
@@ -190,6 +196,11 @@ namespace TiendaRecargas.Controllers
             {
                 return NotFound();
             }
+
+            var configuracion = await _context.RT_Configuracion.ToListAsync();
+            var baseCalculoPorciento = configuracion.FirstOrDefault().baseCalculoPorciento;
+
+            ViewBag.BaseCalculoPorciento = baseCalculoPorciento;
 
             var cuenta = await _context.RT_Cuentas.FindAsync(id);
             if (cuenta == null)

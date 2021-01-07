@@ -37,7 +37,7 @@
                             <i class="fas fa-mobile-alt"></i>
                         </span>
                     </div>
-                    <input asp-for="Telefono" type="tel"  placeholder="Teléfono" class="form-control" />
+                    <input asp-for="Telefono" type="tel" placeholder="Teléfono" class="form-control" />
                 </div>
                 <span asp-validation-for="Telefono" class="text-danger"></span>
             </div>
@@ -187,8 +187,9 @@
             <div class="modal-body">
                 <div>
                     <div class="alert alert-info">
+                        <input id="inputBaseCalculoPorciento" type="hidden" value="@ViewBag.BaseCalculoPorciento" />
                         <p style="font-size:medium">
-                            Para calcular el % ,ingrese el precio de una recarga de <b>$20.00 USD</b> para esta cuenta que está creando!!.
+                            Para calcular el % ,ingrese el precio de una recarga de <b>$@ViewBag.BaseCalculoPorciento.ToString("F2") USD </b> para esta cuenta que está creando!!.
                         </p>
                     </div>
 

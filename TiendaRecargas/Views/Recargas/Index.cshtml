@@ -195,7 +195,7 @@
                                             </div>
                                             <div>Top-up</div>
                                             <div>$@item.valor.ToString("F2") USD</div>
-                                            <div>$@item.valor.ToString("F2") USD</div>
+                                            <div>$@( (item.valor * ViewBag.TasaCambioCUP).ToString("F2") ) CUP</div>
                                             <div>$@item.monto.ToString("F2") USD</div>
                                         </td>
                                     </tr>
