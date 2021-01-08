@@ -104,6 +104,11 @@
     <div class="card-body">
         @*BODY CARD*@
 
+        @if (ViewBag.RecargasConError != null)
+        {
+            <div class="alert alert-danger">Las recargas que no se pudieron enviar quedarán en la lista</div>
+        }
+
         <div class="row">
             @if (ViewBag.RecargasEnLista != null && ViewBag.RecargasEnLista.Count > 0)
             {
@@ -115,9 +120,7 @@
                     else
                         data = item.date.ToString("F", CultureInfo.CreateSpecificCulture("es-ES"));
 
-                    var header_style = "";
-                    //if (item.status == RecargaStatus.success)
-                    //    header_style = "border: 1px solid green; ";
+                    var header_style = "";                   
                     if (item.status == RecargaStatus.error)
                         header_style = "border: 1px solid red;";
 
@@ -139,18 +142,6 @@
                                     </div>
                                 </div>
 
-                                @*<div class="d-flex">
-                                        @if (item.tipoRecarga == TipoRecarga.movil)
-                                        {
-                                            <img width="20" src="~/img/sim_card.png" />
-                                        }
-                                        @if (item.tipoRecarga == TipoRecarga.nauta)
-                                        {
-                                            <img width="20" src="~/img/wifi.png" />
-                                        }
-                                        <b>@item.numero</b>
-                                    </div>
-                                    @(item.descripcion is null ?" ":item.descripcion)*@
                             </div>
                             <div class="card-body">
 
@@ -195,7 +186,7 @@
                                             </div>
                                             <div>Top-up</div>
                                             <div>$@item.valor.ToString("F2") USD</div>
-                                            <div>$@( (item.valor * ViewBag.TasaCambioCUP).ToString("F2") ) CUP</div>
+                                            <div>$@(item.recibe.ToString("F2")) CUP</div>
                                             <div>$@item.monto.ToString("F2") USD</div>
                                         </td>
                                     </tr>

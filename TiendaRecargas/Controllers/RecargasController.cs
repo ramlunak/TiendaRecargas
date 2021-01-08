@@ -31,15 +31,12 @@ namespace TiendaRecargas.Controllers
         {
             IsLogged();
 
-            var configuracion = await _context.RT_Configuracion.ToListAsync();
-            var tasaCambioCUP = configuracion.FirstOrDefault().tasaCambioCUP;
-
-            ViewBag.TasaCambioCUP = tasaCambioCUP;
-
             var recarga = new Recarga();
+            var recargasEnLista = new List<Recarga>();
             try
             {
-                ViewBag.RecargasEnLista = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && (x.status == RecargaStatus.en_lista || x.status == RecargaStatus.error) && x.activo).ToListAsync();
+                recargasEnLista = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && (x.status == RecargaStatus.en_lista || x.status == RecargaStatus.error) && x.activo).ToListAsync();
+                ViewBag.RecargasEnLista = recargasEnLista;
 
                 var numeroSemana = DateTime.Now.GetSemana();
                 var year = DateTime.Now.ToEasternStandardTime().Year;
@@ -71,16 +68,29 @@ namespace TiendaRecargas.Controllers
                 PrompErro(ex.Message);
             }
 
+            if (recargasEnLista.Any() && recargasEnLista.Where(x => x.status == RecargaStatus.error).Any())
+            {
+                ViewBag.RecargasConError = true;
+            }
+
             return View(recarga);
         }
 
         public async Task<IActionResult> Historial()
         {
             IsLogged();
+
             var semana = DateTime.Now.GetSemana();
             var year = DateTime.Now.ToEasternStandardTime().Year;
             ViewBag.Semana = $"{year}-W{semana}";
             var model = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.success && x.year == year && x.semana == semana).ToListAsync();
+
+            if (model.Any())
+            {
+                ViewBag.TotalPagado = model.Sum(x => x.monto);
+                ViewBag.TotalRecibido = model.Sum(x => x.recibe);
+            }
+
             return View(model);
         }
 
@@ -188,7 +198,6 @@ namespace TiendaRecargas.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Recarga recarga)
         {
-
             IsLogged();
             try
             {
@@ -197,6 +206,9 @@ namespace TiendaRecargas.Controllers
                 {
                     return RedirectToAction("Salir", "Login");
                 }
+
+                var configuracion = await _context.RT_Configuracion.ToListAsync();
+                var tasaCambioCUP = configuracion.FirstOrDefault().tasaCambioCUP;
 
                 var RecargasEnLista = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && (x.status == RecargaStatus.en_lista || x.status == RecargaStatus.error) && x.activo).ToListAsync();
 
@@ -209,6 +221,7 @@ namespace TiendaRecargas.Controllers
                 //Validar fondos
                 var recargaValor = await _context.RT_RecargaValores.FirstOrDefaultAsync(x => x.id == recarga.idValorRecarga);
                 recarga.valor = recargaValor.valor;
+                recarga.recibe = recargaValor.valor * tasaCambioCUP;
 
                 var valorLista = RecargasEnLista.Where(x => x.status == RecargaStatus.en_lista && x.idCuenta == Logged.IdCuenta).Sum(x => x.monto);
                 var totalLisat = valorLista + recarga.GetMonto(Logged.Porciento);

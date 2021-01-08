@@ -41,6 +41,7 @@ namespace TiendaRecargas.Models
         public bool activo { get; set; } = true;
         public bool simularErro { get; set; }
         public string bono { get; set; }
+        public decimal recibe { get; set; }
         [NotMapped]
         public string nauta { get; set; }
 
@@ -66,7 +67,7 @@ namespace TiendaRecargas.Models
             get
             {
                 if (input is null) return 0;
-                var numeroSemana = input.Split("-")[1].ToString().Replace("W","");
+                var numeroSemana = input.Split("-")[1].ToString().Replace("W", "");
                 return Convert.ToInt32(numeroSemana);
             }
         }
