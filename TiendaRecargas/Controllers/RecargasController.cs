@@ -98,9 +98,16 @@ namespace TiendaRecargas.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Historial(RecargaSearch filtro)
         {
-            IsLogged();
-            var model = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.success && x.year == filtro.year && x.semana == filtro.semana).ToListAsync();
-            ViewBag.Semana = filtro.input;
+            var semana = filtro.semana;
+            var year = filtro.year;
+            ViewBag.Semana = $"{year}-W{semana}";
+            var model = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.success && x.year == year && x.semana == semana).ToListAsync();
+
+            if (model.Any())
+            {
+                ViewBag.TotalPagado = model.Sum(x => x.monto);
+                ViewBag.TotalRecibido = model.Sum(x => x.recibe);
+            }
             return View(model);
         }
 
@@ -207,6 +214,8 @@ namespace TiendaRecargas.Controllers
                     return RedirectToAction("Salir", "Login");
                 }
 
+                SetSession("Recarga", recarga);
+
                 var configuracion = await _context.RT_Configuracion.ToListAsync();
                 var tasaCambioCUP = configuracion.FirstOrDefault().tasaCambioCUP;
 
@@ -271,7 +280,7 @@ namespace TiendaRecargas.Controllers
                     }
 
                 }
-                SetSession("Recarga", recarga);
+
             }
             catch (Exception ex)
             {
@@ -284,7 +293,6 @@ namespace TiendaRecargas.Controllers
         // GET: Recargas/Edit/5
         public async Task<IActionResult> RecargarLista()
         {
-
             IsLogged();
             var cuentaActiva = await ValidarCuentaActiva();
             if (!cuentaActiva)
@@ -322,19 +330,7 @@ namespace TiendaRecargas.Controllers
                 foreach (var item in listaRecargas)
                 {
                     var result = await Ding.SendTransfer(item, ding_token);
-
-                    //BORRAR >>>>
-                    if (item.simularErro)
-                    {
-                        //BORRAR >>>>
-                        result.ResultCode = "3";//SOLO PARA PODER INSERTER EN SIMULACIO
-                    }
-                    else
-                    {
-                        //BORRAR >>>>
-                        result.ResultCode = "1";//SOLO PARA PODER INSERTER EN SIMULACIO
-                    }
-
+                    
                     item.TransactionDate = DateTime.Now.ToEasternStandardTime();
                     item.TransactionResultCode = result.ResultCode;
                     item.TransactionMsg = result.ErrorCodes != null && result.ErrorCodes.Length > 0 ? result.ErrorCodes.FirstOrDefault().Code : null;
@@ -353,6 +349,7 @@ namespace TiendaRecargas.Controllers
                 var Sumarbalance = listaRecargas.Where(x => x.status == RecargaStatus.success).Sum(x => x.monto);
                 var cuenta = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
                 cuenta.Balance = cuenta.Balance + Sumarbalance;
+
                 _context.RT_Cuentas.Update(cuenta);
                 await _context.SaveChangesAsync();
                 await GetFondos();

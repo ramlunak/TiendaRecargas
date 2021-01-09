@@ -1,6 +1,8 @@
 ﻿
 $(function () {
 
+    $("#inputNumero").mask('50000000');
+
     $('#tipoRecarga').change(function (e) {
         CargarValores();
     });

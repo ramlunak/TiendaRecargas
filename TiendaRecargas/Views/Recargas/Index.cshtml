@@ -40,7 +40,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">+53</span>
                         </div>
-                        <input class="form-control form-control-sm" type="number" asp-for="numero" />
+                        <input id="inputNumero" class="form-control form-control-sm" asp-for="numero" />
                     </div>
                     <span asp-validation-for="numero" class="text-danger"></span>
                 </div>
@@ -48,7 +48,7 @@
                 @*NAUTA*@
                 <div id="coreoNauta" class="form-group col-8 mr-0">
                     <div class="input-group input-group-sm">
-                        <input class="form-control form-control-sm" type="text" asp-for="nauta" />
+                        <input id="nauta" class="form-control form-control-sm" type="text" asp-for="nauta" />
                         <div class="input-group-append">
                             <span class="input-group-text" id="basic-addon1" style="font-size:12px">@("@")nauta.com.cu</span>
                         </div>
@@ -72,12 +72,6 @@
 
             <div class="form-group mb-2">
                 <input class="form-control form-control-sm" asp-for="descripcion" placeholder="Descripción (Opcional)" />
-            </div>
-
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="simularErro" /> @Html.DisplayNameFor(model => model.simularErro)
-                </label>
             </div>
 
             <div class="form-group">
@@ -120,7 +114,7 @@
                     else
                         data = item.date.ToString("F", CultureInfo.CreateSpecificCulture("es-ES"));
 
-                    var header_style = "";                   
+                    var header_style = "";
                     if (item.status == RecargaStatus.error)
                         header_style = "border: 1px solid red;";
 
@@ -307,5 +301,9 @@
     </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="~/js/views/recarga/index.js"></script>
+
+@section scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/jquery/jquery.mask.js" asp-append-version="true"></script>
+    <script src="~/js/views/recarga/index.js" asp-append-version="true"></script>
+}

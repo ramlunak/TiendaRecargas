@@ -21,6 +21,7 @@ namespace TiendaRecargas.Models
         public TipoRecarga tipoRecarga { get; set; }
 
         [Required(ErrorMessage = AppMessages.Required)]
+        [MinLength(8, ErrorMessage = "Escriba correctamente en número de teléfono")]
         public string numero { get; set; }
 
         [Required(ErrorMessage = AppMessages.Required)]
@@ -43,6 +44,8 @@ namespace TiendaRecargas.Models
         public string bono { get; set; }
         public decimal recibe { get; set; }
         [NotMapped]
+        [MinLength(1, ErrorMessage = "Este campo es requerido.")]
+        [RegularExpression(@"^\S*$", ErrorMessage = "El usuario no puede contener espacios en blanco.")]
         public string nauta { get; set; }
 
         public decimal GetMonto(decimal porciento)
