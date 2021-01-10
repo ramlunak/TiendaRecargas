@@ -21,19 +21,18 @@ namespace TiendaRecargas.Controllers
         // GET: ConfigController
         public ActionResult Index()
         {
-            IsLogged();           
+            IsLogged();
             return View(Logged);
         }
 
-        [HttpPost]       
-        public async Task<IActionResult> UpdatePassword(CuentaUpdatePassword cuentaUpdatePassword)
+        [HttpPost]
+        public async Task<IActionResult> UpdatePassword([FromBody] CuentaUpdatePassword cuentaUpdatePassword)
         {
             IsLogged();
             var cuenta = await _context.RT_Cuentas.FindAsync(cuentaUpdatePassword.idCuenta);
             if (cuenta == null)
             {
-                PrompErro("No se pudo actualizar la contraseña, entre en contacto con soporte técnico.");
-                return View(cuentaUpdatePassword);
+                return Ok(new { error = true, errorMsg = "No se pudo actualizar la contraseña, entre en contacto con soporte técnico." });
             }
             try
             {
@@ -43,11 +42,9 @@ namespace TiendaRecargas.Controllers
             }
             catch (Exception ex)
             {
-                NotifyError(ex.ToString());
-                return View(cuentaUpdatePassword);
+                return Ok(new { error = true, errorMsg = ex.Message });
             }
-            NotifySuccess($"La contraseña ha sido actualizada para el usuario {cuentaUpdatePassword.Usuario}.");
-            return RedirectToAction(nameof(Index));
+            return Ok(new { error = false });
         }
 
     }
