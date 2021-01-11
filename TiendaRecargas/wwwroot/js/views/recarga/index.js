@@ -1,6 +1,13 @@
 ﻿
 $(function () {
 
+    $('#btnSubmit').prop('disabled', false);
+
+    $("#formCreate").on("submit", function () {
+        $('#btnSubmit').prop('disabled', true);
+        return true;
+    })
+
     $("#inputNumero").mask('50000000');
 
     $('#tipoRecarga').change(function (e) {

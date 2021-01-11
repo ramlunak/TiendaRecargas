@@ -79,7 +79,7 @@ namespace TiendaRecargas
                 options.RespectBrowserAcceptHeader = true; // false by default
             });
 
-            services.AddDbContext<AppDbContext>(optoins => optoins.UseSqlServer(Configuration.GetConnectionString("ConnectionStringLocalRoyber")));
+            services.AddDbContext<AppDbContext>(optoins => optoins.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
             services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new DateTimeConverter()); });
 
             JsonSerializerOptions options = new JsonSerializerOptions()

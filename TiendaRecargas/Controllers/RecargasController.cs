@@ -27,7 +27,7 @@ namespace TiendaRecargas.Controllers
         }
 
         // GET: Recargas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool success = false)
         {
             IsLogged();
 
@@ -71,7 +71,13 @@ namespace TiendaRecargas.Controllers
             if (recargasEnLista.Any() && recargasEnLista.Where(x => x.status == RecargaStatus.error).Any())
             {
                 ViewBag.RecargasConError = true;
-            }
+            };
+
+            if (success)
+            {
+                NotifySuccess("Recargas enviadas correctamente.");
+            };
+
 
             return View(recarga);
         }
@@ -221,11 +227,12 @@ namespace TiendaRecargas.Controllers
 
                 var RecargasEnLista = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && (x.status == RecargaStatus.en_lista || x.status == RecargaStatus.error) && x.activo).ToListAsync();
 
-                if (RecargasEnLista.Count() >= 3)
+                if (RecargasEnLista.Count() >= 10)
                 {
-                    PrompErro("Solo puede enviar 3 recargas por vez.");
+                    PrompErro("Solo puede enviar 10 recargas por vez.");
                     return RedirectToAction(nameof(Index));
                 }
+
 
                 //Validar fondos
                 var recargaValor = await _context.RT_RecargaValores.FirstOrDefaultAsync(x => x.id == recarga.idValorRecarga);
@@ -245,6 +252,7 @@ namespace TiendaRecargas.Controllers
                 if (recarga.nauta is not null && recarga.tipoRecarga == TipoRecarga.nauta)
                 {
                     recarga.numero = recarga.nauta;
+                    recarga.bono = null;
                     ModelState["Numero"].ValidationState = ModelValidationState.Valid;
                 }
 
@@ -258,11 +266,24 @@ namespace TiendaRecargas.Controllers
 
                         if (recarga.tipoRecarga == TipoRecarga.movil)
                         {
-                            recarga.numero = "53" + recarga.numero;
+                            var numero = "53" + recarga.numero;
+                            if (RecargasEnLista.Where(x => x.numero == numero).Any())
+                            {
+                                PrompErro("Para recargar el mismo número espere 5 minutos.");
+                                return RedirectToAction(nameof(Index));
+                            }
+                            recarga.numero = numero;
                         }
                         else if (recarga.tipoRecarga == TipoRecarga.nauta)
                         {
-                            recarga.numero = recarga.numero + "@nauta.com.cu";
+                            var numero = recarga.numero + "@nauta.com.cu";
+                            if (RecargasEnLista.Where(x => x.numero == numero).Any())
+                            {
+                                PrompErro("Para recargar el mismo usuario nauta espere 5 minutos.");
+                                return RedirectToAction(nameof(Index));
+                            }
+                            recarga.numero = numero;
+
                         }
 
                         _context.Add(recarga);
@@ -330,7 +351,7 @@ namespace TiendaRecargas.Controllers
                 foreach (var item in listaRecargas)
                 {
                     var result = await Ding.SendTransfer(item, ding_token);
-                    
+
                     item.TransactionDate = DateTime.Now.ToEasternStandardTime();
                     item.TransactionResultCode = result.ResultCode;
                     item.TransactionMsg = result.ErrorCodes != null && result.ErrorCodes.Length > 0 ? result.ErrorCodes.FirstOrDefault().Code : null;
@@ -355,8 +376,14 @@ namespace TiendaRecargas.Controllers
                 await GetFondos();
 
             }
-
-            return RedirectToAction(nameof(Index));
+            if (!listaRecargas.Where(x => x.status == RecargaStatus.error).Any())
+            {
+                return RedirectToAction(nameof(Index), new { success = true });
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index), new { success = true });
+            }
         }
 
         // GET: Recargas/Edit/5
