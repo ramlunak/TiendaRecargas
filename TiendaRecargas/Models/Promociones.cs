@@ -26,7 +26,7 @@ namespace TiendaRecargas.Models
         {
             get
             {
-                return semana.FirstDateOfWeek().AddDays(1).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
+                return semana.FirstDateOfWeek().AddDays(0).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
             }
         }
     }

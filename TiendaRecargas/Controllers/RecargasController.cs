@@ -252,6 +252,7 @@ namespace TiendaRecargas.Controllers
                 if (recarga.nauta is not null && recarga.tipoRecarga == TipoRecarga.nauta)
                 {
                     recarga.numero = recarga.nauta;
+                    recarga.bono = null;
                     ModelState["Numero"].ValidationState = ModelValidationState.Valid;
                 }
 
