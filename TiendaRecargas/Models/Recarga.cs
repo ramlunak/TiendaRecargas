@@ -25,12 +25,11 @@ namespace TiendaRecargas.Models
         public string numero { get; set; }
 
         [Required(ErrorMessage = AppMessages.Required)]
-        public int idValorRecarga { get; set; }
-
-        public decimal valor { get; set; }
+        public int idValorRecarga { get; set; }       
         public decimal monto { get; set; }
         public string descripcion { get; set; }
         public int idCuenta { get; set; }
+        public decimal valor { get; set; }
         public DateTime date { get; set; } = DateTime.Now.ToEasternStandardTime();
         public int? semana { get; set; } = CultureInfo.GetCultureInfo("es-ES").Calendar.GetWeekOfYear(DateTime.Now.ToUniversalTime(), CalendarWeekRule.FirstDay, DayOfWeek.Monday);
         public int? year { get; set; } = DateTime.Now.ToEasternStandardTime().Year;
