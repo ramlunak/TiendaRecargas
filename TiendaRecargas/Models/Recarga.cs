@@ -32,7 +32,7 @@ namespace TiendaRecargas.Models
         public string descripcion { get; set; }
         public int idCuenta { get; set; }
         public DateTime date { get; set; } = DateTime.Now.ToEasternStandardTime();
-        public int? semana { get; set; } = CultureInfo.GetCultureInfo("es-ES").Calendar.GetWeekOfYear(DateTime.Now.ToUniversalTime(), CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+        public int? semana { get; set; } = CultureInfo.GetCultureInfo("es-ES").Calendar.GetWeekOfYear(DateTime.Now.ToUniversalTime(), CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
         public int? year { get; set; } = DateTime.Now.ToEasternStandardTime().Year;
         public Enums.RecargaStatus status { get; set; }
         public string TransactionId { get; set; }
