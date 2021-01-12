@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -88,7 +89,12 @@ namespace TiendaRecargas.Controllers
 
             var semana = DateTime.Now.GetSemana();
             var year = DateTime.Now.ToEasternStandardTime().Year;
+            var s = $"{year}-W{semana}";
             ViewBag.Semana = $"{year}-W{semana}";
+
+            ViewBag.PrimerDiaSemana = s.FirstDateOfWeek().AddDays(0).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
+            ViewBag.UltimoDiaSemana = s.FirstDateOfWeek().AddDays(6).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
+
             var model = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.success && x.year == year && x.semana == semana).ToListAsync();
 
             if (model.Any())
@@ -106,7 +112,12 @@ namespace TiendaRecargas.Controllers
         {
             var semana = filtro.semana;
             var year = filtro.year;
+            var s = $"{year}-W{semana}";
             ViewBag.Semana = $"{year}-W{semana}";
+
+            ViewBag.PrimerDiaSemana = s.FirstDateOfWeek().AddDays(0).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
+            ViewBag.UltimoDiaSemana = s.FirstDateOfWeek().AddDays(6).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
+
             var model = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.success && x.year == year && x.semana == semana).ToListAsync();
 
             if (model.Any())
@@ -122,7 +133,12 @@ namespace TiendaRecargas.Controllers
             IsLogged();
             var semana = DateTime.Now.GetSemana();
             var year = DateTime.Now.ToEasternStandardTime().Year;
+
+            var s = $"{year}-W{semana}";
             ViewBag.Semana = $"{year}-W{semana}";
+
+            ViewBag.PrimerDiaSemana = s.FirstDateOfWeek().AddDays(0).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
+            ViewBag.UltimoDiaSemana = s.FirstDateOfWeek().AddDays(6).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
 
             var model = new Facturacion();
 
@@ -149,7 +165,12 @@ namespace TiendaRecargas.Controllers
             IsLogged();
             var semana = filtro.semana;
             var year = filtro.year;
+
             ViewBag.Semana = filtro.input;
+
+            var s = $"{year}-W{semana}";
+            ViewBag.PrimerDiaSemana = s.FirstDateOfWeek().AddDays(0).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
+            ViewBag.UltimoDiaSemana = s.FirstDateOfWeek().AddDays(6).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
 
             var model = new Facturacion();
 
