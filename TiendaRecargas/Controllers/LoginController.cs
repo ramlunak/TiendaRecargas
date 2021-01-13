@@ -54,7 +54,7 @@ namespace TiendaRecargas.Controllers
                 var cuenta = await _context.RT_Cuentas.Where(x => x.Usuario == login.Usuario && x.Password == login.Password).FirstOrDefaultAsync();
                 if (cuenta is null)
                 {
-                    ViewBag.Erro = "Usuario no cadastrado";
+                    ViewBag.Erro = "El usuario o la contraseña estan incorrectos";
                 }
                 else if (!cuenta.Activo)
                 {
