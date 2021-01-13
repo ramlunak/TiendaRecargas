@@ -71,6 +71,10 @@ namespace TiendaRecargas
             //});
 
             var cultureInfo = new CultureInfo("en-US");
+
+            cultureInfo.DateTimeFormat.FirstDayOfWeek = DayOfWeek.Monday;
+            cultureInfo.DateTimeFormat.FirstDayOfWeek = DayOfWeek.Monday;
+
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
