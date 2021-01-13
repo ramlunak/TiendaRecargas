@@ -14,7 +14,7 @@ namespace TiendaRecargas.Provedores
 {
     public class Ding
     {
-        public static bool simulate { get; set; } = false;
+        public static bool simulate { get; set; } = true;
 
         public class CountryIso
         {

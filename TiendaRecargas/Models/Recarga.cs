@@ -25,7 +25,7 @@ namespace TiendaRecargas.Models
         public string numero { get; set; }
 
         [Required(ErrorMessage = AppMessages.Required)]
-        public int idValorRecarga { get; set; }       
+        public int idValorRecarga { get; set; }
         public decimal monto { get; set; }
         public string descripcion { get; set; }
         public int idCuenta { get; set; }
@@ -73,5 +73,6 @@ namespace TiendaRecargas.Models
                 return Convert.ToInt32(numeroSemana);
             }
         }
+        public string numero { get; set; }
     }
 }

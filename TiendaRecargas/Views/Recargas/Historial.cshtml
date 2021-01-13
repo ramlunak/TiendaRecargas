@@ -4,6 +4,8 @@
 @{
     ViewData["Title"] = "Historial";
     var filtro = new RecargaSearch();
+    filtro.input = ViewBag.Semana;
+    filtro.numero = ViewBag.Numero;
 }
 
 <div class="card">
@@ -15,8 +17,10 @@
             </div>
             <form asp-action="Historial">
                 <div>
+
                     <div class="form-group d-flex">
-                        <input asp-for="@filtro.input" type="week" value="@ViewBag.Semana" class="form-control form-control-sm" />
+                        <input id="inputNumero" asp-for="@filtro.numero" type="tel" style="width:120px" placeholder="Número" class="form-control form-control-sm" />
+                        <input asp-for="@filtro.input" type="week" style="width:180px" class="form-control form-control-sm" />
                         <button type="submit" class="btn btn-sm btn-outline-primary"><i class="fa fa-search"></i></button>
                     </div>
 
