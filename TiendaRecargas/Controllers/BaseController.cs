@@ -229,8 +229,6 @@ namespace TiendaRecargas.Controllers
             TempData["Message"] = JsonConvert.SerializeObject(msg);
         }
 
-
-
         public void PrompInfo(string message)
         {
             var msg = new

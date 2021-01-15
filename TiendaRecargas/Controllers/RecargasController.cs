@@ -31,6 +31,7 @@ namespace TiendaRecargas.Controllers
         public async Task<IActionResult> Index(bool success = false)
         {
             IsLogged();
+            await GetFondos();
 
             var recarga = new Recarga();
             var recargasEnLista = new List<Recarga>();
