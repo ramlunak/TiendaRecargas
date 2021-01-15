@@ -99,6 +99,8 @@ namespace TiendaRecargas.Models
         //para facturacion
         [NotMapped]
         public List<Recarga> Recargas { get; set; } = new List<Recarga>();
+        [NotMapped]
+        public List<Cuenta> Subvendedores { get; set; } = new List<Cuenta>();
     }
 
     public class CuentaUpdatePassword

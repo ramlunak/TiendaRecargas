@@ -55,6 +55,9 @@
                         <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador">
                             <a class="nav-link text-dark textalign-center" asp-controller="Cuenta" asp-action="Index"><i class="fas fa-user-shield"></i> Vendedores</a>
                         </li>
+                        <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador">
+                            <a class="nav-link text-dark textalign-center" asp-controller="VentasPorCuentas" asp-action="Index"><i class="fas fa-cog"></i>Historial</a>
+                        </li>
                         <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Vendedor">
                             <a class="nav-link text-dark textalign-center" asp-controller="Cuenta" asp-action="Index"><i class="fas fa-user-shield"></i> Mis asociados</a>
                         </li>
