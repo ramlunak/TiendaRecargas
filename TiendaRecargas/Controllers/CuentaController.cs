@@ -156,17 +156,23 @@ namespace TiendaRecargas.Controllers
                 }
 
                 _context.Add(cuenta);
+
                 try
                 {
                     await _context.SaveChangesAsync();
 
+                    await _contextAddMovimiento(cuenta.IdCuenta, TipoMovimiento.credito.ToString(), null, cuenta.Credito);
+
                     if (Logged.Rol != RolesSistema.Administrador.ToString())
                     {
                         var padre = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
+                        var oldValue = padre.CreditoBloqueado;
                         padre.CreditoBloqueado += cuenta.Credito;
                         _context.Update(padre);
                         await _context.SaveChangesAsync();
+                        await _contextAddMovimiento(Logged.IdCuenta, TipoMovimiento.creditoBloqueado.ToString(), oldValue, padre.CreditoBloqueado);
                         await GetFondos();
+
                     }
 
                 }
@@ -287,9 +293,11 @@ namespace TiendaRecargas.Controllers
             if (Logged.Rol != RolesSistema.Administrador.ToString())
             {
                 var padre = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
+                var oldValue = padre.CreditoBloqueado;
                 padre.CreditoBloqueado -= cuenta.Credito;
                 _context.Update(padre);
                 await _context.SaveChangesAsync();
+                await _contextAddMovimiento(Logged.IdCuenta, TipoMovimiento.creditoBloqueado.ToString(), oldValue, padre.CreditoBloqueado);
                 await GetFondos();
             }
 
@@ -387,14 +395,18 @@ namespace TiendaRecargas.Controllers
                     else
                     {
                         var subcuenta = await _context.RT_Cuentas.FindAsync(cuenta.IdCuenta);
+                        var oldValue = subcuenta.Credito;
                         subcuenta.Credito += cuenta.Credito;
                         _context.Update(subcuenta);
                         await _context.SaveChangesAsync();
+
+                        await _contextAddMovimiento(Logged.IdCuenta, TipoMovimiento.credito.ToString(), oldValue, subcuenta.Credito);
 
                         var padre = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
                         padre.CreditoBloqueado += cuenta.Credito;
                         _context.Update(padre);
                         await _context.SaveChangesAsync();
+                        await _contextAddMovimiento(Logged.IdCuenta, TipoMovimiento.creditoBloqueado.ToString(), oldValue, padre.CreditoBloqueado);
                         await GetFondos();
                     }
                 }
@@ -425,9 +437,11 @@ namespace TiendaRecargas.Controllers
                 if (!cuenta.Activo)
                 {
                     var subcuenta = await _context.RT_Cuentas.FindAsync(cuenta.IdCuenta);
+                    var oldValue = subcuenta.Credito;
                     subcuenta.Credito += cuenta.Credito;
                     _context.Update(subcuenta);
                     await _context.SaveChangesAsync();
+                    await _contextAddMovimiento(subcuenta.IdCuenta, TipoMovimiento.credito.ToString(), oldValue, subcuenta.Credito);
                 }
                 else
                 {
@@ -439,13 +453,27 @@ namespace TiendaRecargas.Controllers
                     else
                     {
                         subcuenta.Credito -= cuenta.Credito;
+                        var oldValue = subcuenta.Credito;
                         _context.Update(subcuenta);
                         await _context.SaveChangesAsync();
+                        await _contextAddMovimiento(subcuenta.IdCuenta, TipoMovimiento.credito.ToString(), oldValue, subcuenta.Credito);
                     }
                 }
             }
             return Ok(new { ok = true });
 
+        }
+
+        public async Task _contextAddMovimiento(int idCuenta, string tipo, decimal? oldValue, decimal newValue)
+        {
+            var movimiento = new Movimientos();
+            movimiento.idUserLogged = Logged.IdCuenta;
+            movimiento.idCuenta = idCuenta;
+            movimiento.tipo = tipo;
+            movimiento.oldValue = oldValue;
+            movimiento.newValue = newValue;
+            _context.Add(movimiento);
+            await _context.SaveChangesAsync();
         }
 
     }
