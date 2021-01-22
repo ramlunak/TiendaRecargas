@@ -29,22 +29,23 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.primerDiaPromocion)
-            </td>
-            <td>
-                <textarea asp-for="@item.texto" class="form-control" readonly rows="5"></textarea>
-            </td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.primerDiaPromocion)
+                </td>
+                <td>
+                    <textarea asp-for="@item.texto" class="form-control" readonly rows="5"></textarea>
+                </td>
 
-            <td>
-                <textarea asp-for="@item.bono" class="form-control" readonly rows="3"></textarea>
-            </td>
+                <td>
+                    <textarea asp-for="@item.bono" class="form-control" readonly rows="3"></textarea>
+                </td>
 
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.id" class="mr-3"><i style="color:green" class="fas fa-edit"></i></a>
-            </td>
-        </tr>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.id" class="mr-3"><i style="color:green" class="fas fa-edit"></i></a>|
+                    <a asp-action="Delete" asp-route-id="@item.id"><i style="color:orangered" class="fas fa-trash"></i></a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
