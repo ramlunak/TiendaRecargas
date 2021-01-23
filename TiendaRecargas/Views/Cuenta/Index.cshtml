@@ -38,11 +38,11 @@
                                 <div class="d-flex">
                                     @if (item.Rol == RolesSistema.Vendedor.ToString())
                                     {
-                                        <div class="mr-2 cursor-pointer"><a onclick="LiberarCredito(@item.IdCuenta)" data-toggle="tooltip" data-placement="top" title="Liberar Crédito"><i class="fa fa-credit-card" style="color:white" aria-hidden="true"></i></a></div>
+                                        <div class="mr-2 cursor-pointer"><a onclick="LiberarCredito(@item.IdCuenta)" data-toggle="tooltip" data-placement="top" title="Liberar Fondos"><i class="fa fa-credit-card" style="color:white" aria-hidden="true"></i></a></div>
                                     }
                                     @if (item.Rol == RolesSistema.Subvendedor.ToString() && item.liberarBalance)
                                     {
-                                        <div class="mr-2 cursor-pointer"><a onclick="LiberarCredito(@item.IdCuenta)" data-toggle="tooltip" data-placement="top" title="Liberar Crédito"><i class="fa fa-credit-card" style="color:white" aria-hidden="true"></i></a></div>
+                                        <div class="mr-2 cursor-pointer"><a onclick="LiberarCredito(@item.IdCuenta)" data-toggle="tooltip" data-placement="top" title="Liberar Fondos"><i class="fa fa-credit-card" style="color:white" aria-hidden="true"></i></a></div>
                                     }
                                     @if (item.Rol != RolesSistema.Subvendedor.ToString())
                                     {
