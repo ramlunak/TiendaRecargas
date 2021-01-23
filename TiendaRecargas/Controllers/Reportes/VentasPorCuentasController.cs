@@ -73,20 +73,20 @@ namespace TiendaRecargas.Controllers
             ViewBag.PrimerDiaSemana = s.FirstDateOfWeek().AddDays(0).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
             ViewBag.UltimoDiaSemana = s.FirstDateOfWeek().AddDays(6).ToEasternStandardTime().ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("es-ES"));
 
-
-
-            var model = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.success && x.year == year && x.semana == semana).ToListAsync();
-            if (!string.IsNullOrEmpty(filtro.numero))
+            var vendedores = await _context.RT_Cuentas.Where(x => x.IdCuentaPadre == Logged.IdCuenta).ToListAsync();
+            foreach (var item in vendedores)
             {
-                model = await _context.RT_Recargas.Where(x => x.idCuenta == Logged.IdCuenta && x.status == RecargaStatus.success && x.year == year && x.semana == semana && x.numero.Contains(filtro.numero)).ToListAsync();
+                item.Recargas = await _context.RT_Recargas.Where(x => x.idCuenta == item.IdCuenta && x.status == RecargaStatus.success && x.year == year && x.semana == semana).ToListAsync();
+                item.Subvendedores = await _context.RT_Cuentas.Where(x => x.IdCuentaPadre == item.IdCuenta).ToListAsync();
+
+                foreach (var subvendedor in item.Subvendedores)
+                {
+                    subvendedor.Recargas = await _context.RT_Recargas.Where(x => x.idCuenta == subvendedor.IdCuenta && x.status == RecargaStatus.success && x.year == year && x.semana == semana).ToListAsync();
+                }
             }
 
+            ViewBag.Vendedores = vendedores;
 
-            if (model.Any())
-            {
-                ViewBag.TotalPagado = model.Sum(x => x.monto);
-                ViewBag.TotalRecibido = model.Sum(x => x.recibe);
-            }
             return View();
         }
 
