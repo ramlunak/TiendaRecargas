@@ -1,0 +1,60 @@
+﻿@model IEnumerable<TiendaRecargas.Models.Movimientos>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                Usuario
+            </th>
+            <th>
+                Cuenta
+            </th>
+            <th>
+               Old value
+            </th>
+            <th>
+               New value
+            </th>
+            <th>
+               Fecha
+            </th>
+            <th>
+               Tipo
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.UsuarioLoggado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cuenta)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.oldValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.newValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fecha)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.tipo)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

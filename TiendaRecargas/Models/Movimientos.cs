@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using TiendaRecargas.Extensions;
@@ -16,5 +17,10 @@ namespace TiendaRecargas.Models
         public decimal newValue { get; set; }
         public DateTime fecha { get; set; } = DateTime.Now.ToEasternStandardTime();
         public string tipo { get; set; }
+
+        [NotMapped]
+        public string UsuarioLoggado { set; get; }
+        [NotMapped]
+        public string Cuenta { set; get; }
     }
 }
