@@ -48,6 +48,63 @@ namespace TiendaRecargas.Controllers
             return View(new List<Cuenta>());
         }
 
+        public async Task<IActionResult> LiberarCredito(int? id)
+        {
+            IsLogged();
+
+            if (id is null) return NotFound();
+
+            if (Logged.Rol == RolesSistema.Administrador.ToString())
+            {
+                //LIberar balance cuenta
+                var padre = await _context.RT_Cuentas.FindAsync(id);
+                var oldValue = padre.Balance;
+                padre.Balance = 0;
+                _context.Update(padre);
+                await _context.SaveChangesAsync();
+                await _contextAddMovimiento(padre.IdCuenta, TipoMovimiento.balance.ToString(), oldValue, padre.Balance);
+
+                //Marcar subcuentas para liberar credito
+                var subcuentas = await _context.RT_Cuentas.Where(x => x.IdCuentaPadre == id).ToListAsync();
+
+                foreach (var item in subcuentas)
+                {
+                    item.liberarBalance = true; 
+                    _context.Update(item);
+                    await _context.SaveChangesAsync();
+                }
+
+                await GetFondos();
+                return Ok(true);
+            }
+            if (Logged.Rol == RolesSistema.Vendedor.ToString())
+            {
+                //LIberar balance cuenta
+                var hijo = await _context.RT_Cuentas.FindAsync(id);
+                var BalanceoldValue = hijo.Balance;
+
+                hijo.Balance = 0;
+                hijo.liberarBalance = false;
+                _context.Update(hijo);
+                await _context.SaveChangesAsync();
+                await _contextAddMovimiento(hijo.IdCuenta, TipoMovimiento.balance.ToString(), BalanceoldValue, hijo.Balance);
+
+                //liberra credito del padre
+                var padre = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
+                var oldValue = padre.CreditoBloqueado;
+                padre.CreditoBloqueado -= BalanceoldValue;
+                _context.Update(padre);
+                await _context.SaveChangesAsync();
+                await _contextAddMovimiento(padre.IdCuenta, TipoMovimiento.liberarCredito.ToString(), oldValue, padre.CreditoBloqueado);
+                await GetFondos();
+
+                return Ok(true);
+            }
+
+            return NotFound();
+
+        }
+
         // GET: Cuenta/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -170,7 +227,7 @@ namespace TiendaRecargas.Controllers
                         padre.CreditoBloqueado += cuenta.Credito;
                         _context.Update(padre);
                         await _context.SaveChangesAsync();
-                        await _contextAddMovimiento(Logged.IdCuenta, TipoMovimiento.creditoBloqueado.ToString(), oldValue, padre.CreditoBloqueado);
+                        await _contextAddMovimiento(padre.IdCuenta, TipoMovimiento.creditoBloqueado.ToString(), oldValue, padre.CreditoBloqueado);
                         await GetFondos();
 
                     }
@@ -297,7 +354,7 @@ namespace TiendaRecargas.Controllers
                 padre.CreditoBloqueado -= cuenta.Credito;
                 _context.Update(padre);
                 await _context.SaveChangesAsync();
-                await _contextAddMovimiento(Logged.IdCuenta, TipoMovimiento.creditoBloqueado.ToString(), oldValue, padre.CreditoBloqueado);
+                await _contextAddMovimiento(padre.IdCuenta, TipoMovimiento.creditoBloqueado.ToString(), oldValue, padre.CreditoBloqueado);
                 await GetFondos();
             }
 
@@ -400,13 +457,13 @@ namespace TiendaRecargas.Controllers
                         _context.Update(subcuenta);
                         await _context.SaveChangesAsync();
 
-                        await _contextAddMovimiento(Logged.IdCuenta, TipoMovimiento.credito.ToString(), oldValue, subcuenta.Credito);
+                        await _contextAddMovimiento(subcuenta.IdCuenta, TipoMovimiento.credito.ToString(), oldValue, subcuenta.Credito);
 
                         var padre = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
                         padre.CreditoBloqueado += cuenta.Credito;
                         _context.Update(padre);
                         await _context.SaveChangesAsync();
-                        await _contextAddMovimiento(Logged.IdCuenta, TipoMovimiento.creditoBloqueado.ToString(), oldValue, padre.CreditoBloqueado);
+                        await _contextAddMovimiento(subcuenta.IdCuenta, TipoMovimiento.creditoBloqueado.ToString(), oldValue, padre.CreditoBloqueado);
                         await GetFondos();
                     }
                 }

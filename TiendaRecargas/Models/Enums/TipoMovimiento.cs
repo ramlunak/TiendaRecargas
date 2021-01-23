@@ -14,7 +14,8 @@ namespace TiendaRecargas.Models.Enums
         credito,
         balance,
         porciento,
-        creditoBloqueado
+        creditoBloqueado,
+        liberarCredito
     }
 
 }

@@ -45,7 +45,6 @@ $(function () {
     }, 1000);
 
     $(document).mousemove(function () {
-        console.log(timeout);
 
         timeout = 0;
     });
