@@ -55,9 +55,25 @@
                         <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador">
                             <a class="nav-link text-dark textalign-center" asp-controller="Cuenta" asp-action="Index"><i class="fas fa-user-shield"></i> Vendedores</a>
                         </li>
-                        <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador">
-                            <a class="nav-link text-dark textalign-center" asp-controller="VentasPorCuentas" asp-action="Index"><i class="fas fa-cog"></i>Historial</a>
+
+                        <li class="nav-item dropdown" data-toggle="tooltip" data-placement="right" title="Área de produtos" asp-authorize asp-roles="@RolesSistema.Administrador">
+                            <a class="m-1 nav-link  dropdown-toggle text-dark textalign-center" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-clock mr-1"></i>Historial
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="m-1 dropdown-item text-dark btn btn-outline-primary" asp-area="" asp-controller="VentasPorCuentas" asp-action="Index">
+                                    <i class="fab fa-buffer fa-1x mr-2"></i>Recargas por cuentas
+                                </a>
+                                <a class="m-1 dropdown-item text-dark btn btn-outline-primary" asp-area="" asp-controller="Movimientos" asp-action="Index">
+                                    <i class="fa fa-dollar-sign fa-1x mr-2"></i>Movimientos
+                                </a>
+
+                            </div>
                         </li>
+
+                        @*<li class="nav-item" asp-authorize asp-roles="@RolesSistema.Administrador">
+                                <a class="nav-link text-dark textalign-center" asp-controller="VentasPorCuentas" asp-action="Index"><i class="fas fa-clock"></i>Historial</a>
+                            </li>*@
                         <li class="nav-item" asp-authorize asp-roles="@RolesSistema.Vendedor">
                             <a class="nav-link text-dark textalign-center" asp-controller="Cuenta" asp-action="Index"><i class="fas fa-user-shield"></i> Mis asociados</a>
                         </li>

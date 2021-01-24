@@ -8,7 +8,7 @@
 <div class="card">
     <div class="card-header small">
         <div class="row d-flex justify-content-between p-2">
-            <div>               
+            <div>
                 <b>CUENTAS</b>
             </div>
             <div>
@@ -34,11 +34,22 @@
                         <div class="card-header bg-primary text-white">
                             <div class="d-flex justify-content-between">
                                 <div>@item.Nombre</div>
-                                @if (item.Rol != RolesSistema.Subvendedor.ToString())
-                                {
-                                    <div><a asp-action="Index" asp-route-id="@item.IdCuenta" asp-route-backId="@item.IdCuentaPadre" data-toggle="tooltip" data-placement="top" title="Subcuentas"><i class="fa fa-users" style="color:white" aria-hidden="true"></i></a></div>
 
-                                }
+                                <div class="d-flex">
+                                    @if (item.Rol == RolesSistema.Vendedor.ToString())
+                                    {
+                                        <div class="mr-2 cursor-pointer"><a onclick="LiberarCredito(@item.IdCuenta)" data-toggle="tooltip" data-placement="top" title="Liberar Fondos"><i class="fa fa-credit-card" style="color:white" aria-hidden="true"></i></a></div>
+                                    }
+                                    @if (item.Rol == RolesSistema.Subvendedor.ToString() && item.liberarBalance)
+                                    {
+                                        <div class="mr-2 cursor-pointer"><a onclick="LiberarCredito(@item.IdCuenta)" data-toggle="tooltip" data-placement="top" title="Liberar Fondos"><i class="fa fa-credit-card" style="color:white" aria-hidden="true"></i></a></div>
+                                    }
+                                    @if (item.Rol != RolesSistema.Subvendedor.ToString())
+                                    {
+                                        <div><a asp-action="Index" asp-route-id="@item.IdCuenta" asp-route-backId="@item.IdCuentaPadre" data-toggle="tooltip" data-placement="top" title="Subcuentas"><i class="fa fa-users" style="color:white" aria-hidden="true"></i></a></div>
+                                    }
+                                </div>
+
                             </div>
                         </div>
                         <div class="card-body">

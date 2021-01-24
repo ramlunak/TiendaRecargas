@@ -66,9 +66,9 @@ function EditarCredito(idCuenta) {
         },
         allowOutsideClick: () => !Swal.isLoading()
     }).then((result) => {
-      
-        if (result.isConfirmed) {  
-            
+
+        if (result.isConfirmed) {
+
             Swal.fire(
                 'Acción completada!',
                 'El crédito de la cuenta se ha modificado.',
@@ -76,9 +76,59 @@ function EditarCredito(idCuenta) {
             ).then((re) => {
                 location.reload(true);
             });
-           
+
         }
-       
+
+    })
+
+    $(".swal2-input").mask("###0.00", { reverse: true });
+
+}
+
+
+function LiberarCredito(idCuenta) {
+    console.log(idCuenta);
+    var modal = Swal.fire({
+        title: 'Confirma liberar el crédito de esta cuenta?',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Confirmar',
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+            return fetch('cuenta/LiberarCredito/' + idCuenta, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "GET",
+                //body: JSON.stringify({
+                //    idCuenta: idCuenta
+                //})
+            }).then(response => {
+
+                return response.json()
+            })
+                .catch(error => {
+
+                    Swal.showValidationMessage(
+                        `Ocurrió un error, contacte con soporte técnico`
+                    )
+
+                })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            Swal.fire(
+                'Acción completada!',
+            ).then((re) => {
+                location.reload(true);
+            });
+
+        }
+
     })
 
     $(".swal2-input").mask("###0.00", { reverse: true });

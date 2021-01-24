@@ -1,71 +1,98 @@
 ﻿@using System.Linq
 @{
     ViewData["Title"] = "Index";
+    var filtro = new RecargaSearch();
+    filtro.input = ViewBag.Semana;
+    filtro.numero = ViewBag.Numero;
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Nombre
-            </th>
-            <th>
-                Total recargas
-            </th>
-            <th>
-                Monto
-            </th>
+<div class="card">
+    <div class="card-header">
+        <div class="row d-flex justify-content-between p-2">
+            <div class="d-block align-items-center">
+                <div> <b>HISTORIAL DE RECARGAS</b></div>
+                <div><b>@ViewBag.PrimerDiaSemana | @ViewBag.UltimoDiaSemana</b> </div>
+            </div>
+            <form asp-action="Index">
+                <div>
 
-        </tr>
-    </thead>
-    <tbody>
-        @if (ViewBag.Vendedores != null)
-            @foreach (var item in ViewBag.Vendedores)
-            {
-                var vendedor = (Cuenta)item;
+                    <div class="form-group d-flex">
+                        <input asp-for="@filtro.input" type="week" style="width:180px" class="form-control form-control-sm" />
+                        <button type="submit" class="btn btn-sm btn-outline-primary"><i class="fa fa-search"></i></button>
+                    </div>
 
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="card-body">
+
+        <table class="table">
+            <thead>
                 <tr>
-                    <td style="width:50%">
-                        <i class="fas fa-user-shield"></i> <b> @vendedor.Nombre</b>
-                    </td>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Total recargas
+                    </th>
+                    <th>
+                        Monto
+                    </th>
 
-                    <td style="width:20%">
-                        <b> @vendedor.Recargas.Count</b>
-                    </td>
-                    <td>
-                        <b> $@vendedor.Recargas.Sum(x => x.monto).ToString("F2") USD</b>
-                    </td>
                 </tr>
-                @if (vendedor.Subvendedores.Any())
-                {
-                    <tr>
-                        <td colspan="3" class="pl-4">
+            </thead>
+            <tbody>
+                @if (ViewBag.Vendedores != null)
+                    @foreach (var item in ViewBag.Vendedores)
+                    {
+                        var vendedor = (Cuenta)item;
 
-                            <table class="table table-striped">
-                                <tbody>
-                                    @foreach (var sub in vendedor.Subvendedores)
-                                    {
-                                        var subvendedor = (Cuenta)sub;
+                        <tr>
+                            <td style="width:50%">
+                                <i class="fas fa-user-shield"></i> <b> @vendedor.Nombre</b>
+                            </td>
 
-                                        <tr>
-                                            <td style="width:50%">
-                                                @subvendedor.Nombre
-                                            </td>
+                            <td style="width:20%">
+                                <b> @vendedor.Recargas.Count</b>
+                            </td>
+                            <td>
+                                <b> $@vendedor.Recargas.Sum(x => x.monto).ToString("F2") USD</b>
+                            </td>
+                        </tr>
+                        @if (vendedor.Subvendedores.Any())
+                        {
+                            <tr>
+                                <td colspan="3" class="pl-4">
 
-                                            <td style="width:20%">
-                                                @subvendedor.Recargas.Count
-                                            </td>
-                                            <td>
-                                                $@subvendedor.Recargas.Sum(x => x.monto).ToString("F2") USD
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            @foreach (var sub in vendedor.Subvendedores)
+                                            {
+                                                var subvendedor = (Cuenta)sub;
 
-                        </td>
-                    </tr>
-                }
-            }
-    </tbody>
-</table>
+                                                <tr>
+                                                    <td style="width:50%">
+                                                        @subvendedor.Nombre
+                                                    </td>
+
+                                                    <td style="width:20%">
+                                                        @subvendedor.Recargas.Count
+                                                    </td>
+                                                    <td>
+                                                        $@subvendedor.Recargas.Sum(x => x.monto).ToString("F2") USD
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+            </tbody>
+        </table>
+    </div>
+</div>

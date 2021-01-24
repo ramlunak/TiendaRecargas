@@ -387,6 +387,12 @@ namespace TiendaRecargas.Controllers
                     item.TransactionDate = DateTime.Now.ToEasternStandardTime();
                     item.TransactionResultCode = result.ResultCode;
                     item.TransactionMsg = result.ErrorCodes != null && result.ErrorCodes.Length > 0 ? result.ErrorCodes.FirstOrDefault().Code : null;
+
+                    if (Ding.simulate)
+                    {
+                        result.ResultCode = "1";
+                    }
+
                     if (Convert.ToInt32(result.ResultCode) > 2)
                     {
                         item.status = RecargaStatus.error;

@@ -103,26 +103,35 @@ namespace TiendaRecargas.Controllers
             return View(promocion);
         }
 
-        // GET: PromocionesController/Delete/5
-        public ActionResult Delete(int id)
+        // GET: RecargaValores/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
             IsLogged();
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var recargaValor = await _context.RT_Promociones
+                .FirstOrDefaultAsync(m => m.id == id);
+            if (recargaValor == null)
+            {
+                return NotFound();
+            }
+
+            return View(recargaValor);
         }
 
-        // POST: PromocionesController/Delete/5
-        [HttpPost]
+        // POST: RecargaValores/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            IsLogged();
+            var recargaValor = await _context.RT_Promociones.FindAsync(id);
+            _context.RT_Promociones.Remove(recargaValor);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

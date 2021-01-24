@@ -82,6 +82,8 @@ namespace TiendaRecargas.Models
         [Column(TypeName = "bit")]
         public bool Activo { get; set; } = true;
 
+        public bool liberarBalance { get; set; } = true;
+
         //PARA CALCULAR % 
 
         [DisplayName("Precio de la recarga")]
