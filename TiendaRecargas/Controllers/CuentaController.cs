@@ -88,15 +88,15 @@ namespace TiendaRecargas.Controllers
                 _context.Update(hijo);
                 await _context.SaveChangesAsync();
                 await _contextAddMovimiento(hijo.IdCuenta, TipoMovimiento.balance.ToString(), BalanceoldValue, hijo.Balance);
-
-                //liberra credito del padre
-                var padre = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
-                var oldValue = padre.CreditoBloqueado;
-                padre.CreditoBloqueado -= BalanceoldValue;
-                _context.Update(padre);
-                await _context.SaveChangesAsync();
-                await _contextAddMovimiento(padre.IdCuenta, TipoMovimiento.liberarCredito.ToString(), oldValue, padre.CreditoBloqueado);
                 await GetFondos();
+
+                ////liberra credito del padre
+                //var padre = await _context.RT_Cuentas.FindAsync(Logged.IdCuenta);
+                //var oldValue = padre.CreditoBloqueado;
+                //padre.CreditoBloqueado -= BalanceoldValue;
+                //_context.Update(padre);
+                //await _context.SaveChangesAsync();
+                //await _contextAddMovimiento(padre.IdCuenta, TipoMovimiento.liberarCredito.ToString(), oldValue, padre.CreditoBloqueado);
 
                 return Ok(true);
             }
