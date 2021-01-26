@@ -12,7 +12,7 @@ $(function () {
     setInterval(function () {
         timeout++;
 
-        if (!timeoutModalOpen && (timeout >= 300000)) {
+        if (!timeoutModalOpen && (timeout >= 120)) {
             timeoutModalOpen = true;
             sugundosparacerrar = 10;
 
@@ -35,7 +35,7 @@ $(function () {
             timeoutModalOpen = false;
             location.href = "/login/Salir";
         }
-
+        
     }, 1000);
 
     setInterval(function () {
@@ -47,6 +47,7 @@ $(function () {
     $(document).mousemove(function () {
 
         timeout = 0;
+
     });
 
 });
