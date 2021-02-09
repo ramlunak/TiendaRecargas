@@ -35,7 +35,7 @@ $(function () {
             timeoutModalOpen = false;
             location.href = "/login/Salir";
         }
-
+        
     }, 1000);
 
     setInterval(function () {
@@ -47,6 +47,7 @@ $(function () {
     $(document).mousemove(function () {
 
         timeout = 0;
+
     });
 
 });
