@@ -14,16 +14,16 @@ namespace TiendaRecargas.Provedores
 {
     public class Ding
     {
-        public static bool simulate { get; set; } = false;
+        public static bool simulate { get; set; } = true;
 
         public class CountryIso
         {
             [DataMember]
             public string countryIso { get; set; }
         }
-    
-        public static async Task<GetProductsResponse> GetProductsBycountryIso(string iso,string token)
-        {           
+
+        public static async Task<GetProductsResponse> GetProductsBycountryIso(string iso, string token)
+        {
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Clear();
