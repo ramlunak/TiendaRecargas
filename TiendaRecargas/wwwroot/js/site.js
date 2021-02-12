@@ -12,7 +12,7 @@ $(function () {
     setInterval(function () {
         timeout++;
 
-        if (!timeoutModalOpen && (timeout >= 120)) {
+        if (!timeoutModalOpen && (timeout >= 900)) {
             timeoutModalOpen = true;
             sugundosparacerrar = 10;
 

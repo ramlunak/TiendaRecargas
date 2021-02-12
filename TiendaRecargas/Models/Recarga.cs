@@ -74,5 +74,6 @@ namespace TiendaRecargas.Models
             }
         }
         public string numero { get; set; }
+        public int? idCuenta { get; set; }
     }
 }

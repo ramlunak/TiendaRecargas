@@ -1,60 +1,100 @@
 ﻿@model IEnumerable<TiendaRecargas.Models.Movimientos>
 
+@using System.Globalization;
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Historial";
+    var filtro = new RecargaSearch();
+    filtro.input = ViewBag.Semana;
+    filtro.numero = ViewBag.Numero;
 }
+<div class="card">
+    <div class="card-header">
+        <div class="row d-flex justify-content-between p-2">
+            <div class="d-block align-items-center">
+                <div> <b>HISTORIAL DE MOVIMIENTOS</b></div>
+                <div><b>@ViewBag.PrimerDiaSemana | @ViewBag.UltimoDiaSemana</b> </div>
+            </div>
+            <form asp-action="Index">
+                <div>
+
+                    <div class="form-group d-flex">
+
+                        <select asp-for="@filtro.idCuenta" class="form-control form-control-sm mr-2">
+                            <option value="">Todos</option>
+                            @foreach (var cuenta in ViewBag.Cuentas)
+                            {
+                                <option value="@cuenta.IdCuenta">@cuenta.Nombre</option>
+                            }
+                        </select>
+
+                        <input asp-for="@filtro.input" type="week" style="width:180px" class="form-control form-control-sm" />
+                        <button type="submit" class="btn btn-sm btn-outline-primary"><i class="fa fa-search"></i></button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="card-body">
+
+        <table class="table">
+            <thead>
+                <tr>
+
+                    <th>
+                        Usuario
+                    </th>
+                    <th>
+                        Fecha
+                    </th>
+                    <th>
+                        Cuenta
+                    </th>
+                    <th>
+                        Tipo
+                    </th>
+                    <th>
+                        Old value
+                    </th>
+                    <th>
+                        New value
+                    </th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UsuarioLoggado)
+                        </td>
+                        <td>
+                            @item.fecha.ToString("dd/MM/yyyy HH:mm")
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cuenta)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.tipo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.oldValue)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.newValue)
+                        </td>
 
 
-<table class="table">
-    <thead>
-        <tr>
 
-            <th>
-                Usuario
-            </th>
-            <th>
-                Cuenta
-            </th>
-            <th>
-               Old value
-            </th>
-            <th>
-               New value
-            </th>
-            <th>
-               Fecha
-            </th>
-            <th>
-               Tipo
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.UsuarioLoggado)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Cuenta)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.oldValue)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.newValue)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fecha)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.tipo)
-                </td>
-
-            </tr>
-        }
-    </tbody>
-</table>
+    </div>
+</div>
