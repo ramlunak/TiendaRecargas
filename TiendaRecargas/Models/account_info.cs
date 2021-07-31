@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using TiendaRecargas.Class;
+using TiendaRecargas.Extensions;
 
 namespace TiendaRecargas.Models
 {
@@ -410,7 +412,7 @@ namespace TiendaRecargas.Models
 
                     var response = await client.GetAsync(URL);
                     var Result = await response.Content.ReadAsStringAsync();
-                    _Global.TransactionResponse = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
+                    var r = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
                     return Result;
 
                 }
@@ -443,7 +445,7 @@ namespace TiendaRecargas.Models
 
                     var response = await client.GetAsync(URL);
                     var Result = await response.Content.ReadAsStringAsync();
-                    _Global.TransactionResponse = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
+                    var r = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
                     return Result;
 
                 }
@@ -477,7 +479,7 @@ namespace TiendaRecargas.Models
 
                     var response = await client.GetAsync(URL);
                     var Result = await response.Content.ReadAsStringAsync();
-                    _Global.TransactionResponse = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
+                   var r = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
                     return Result;
 
                 }
@@ -510,7 +512,7 @@ namespace TiendaRecargas.Models
 
                     var response = await client.GetAsync(URL);
                     var Result = await response.Content.ReadAsStringAsync();
-                    _Global.TransactionResponse = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
+                   var r = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
                     return Result;
 
                 }
@@ -553,6 +555,25 @@ namespace TiendaRecargas.Models
             }
         }
 
+        public class GetAccountListRequest
+        {
+
+            [DataMember]
+            public int offset { get; set; }
+            [DataMember]
+            public int limit { get; set; }
+            [DataMember]
+            public int i_customer { get; set; }
+            [DataMember]
+            public int i_batch { get; set; }
+
+        } 
+        
+        public class GetAccountListResponse
+        {
+            [DataMember]
+            public account_info[] account_list { get; set; }
+        }
 
         public class GetAccountXDRListRequest
         {
@@ -668,6 +689,17 @@ namespace TiendaRecargas.Models
             [DataMember]
             public string i_xdr { get; set; }
 
+        }
+
+        public class ErrorHandling
+        {
+            [DataMember]
+            [DefaultValue(false)]
+            public bool faul { get; set; }
+            [DataMember]
+            public string faultcode { get; set; }
+            [DataMember]
+            public string faultstring { get; set; }
         }
 
 

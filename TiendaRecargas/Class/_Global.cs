@@ -1,7 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using TiendaRecargas.Extensions;
+using TiendaRecargas.Models;
 
 namespace TiendaRecargas.Class
 {
@@ -108,86 +116,11 @@ namespace TiendaRecargas.Class
             }
         }
 
-
-        public static EPromo Promociones = new EPromo();
-
-        public static class db
-        {
-            public static List<Esms> sms = new List<Esms>();
-        }
-
-        public static class phone
-        {
-            public static SQLiteAsyncConnection db
-            {
-                get
-                {
-                    var con = DependencyService.Get<ISQLiteDB>().GetConnection();
-                    con.CreateTableAsync<SQ_Recarga>();
-                    return con;
-                }
-            }
-
-            public static List<EContacto> contactos = new List<EContacto>();
-
-            public static async Task CargarContactos()
-            {
-
-                var ListaContactos = new List<EContacto>();
-                var PhoneContactos = await Plugin.ContactService.CrossContactService.Current.GetContactListAsync();
-                foreach (var item in PhoneContactos)
-                {
-                    var nauta = "";
-                    if (item.Emails.Count > 0)
-                    {
-                        foreach (var con in item.Emails)
-                        {
-                            if (con.Contains("@nauta.com.cu"))
-                            {
-                                nauta = con;
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        if (item.Email != null)
-                            if (item.Email.Contains("@nauta.com.cu"))
-                                nauta = item.Email;
-                    }
-
-                    if (nauta != "")
-                    {
-                        var arr = nauta.Split('@');
-                        nauta = arr[0].ToString();
-                        ;
-                    }
-                    var contacto = new EContacto();
-                    contacto.Nombre = item.Name;
-                    contacto.Telefono = item.Number;
-                    contacto.UserNauta = nauta;
-                    ListaContactos.Add(contacto);
-                }
-
-                contactos = ListaContactos;
-                _Global.ListaContactos = contactos;
-            }
-
-            public static async Task<List<Esms>> GetAllSms()
-            {
-                var con = DependencyService.Get<ISQLiteDB>().GetConnection();
-                await con.CreateTableAsync<Esms>();
-                return con.Table<Esms>().ToListAsync().Result;
-            }
-        }
-
         public static string StaticCaptureMonto { get; set; }
 
         public static bool CargarSmsNew = true;
 
         public static int IdSmsFromNoti = 0;
-
-
 
         public static bool ShowNitificasion = false;
 
@@ -221,113 +154,21 @@ namespace TiendaRecargas.Class
         }
 
         public static string MasterURL = "https://teleyumarestapi.azurewebsites.net/api/"; // IIS      
-                                                                                           // public static string MasterURL = "http://192.168.42.145/teleyuma/api/"; // IIS
-                                                                                           // public static string MasterURL = "http://192.168.42.145:58723/api/"; // IIS
-
+              
 
         //public static string MasterURL = "http://192.168.42.180/service/Service1.svc/"; // url anclaje
         // public static string MasterURL = "http://192.168.1.100/service/Service1.svc/"; // url emulador
 
         //public static string MasterURL = "http://smsteleyuma.azurewebsites.net/Service1.svc/"; // url nube
 
-        public static ERecMovilConfig RecMovilConfig = new ERecMovilConfig();
-
-        public static EPromocion Promocion = new EPromocion();
-
         public static string TipoRecarga = string.Empty;
 
         public static string AccionRecarga = string.Empty;
 
-        public static EPais PaisSeleccionado = new EPais();
-
-        public static EContacto ContactoSeleccionado = new EContacto();
-
-        public static nautaInfo RecargaNauta = new nautaInfo();
-
-        public static ListaRecarga ListaRecargas = new ListaRecarga();
 
         public static account_info CurrentAccount = new account_info();
 
         public static float MontoTransferenciaBancaria = 0;
-
-        public static MakeAccountTransactionResponse TransactionResponse = new MakeAccountTransactionResponse();
-
-        public static PaymentMethodObject CurrentCustomer_PaymentMethodObject = new PaymentMethodObject();
-
-        public static Grupos ListaGrupos = new Grupos();
-
-        public static List<GrupoSMS> GruposDeListasSMS = new List<GrupoSMS>();
-
-        public static GrupoSMS GrupoSMS = new GrupoSMS();
-
-        public static List<Esms> ListaSMS = new List<Esms>();
-
-        public static List<EContacto> ListaContactos = new List<EContacto>();
-
-        public static SQ_Login SQLiteLogin = new SQ_Login();
-
-        public static List<SQ_Recarga> Recargas = new List<SQ_Recarga>();
-
-        public static class VM
-        {
-            public static VMHome VMHome = new VMHome();
-
-            public static VMInicio VMInicio = new VMInicio();
-
-            public static VMMensaje VMMensaje = new VMMensaje();
-
-            public static VMGrupos VMGrupos = new VMGrupos();
-
-            public static VMRecargas VMRecargas = new VMRecargas();
-
-            public static VMCompras VMCompras = new VMCompras();
-
-            public static VMPagar VMPagar = new VMPagar();
-
-            public static VMResumenRecarga VMResumenRecarga = new VMResumenRecarga();
-
-            public static VMListaContactos VMListaContactos = new VMListaContactos();
-
-        }
-
-        public static class Vistas
-        {
-
-            public static PagesInicio.ConfirmarTelefono ConfirmarTelefono = new PagesInicio.ConfirmarTelefono();
-
-            public static Pages.Pagar Pagar = new Pages.Pagar();
-
-            public static Pages.TransferenciaBancaria TransferenciaBancaria = new Pages.TransferenciaBancaria();
-
-            public static Pages.ListaRecargas ListaRecargas = new Pages.ListaRecargas();
-
-            public static Pages.NewListaPaises PageNewListaPaises = new Pages.NewListaPaises();
-
-            public static Pages.PhoneContacs PhoneContacs = new Pages.PhoneContacs();
-
-            public static Pages.RespuestaRecarga RespuestaRecarga = new Pages.RespuestaRecarga();
-
-            public static Contactos.ListaContactos ListaContactos = new Contactos.ListaContactos();
-
-            public static Contactos.Llamar Llamar = new Contactos.Llamar();
-
-            public static SMS.Grupos Grupos = new SMS.Grupos();
-
-            public static SMS.Mensaje EnviarSMS = new SMS.Mensaje();
-
-            public static SMS.NewSMS NewSMS = new SMS.NewSMS();
-        }
-
-        public async static Task<string> GetAuthInfoAdminJson()
-        {
-            var credenciales = await Get<Credenciales>("credenciales/2");
-
-            var admin = new AuthInfo
-            {
-                session_id = credenciales.KeyGenerate
-            };
-            return JsonConvert.SerializeObject(admin);
-        }
 
         public static string ServicePassword
         {
@@ -412,22 +253,10 @@ namespace TiendaRecargas.Class
 
         }
 
-        public static string GetAuthInfo(string login, string password)
-        {
-
-            var admin = new AuthInfo
-            {
-                login = login,
-                password = password
-            };
-            return JsonConvert.SerializeObject(admin);
-        }
+        public static string BaseUrlAdmin = "https://mybilling.willtech.us/rest/";
 
 
-        public static string BaseUrlAdmin = "https://mybilling.teleyuma.com/rest/";
-
-
-        public static string BaseUrlCliente = "https://mybilling.teleyuma.com:8444/rest/";
+        public static string BaseUrlCliente = "https://mybilling.willtech.us:8444/rest/";
 
         public class Servicio
         {
@@ -468,25 +297,9 @@ namespace TiendaRecargas.Class
 
         }
 
-        public static string GetMd5Hash(string input)
+        internal static Task<string> GetAuthInfoAdminJson()
         {
-            MD5 md5Hash = MD5.Create();
-            // Convert the input string to a byte array and compute the hash.
-            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
-            StringBuilder sBuilder = new StringBuilder();
-
-            // Loop through each byte of the hashed data 
-            // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-
-            // Return the hexadecimal string.
-            return sBuilder.ToString();
+            throw new NotImplementedException();
         }
 
         public static HttpRequestMessage GetHttpRequestMessage(string url, HttpMethod method = null, HttpContent content = null)

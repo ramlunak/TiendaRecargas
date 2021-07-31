@@ -1,13 +1,23 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace TiendaRecargas.Extensions
 {
     public static class DateExtensions
     {
+
+        public static StringContent AsJsonStringContent(this object o)
+        => new StringContent(JsonConvert.SerializeObject(o), Encoding.UTF8, "application/json");
+
+        public static string AsJson(this object o)
+       => JsonConvert.SerializeObject(o);
+
         public static DateTime ToTimeZone(this DateTime date, string id)
         {
             var kstZone = TimeZoneInfo.FindSystemTimeZoneById(id);
