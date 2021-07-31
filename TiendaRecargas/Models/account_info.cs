@@ -557,7 +557,6 @@ namespace TiendaRecargas.Models
 
         public class GetAccountListRequest
         {
-
             [DataMember]
             public int offset { get; set; }
             [DataMember]
@@ -566,7 +565,6 @@ namespace TiendaRecargas.Models
             public int i_customer { get; set; }
             [DataMember]
             public int i_batch { get; set; }
-
         } 
         
         public class GetAccountListResponse
