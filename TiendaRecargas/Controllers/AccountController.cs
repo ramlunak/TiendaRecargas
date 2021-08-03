@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,30 @@ namespace TiendaRecargas.Controllers
     public class AccountController : Controller
     {
         // GET: AccountController
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string nombre, int pagina = 1)
         {
-            var model = await GetAccounList();
-            return View(model);
+            var cantidadRegistrosPorPagina = 10; // parámetro
+            var skip = ((pagina - 1) * cantidadRegistrosPorPagina);
+          
+            var lista = await GetAccounList(skip, cantidadRegistrosPorPagina);
+
+            ViewBag.FlrNombre = nombre;
+
+            var modelo = new ViewModels.VMAccount();
+            modelo.Accounts = lista.OrderBy(x => x.firstname).ToList();
+            modelo.PaginaActual = pagina;
+            modelo.TotalDeRegistros = 300;
+            modelo.RegistrosPorPagina = cantidadRegistrosPorPagina;
+            modelo.ValoresQueryString = new RouteValueDictionary();
+            modelo.ValoresQueryString["pagina"] = pagina;
+            modelo.ValoresQueryString["nombre"] = nombre;
+
+            return View(modelo);
+
         }
 
 
-        public async Task<List<account_info>> GetAccounList()
+        public async Task<List<account_info>> GetAccounList(int skip, int limit)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -38,8 +55,8 @@ namespace TiendaRecargas.Controllers
                     };
                     var param = new
                     {
-                        offset = 0,
-                        limit = 10,
+                        offset = skip,
+                        limit = limit,
                         i_batch = 203968,
                         i_customer = 260271
                     };

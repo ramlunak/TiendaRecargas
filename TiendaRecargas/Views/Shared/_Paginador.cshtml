@@ -1,0 +1,138 @@
+﻿@model TiendaRecargas.Models.BaseModelo
+
+@{
+    var cantidadPaginas = (int)Math.Ceiling((double)Model.TotalDeRegistros / Model.RegistrosPorPagina);
+}
+
+@*<ul class="pagination">
+        @if (Model.PaginaActual == 1)
+        {
+            Model.ValoresQueryString["pagina"] = 1;
+            <li class="disabled">@Html.ActionLink("Anterior", null, Model.ValoresQueryString)</li>
+        }
+        else
+        {
+            Model.ValoresQueryString["pagina"] = Model.PaginaActual - 1;
+            <li>@Html.ActionLink("Anterior", null, Model.ValoresQueryString)</li>
+        }
+
+        @if (Model.PaginaActual == cantidadPaginas)
+        {
+            Model.ValoresQueryString["pagina"] = cantidadPaginas;
+            <li class="disabled">@Html.ActionLink("Siguiente", null, Model.ValoresQueryString)</li>
+        }
+        else
+        {
+            Model.ValoresQueryString["pagina"] = Model.PaginaActual + 1;
+            <li>@Html.ActionLink("Siguiente", null, Model.ValoresQueryString)</li>
+        }
+    </ul>*@
+
+<!--Funcionalidad: Páginas-->
+
+@{
+    int Inicial = 1;
+    var radio = 3;
+    var cantidadMaximaDePaginas = radio * 2 + 1;
+    int Final = (cantidadPaginas > cantidadMaximaDePaginas) ? cantidadMaximaDePaginas : cantidadPaginas;
+    if (Model.PaginaActual > radio + 1)
+    {
+        Inicial = Model.PaginaActual - radio;
+        if (cantidadPaginas > Model.PaginaActual + radio)
+        {
+            Final = Model.PaginaActual + radio;
+        }
+        else
+        {
+            Final = cantidadPaginas;
+        }
+    }
+}
+
+@*<nav aria-label="...">
+        <ul class="pagination">
+            <li class="page-item disabled">
+                <span class="page-link">Previous</span>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item active">
+                <span class="page-link">
+                    2
+                    <span class="sr-only">(current)</span>
+                </span>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>*@
+
+<nav>
+    <ul class="pagination">
+
+        @{Model.ValoresQueryString["pagina"] = 1; }
+
+        @*IR PRIMERA PAGINA*@
+        @if (Model.PaginaActual == 1)
+        {
+            <li class="page-item disabled">@Html.ActionLink("Primera", null, Model.ValoresQueryString, new { @class = "page-link" })</li>
+        }
+        else
+        {
+            <li class="page-item">@Html.ActionLink("Primera", null, Model.ValoresQueryString, new { @class = "page-link" })</li>
+        }
+
+        @*ANTERIOR*@
+        @*@if (Model.PaginaActual == 1)
+            {
+                Model.ValoresQueryString["pagina"] = 1;
+                <li class="page-item disabled">@Html.ActionLink("←", null, Model.ValoresQueryString, new { @class = "page-link" })</li>
+            }
+            else
+            {
+                Model.ValoresQueryString["pagina"] = Model.PaginaActual - 1;
+                <li class="page-item">@Html.ActionLink("←", null, Model.ValoresQueryString, new { @class = "page-link" })</li>
+            }*@
+
+        @for (int i = Inicial; i <= Final; i++)
+        {
+            Model.ValoresQueryString["pagina"] = i;
+            if (i == Model.PaginaActual)
+            {
+                <li class="page-item active">@Html.ActionLink(i.ToString(), null, Model.ValoresQueryString, new { @class = "page-link" })</li>
+            }
+            else
+            {
+                <li class="page-item">@Html.ActionLink(i.ToString(), null, Model.ValoresQueryString, new { @class = "page-link" })</li>
+            }
+        }
+
+        @*SIGUIENTE*@
+
+        @*@if (Model.PaginaActual == cantidadPaginas)
+            {
+                Model.ValoresQueryString["pagina"] = cantidadPaginas;
+                <li class="page-item disabled">@Html.ActionLink("->", null, Model.ValoresQueryString, new { @class = "page-link",@style="font-size:15px" })</li>
+            }
+            else
+            {
+                Model.ValoresQueryString["pagina"] = Model.PaginaActual + 1;
+                <li class="page-item">@Html.ActionLink("->", null, Model.ValoresQueryString, new { @class = "page-link" ,@style="font-size:15px"})</li>
+            }*@
+
+        @*IA A ULTIMA PAGINA*@
+
+        @{Model.ValoresQueryString["pagina"] = cantidadPaginas; }
+        @if (Model.PaginaActual == cantidadPaginas)
+        {
+            <li class="page-item disabled">@Html.ActionLink("Ultima", null, Model.ValoresQueryString, new { @class = "page-link" })</li>
+        }
+        else
+        {
+            <li class="page-item">@Html.ActionLink("Ultima", null, Model.ValoresQueryString, new { @class = "page-link" })</li>
+        }
+
+
+    </ul>
+</nav>
