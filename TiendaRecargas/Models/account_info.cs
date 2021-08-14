@@ -36,6 +36,9 @@ namespace TiendaRecargas.Models
         [DataMember]
 
         public string activation_date { get; set; }
+
+        private string product_visible_name;
+
         [DataMember]
 
         public int i_product { get; set; }
@@ -77,6 +80,9 @@ namespace TiendaRecargas.Models
         [DataMember]
 
         public string batch_name { get; set; }
+
+        private string out_date_format;
+
         [DataMember]
 
         public int control_number { get; set; }
@@ -309,8 +315,53 @@ namespace TiendaRecargas.Models
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 try
                 {
+                    var security = new
+                    {
+                        login = "appuser",
+                        password = "th89>)wam2020*"
+                    };
                     var param = JsonConvert.SerializeObject(new { account_info = _Global.CurrentAccount });
-                    URL = _Global.BaseUrlAdmin + _Global.Servicio.Account + "/" + _Global.Metodo.update_account + "/" + await _Global.GetAuthInfoAdminJson() + "/" + param;
+                    URL = _Global.BaseUrlAdmin + _Global.Servicio.Account + "/" + _Global.Metodo.update_account + "/" + security.AsJson() + "/" + param;
+                    var response = await client.GetAsync(URL);
+                    var json = await response.Content.ReadAsStringAsync();
+                    var ErrorHandling = JsonConvert.DeserializeObject<ErrorHandling>(json);
+                    if (ErrorHandling.faultstring is null)
+                    {
+                        //_Global.Vistas.PageHome.ActualizarInformacionCuenta();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+                catch
+                {
+                    return false;
+                }
+
+            }
+        }
+
+
+        public async Task<bool> AddAccount()
+        {
+
+            using (HttpClient client = new HttpClient())
+            {
+                var URL = "";
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                try
+                {
+                    var security = new
+                    {
+                        login = "appuser",
+                        password = "th89>)wam2020*"
+                    };
+                    var param = JsonConvert.SerializeObject(new { account_info = this.getNewAccout() });
+                    URL = _Global.BaseUrlAdmin + _Global.Servicio.Account + "/" + _Global.Metodo.add_account + "/" + security.AsJson() + "/" + param;
                     var response = await client.GetAsync(URL);
                     var json = await response.Content.ReadAsStringAsync();
                     var ErrorHandling = JsonConvert.DeserializeObject<ErrorHandling>(json);
@@ -479,7 +530,7 @@ namespace TiendaRecargas.Models
 
                     var response = await client.GetAsync(URL);
                     var Result = await response.Content.ReadAsStringAsync();
-                   var r = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
+                    var r = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
                     return Result;
 
                 }
@@ -512,7 +563,7 @@ namespace TiendaRecargas.Models
 
                     var response = await client.GetAsync(URL);
                     var Result = await response.Content.ReadAsStringAsync();
-                   var r = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
+                    var r = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
                     return Result;
 
                 }
@@ -565,8 +616,8 @@ namespace TiendaRecargas.Models
             public int i_customer { get; set; }
             [DataMember]
             public int i_batch { get; set; }
-        } 
-        
+        }
+
         public class GetAccountListResponse
         {
             [DataMember]
@@ -700,6 +751,27 @@ namespace TiendaRecargas.Models
             public string faultstring { get; set; }
         }
 
+        public account_info getNewAccout()
+        {
+            var account = new account_info();
+            account.i_account = 11111;
+            account.firstname = "Royber";
+            account.lastname = "Arias";
+            account.i_product = 22791;
+            account.opening_balance = 0;
+            account.activation_date = "2018-04-13";
+            account.product_visible_name = "Pinless";
+            account.iso_4217 = "USD";
+            account.batch_name = "260271-di-pinless";
+            account.out_date_format = "MM-DD-YYYY";
+            account.bill_status = "O";
+            account.balance = 0;
+            account.billing_model = -1;
+            account.control_number = 1;
+            account.i_customer = 260271;
+
+            return account;
+        }
 
     }
 
