@@ -23,9 +23,19 @@ namespace TiendaRecargas.Controllers
             var cantidadRegistrosPorPagina = 10; // parámetro
             var skip = ((pagina - 1) * cantidadRegistrosPorPagina);
 
-            var lista = await GetAccounList(skip, cantidadRegistrosPorPagina);
+            var lista = new List<account_info>();
 
-            ViewBag.FlrNombre = nombre;
+            if (nombre != null)
+            {
+                lista = await GetAccounList(0, 1000);
+                lista = lista.Where(
+                     x => x.firstname.Contains(nombre) 
+                    ).ToList();
+            }
+            else
+            {
+                lista = await GetAccounList(skip, cantidadRegistrosPorPagina);
+            }
 
             var modelo = new ViewModels.VMAccount();
             modelo.Accounts = lista.OrderBy(x => x.firstname).ToList();
@@ -36,6 +46,7 @@ namespace TiendaRecargas.Controllers
             modelo.ValoresQueryString["pagina"] = pagina;
             modelo.ValoresQueryString["nombre"] = nombre;
 
+            ViewBag.FlrNombre = nombre;
             return View(modelo);
 
         }
@@ -134,6 +145,7 @@ namespace TiendaRecargas.Controllers
             var activationDate = now.Year + "-" + MM + "-" + DD;
 
             account.id = "a" + accountEditar.Telefono;
+            account.phone1 = accountEditar.Telefono;
             account.iso_4217 = "USD";
             account.i_customer = 260271;  //Online customers
             account.i_distributor = 282645;  //distributor  customers
