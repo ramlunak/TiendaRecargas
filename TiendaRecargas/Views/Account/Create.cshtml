@@ -1,204 +1,62 @@
-﻿@model TiendaRecargas.Models.account_info
+﻿@model TiendaRecargas.Models.AccountEditar
 
 @{
-    Layout = null;
+
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Create</title>
-</head>
-<body>
-
-<h4>account_info</h4>
-<hr />
-<div class="row">
+<div class="row justify-content-center">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="i_account" class="control-label"></label>
-                <input asp-for="i_account" class="form-control" />
-                <span asp-validation-for="i_account" class="text-danger"></span>
+        <div class="card">
+            <div class="card-header small">
+                <div class="row d-flex justify-content-between p-2">
+                    <div>
+                        <b>CREAR CUENTA</b>
+                    </div>
+
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="id" class="control-label"></label>
-                <input asp-for="id" class="form-control" />
-                <span asp-validation-for="id" class="text-danger"></span>
+            <div class="card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <input asp-for="Nombre" placeholder="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Apellido" placeholder="Apellido" class="form-control" />
+                        <span asp-validation-for="Apellido" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Telefono" type="number" placeholder="Teléfono" class="form-control" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Email" type="email" placeholder="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    @*<div class="form-group">
+                        <input asp-for="Password" placeholder="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="ConfirmPassword" placeholder="Confirmar Password" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>*@
+                    <div>
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger">@ViewBag.Error</div>
+                        }
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Crear" class="btn btn-primary btn-sm form-control form-control-sm mb-2" />
+                        <a class="btn btn-danger btn-sm form-control form-control-sm" asp-action="Index">Cancelar</a>
+                    </div>
+                </form>
+
             </div>
-            <div class="form-group">
-                <label asp-for="i_customer" class="control-label"></label>
-                <input asp-for="i_customer" class="form-control" />
-                <span asp-validation-for="i_customer" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="billing_model" class="control-label"></label>
-                <input asp-for="billing_model" class="form-control" />
-                <span asp-validation-for="billing_model" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="activation_date" class="control-label"></label>
-                <input asp-for="activation_date" class="form-control" />
-                <span asp-validation-for="activation_date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="i_product" class="control-label"></label>
-                <input asp-for="i_product" class="form-control" />
-                <span asp-validation-for="i_product" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="baddr1" class="control-label"></label>
-                <input asp-for="baddr1" class="form-control" />
-                <span asp-validation-for="baddr1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="baddr2" class="control-label"></label>
-                <input asp-for="baddr2" class="form-control" />
-                <span asp-validation-for="baddr2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AuthorizationOnlyTransaction_id" class="control-label"></label>
-                <input asp-for="AuthorizationOnlyTransaction_id" class="form-control" />
-                <span asp-validation-for="AuthorizationOnlyTransaction_id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="baddr3" class="control-label"></label>
-                <input asp-for="baddr3" class="form-control" />
-                <span asp-validation-for="baddr3" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="baddr4" class="control-label"></label>
-                <input asp-for="baddr4" class="form-control" />
-                <span asp-validation-for="baddr4" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="baddr5" class="control-label"></label>
-                <input asp-for="baddr5" class="form-control" />
-                <span asp-validation-for="baddr5" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="i_distributor" class="control-label"></label>
-                <input asp-for="i_distributor" class="form-control" />
-                <span asp-validation-for="i_distributor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="batch_name" class="control-label"></label>
-                <input asp-for="batch_name" class="form-control" />
-                <span asp-validation-for="batch_name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="control_number" class="control-label"></label>
-                <input asp-for="control_number" class="form-control" />
-                <span asp-validation-for="control_number" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="bill_status" class="control-label"></label>
-                <input asp-for="bill_status" class="form-control" />
-                <span asp-validation-for="bill_status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="iso_4217" class="control-label"></label>
-                <input asp-for="iso_4217" class="form-control" />
-                <span asp-validation-for="iso_4217" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="opening_balance" class="control-label"></label>
-                <input asp-for="opening_balance" class="form-control" />
-                <span asp-validation-for="opening_balance" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="balance" class="control-label"></label>
-                <input asp-for="balance" class="form-control" />
-                <span asp-validation-for="balance" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="balance2" class="control-label"></label>
-                <input asp-for="balance2" class="form-control" />
-                <span asp-validation-for="balance2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="login" class="control-label"></label>
-                <input asp-for="login" class="form-control" />
-                <span asp-validation-for="login" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="password" class="control-label"></label>
-                <input asp-for="password" class="form-control" />
-                <span asp-validation-for="password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="firstname" class="control-label"></label>
-                <input asp-for="firstname" class="form-control" />
-                <span asp-validation-for="firstname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="lastname" class="control-label"></label>
-                <input asp-for="lastname" class="form-control" />
-                <span asp-validation-for="lastname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="fullname" class="control-label"></label>
-                <input asp-for="fullname" class="form-control" />
-                <span asp-validation-for="fullname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="iniciales" class="control-label"></label>
-                <input asp-for="iniciales" class="form-control" />
-                <span asp-validation-for="iniciales" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="cont1" class="control-label"></label>
-                <input asp-for="cont1" class="form-control" />
-                <span asp-validation-for="cont1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="phone1" class="control-label"></label>
-                <input asp-for="phone1" class="form-control" />
-                <span asp-validation-for="phone1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="phone2" class="control-label"></label>
-                <input asp-for="phone2" class="form-control" />
-                <span asp-validation-for="phone2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="email" class="control-label"></label>
-                <input asp-for="email" class="form-control" />
-                <span asp-validation-for="email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="country" class="control-label"></label>
-                <input asp-for="country" class="form-control" />
-                <span asp-validation-for="country" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="h323_password" class="control-label"></label>
-                <input asp-for="h323_password" class="form-control" />
-                <span asp-validation-for="h323_password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="blocked" class="control-label"></label>
-                <input asp-for="blocked" class="form-control" />
-                <span asp-validation-for="blocked" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="cont2" class="control-label"></label>
-                <input asp-for="cont2" class="form-control" />
-                <span asp-validation-for="cont2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-</body>
-</html>
