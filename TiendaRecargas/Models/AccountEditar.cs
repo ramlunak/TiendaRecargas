@@ -31,6 +31,10 @@ namespace TiendaRecargas.Models
         [DisplayName("Email")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = AppMessages.Required)]        
+        [DisplayName("Balance")]
+        public decimal Balance { get; set; }
+
         //[Required(ErrorMessage = AppMessages.Required)]
         //[Column(TypeName = "nvarchar(max)")]
         //[DisplayName("Contraseña")]

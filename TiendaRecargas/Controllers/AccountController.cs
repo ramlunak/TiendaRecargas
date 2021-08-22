@@ -28,9 +28,11 @@ namespace TiendaRecargas.Controllers
             if (nombre != null)
             {
                 lista = await GetAccounList(0, 1000);
-                lista = lista.Where(
-                     x => x.firstname.Contains(nombre) 
-                    ).ToList();
+                lista = lista.Where(x => 
+                x.firstname.ToLower().Contains(nombre.ToLower()) || 
+                (x.login != null && x.login.ToLower().Contains(nombre.ToLower())) || 
+                (x.lastname != null && x.lastname.ToLower().Contains(nombre.ToLower()))
+                                    ).ToList();
             }
             else
             {
@@ -159,6 +161,7 @@ namespace TiendaRecargas.Controllers
             account.firstname = accountEditar.Nombre;
             account.lastname = accountEditar.Apellido;
 
+            account.balance = accountEditar.Balance;
             account.email = accountEditar.Email;
             account.login = accountEditar.Email;
             account.password = "Acc7o2554unt**,,";
