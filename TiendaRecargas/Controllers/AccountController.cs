@@ -272,6 +272,7 @@ namespace TiendaRecargas.Controllers
             }
             var acc = accounts.Where(x => x.i_account == id).First();
             var editar = new EditarBalance();
+            editar.i_account = acc.i_account;
             editar.fullname = acc.fullname;
             editar.balance = acc.balance;
             return View(editar);
@@ -279,11 +280,31 @@ namespace TiendaRecargas.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Balance(EditarBalance editarBalance)
+        public async Task<ActionResult> Balance(EditarBalance editarBalance)
         {
+
             if (ModelState.IsValid)
             {
-                return View(editarBalance);
+                ErrorHandling errorHandling = null;
+                if (editarBalance.editar_balance > 0)
+                {
+                    errorHandling = await MakeTransaction__Manualcredit(editarBalance.i_account, editarBalance.editar_balance, "Manual Transaction(WEB)");
+
+                }
+                else
+                {
+                    errorHandling = await MakeTransaction_Manualcharge(editarBalance.i_account , (editarBalance.editar_balance * -1), "Manual Transaction(WEB)");
+                }
+
+                if (errorHandling != null && errorHandling.faultcode != null)
+                {
+                    ViewBag.Error = errorHandling?.faultstring;
+                    return View(editarBalance);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
@@ -325,6 +346,82 @@ namespace TiendaRecargas.Controllers
             {
                 return View();
             }
+        }
+
+
+        public async Task<ErrorHandling> MakeTransaction_Manualcharge(int i_account, decimal monto, string visible_comment)
+        {
+
+            var MakeAccountTransactionRequest = new MakeAccountTransactionRequest();
+            MakeAccountTransactionRequest.i_account = i_account;
+            MakeAccountTransactionRequest.amount = Convert.ToDecimal(monto);
+            MakeAccountTransactionRequest.action = "Manual charge";
+            MakeAccountTransactionRequest.visible_comment = visible_comment;
+            var MakeAccountTransactionResponse = new MakeAccountTransactionResponse();
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                try
+                {
+                    var security = new
+                    {
+                        login = "appuser",
+                        password = "th89>)wam2020*"
+                    };
+                    var param = JsonConvert.SerializeObject(MakeAccountTransactionRequest);
+                    var URL = _Global.BaseUrlAdmin + _Global.Servicio.Account + "/" + _Global.Metodo.make_transaction + "/" + security.AsJson() + "/" + param;
+
+                    var response = await client.GetAsync(URL);
+                    var Result = await response.Content.ReadAsStringAsync();
+                    //var r = JsonConvert.DeserializeObject<MakeAccountTransactionResponse>(Result);
+                    return JsonConvert.DeserializeObject<ErrorHandling>(Result);
+                }
+                catch (Exception ex)
+                {
+                    return default(ErrorHandling);
+                }
+            }
+
+        }
+
+
+        public async Task<ErrorHandling> MakeTransaction__Manualcredit(int i_account, decimal monto, string visible_comment)
+        {
+            var MakeAccountTransactionRequest = new MakeAccountTransactionRequest();
+
+            MakeAccountTransactionRequest.i_account = i_account;
+            MakeAccountTransactionRequest.amount = Convert.ToDecimal(monto);
+            MakeAccountTransactionRequest.action = "Manual credit";
+            MakeAccountTransactionRequest.visible_comment = visible_comment;
+
+            var MakeAccountTransactionResponse = new MakeAccountTransactionResponse();
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                try
+                {
+                    var security = new
+                    {
+                        login = "appuser",
+                        password = "th89>)wam2020*"
+                    };
+                    var param = JsonConvert.SerializeObject(MakeAccountTransactionRequest);
+                    var URL = _Global.BaseUrlAdmin + _Global.Servicio.Account + "/" + _Global.Metodo.make_transaction + "/" + security.AsJson() + "/" + param;
+
+                    var response = await client.GetAsync(URL);
+                    var Result = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<ErrorHandling>(Result);
+                }
+                catch (Exception ex)
+                {
+                    return default(ErrorHandling);
+                }
+            }
+
         }
 
     }

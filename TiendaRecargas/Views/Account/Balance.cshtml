@@ -18,7 +18,7 @@
 
                 <form asp-action="Balance">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+                    <input asp-for="i_account" hidden readonly class="form-control" />
                     <div class="form-group">
                         <input asp-for="fullname" readonly class="form-control" />
                         <span asp-validation-for="fullname" id="fullname" class="text-danger"></span>
@@ -33,18 +33,18 @@
                     </div>
                     <hr />
                     @*<div class="form-group">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Opción</label>
-                                </div>
-                                <select asp-for="adicionar" class="custom-select" id="adicionar">
-                                    <option selected>Seleccione....</option>
-                                    <option value="true">Adicionar</option>
-                                    <option value="false">Restar</option>
-                                </select>
-                            </div>
-                            <span asp-validation-for="adicionar" class="text-danger"></span>
-                        </div>*@
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">Opción</label>
+                </div>
+                <select asp-for="adicionar" class="custom-select" id="adicionar">
+                    <option selected>Seleccione....</option>
+                    <option value="true">Adicionar</option>
+                    <option value="false">Restar</option>
+                </select>
+            </div>
+            <span asp-validation-for="adicionar" class="text-danger"></span>
+        </div>*@
                     <div class="form-group">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
@@ -52,6 +52,12 @@
                             </div>
                             <input type="text" asp-for="editar_balance" class="form-control">
                         </div>
+                    </div>
+                    <div>
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger">@ViewBag.Error</div>
+                        }
                     </div>
                     <div class="form-group">
                         <div class="d-flex justify-content-between">

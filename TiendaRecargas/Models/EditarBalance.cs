@@ -11,7 +11,7 @@ namespace TiendaRecargas.Models
 {
     public class EditarBalance
     {
-
+        public int i_account { get; set; }
         [DisplayName("Nombre")]
         public string fullname { get; set; }
 
