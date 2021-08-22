@@ -15,7 +15,7 @@ using static TiendaRecargas.Models.account_info;
 
 namespace TiendaRecargas.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         // GET: AccountController
         public async Task<ActionResult> Index(string nombre, int pagina = 1)
@@ -28,9 +28,9 @@ namespace TiendaRecargas.Controllers
             if (nombre != null)
             {
                 lista = await GetAccounList(0, 1000);
-                lista = lista.Where(x => 
-                x.firstname.ToLower().Contains(nombre.ToLower()) || 
-                (x.login != null && x.login.ToLower().Contains(nombre.ToLower())) || 
+                lista = lista.Where(x =>
+                x.firstname.ToLower().Contains(nombre.ToLower()) ||
+                (x.login != null && x.login.ToLower().Contains(nombre.ToLower())) ||
                 (x.lastname != null && x.lastname.ToLower().Contains(nombre.ToLower()))
                                     ).ToList();
             }
@@ -38,6 +38,8 @@ namespace TiendaRecargas.Controllers
             {
                 lista = await GetAccounList(skip, cantidadRegistrosPorPagina);
             }
+
+            SetSession("ss_accounts", lista);
 
             var modelo = new ViewModels.VMAccount();
             modelo.Accounts = lista.OrderBy(x => x.firstname).ToList();
@@ -52,7 +54,6 @@ namespace TiendaRecargas.Controllers
             return View(modelo);
 
         }
-
 
         public async Task<List<account_info>> GetAccounList(int skip, int limit)
         {
@@ -86,7 +87,6 @@ namespace TiendaRecargas.Controllers
                 }
             }
         }
-
 
         // GET: AccountController/Details/5
         public ActionResult Details(int id)
@@ -161,7 +161,7 @@ namespace TiendaRecargas.Controllers
             account.firstname = accountEditar.Nombre;
             account.lastname = accountEditar.Apellido;
 
-            account.balance = accountEditar.Balance;
+            account.balance = 0;
             account.email = accountEditar.Email;
             account.login = accountEditar.Email;
             account.password = "Acc7o2554unt**,,";
@@ -222,7 +222,6 @@ namespace TiendaRecargas.Controllers
 
         }
 
-
         public async Task<ErrorHandling> CreateCuenta(account_info account)
         {
 
@@ -254,11 +253,42 @@ namespace TiendaRecargas.Controllers
 
         }
 
-
         // GET: AccountController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
+        }
+
+        public ActionResult Balance(int? id)
+        {
+            if (id is null)
+            {
+                return View();
+            }
+            var accounts = GetSession<List<account_info>>("ss_accounts");
+            if (accounts is null)
+            {
+                return View();
+            }
+            var acc = accounts.Where(x => x.i_account == id).First();
+            var editar = new EditarBalance();
+            editar.fullname = acc.fullname;
+            editar.balance = acc.balance;
+            return View(editar);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Balance(EditarBalance editarBalance)
+        {
+            if (ModelState.IsValid)
+            {
+                return View(editarBalance);
+            }
+            else
+            {
+                return View(editarBalance);
+            }
         }
 
         // POST: AccountController/Edit/5

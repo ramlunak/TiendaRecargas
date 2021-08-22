@@ -65,7 +65,7 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.login)
-                        </td>                       
+                        </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.fullname)
                         </td>
@@ -79,9 +79,10 @@
                             @Html.DisplayFor(modelItem => item.country)
                         </td>
                         <td>
-                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                            @Html.ActionLink("Balance", "Balance", new { id = item.i_account })
+                            @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
                         </td>
                     </tr>
                 }

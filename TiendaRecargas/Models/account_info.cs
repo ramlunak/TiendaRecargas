@@ -107,6 +107,9 @@ namespace TiendaRecargas.Models
             }
         }
 
+        public decimal editar_balance { get; set; }
+        public bool adicionar { get; set; }
+
         [DataMember]
 
         public string login { get; set; }

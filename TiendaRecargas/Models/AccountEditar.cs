@@ -15,7 +15,7 @@ namespace TiendaRecargas.Models
         [StringLength(255)]
         [DisplayName("Nombre")]
         public string Nombre { get; set; }
-        
+
         [Required(ErrorMessage = AppMessages.Required)]
         [StringLength(255)]
         [DisplayName("Apellido")]
@@ -31,9 +31,9 @@ namespace TiendaRecargas.Models
         [DisplayName("Email")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = AppMessages.Required)]        
-        [DisplayName("Balance")]
-        public decimal Balance { get; set; }
+        //[Required(ErrorMessage = AppMessages.Required)]        
+        //[DisplayName("Balance")]
+        //public decimal Balance { get; set; }
 
         //[Required(ErrorMessage = AppMessages.Required)]
         //[Column(TypeName = "nvarchar(max)")]
